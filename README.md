@@ -66,3 +66,7 @@ The **Animation** panel has **Next** and **Reset** controls. Each click advances
 4. Add **1 metre** to both the rack gaps and row gaps, moving the racks and camera smoothly.
 
 Layout controls are locked during the sequence. Reset restores the original layout and connection-layer settings. Motion respects the operating system's reduced-motion preference. The animation is a visual presentation sequence, not a physical procedure for disconnecting live equipment. The current-view PNG export captures any stage.
+
+## Installation walkthrough
+
+Open **`install.html`** for the separate presentation interface. Six click-through screens explain the proposed installation: remove network → inference units → inline TAPs → verifier compute → an illustrative recomputation check. Both matching and differing replies can be demonstrated as sample PASS/FAIL outcomes. Storage relocation is deliberately omitted. Read `INSTALLATION_STORYBOARD.md` for the proposal assumptions and the distinction between this visual analogy and an actual recomputation algorithm.
