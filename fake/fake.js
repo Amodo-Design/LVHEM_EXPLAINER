@@ -23,6 +23,7 @@ function renderExamples() {
 // The shared timeline follows the most recently sent example. Both model
 // cards must reach a milestone before it advances; older runs cannot reset it.
 let latestRun = 0;
+let runController = new AbortController();
 function setTimeline(step) {
   $("#timeline").dataset.step = String(step);
   [...$("#timeline").children].forEach((item, index) => {
@@ -31,13 +32,35 @@ function setTimeline(step) {
     if (index === step - 1) item.setAttribute("aria-current", "step");
     else item.removeAttribute("aria-current");
   });
-  $("#timeline-status").textContent = $("#timeline").children[step - 1].lastElementChild.textContent;
+  $("#timeline-status").textContent = step ? $("#timeline").children[step - 1].lastElementChild.textContent : "Results cleared. Choose an example to start again.";
 }
 
 // --- timing ---------------------------------------------------------------
 
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+function sleep(ms, signal) {
+  if (signal.aborted) return Promise.reject(signal.reason);
+  return new Promise((resolve, reject) => {
+    const onAbort = () => { clearTimeout(timer); reject(signal.reason); };
+    const timer = setTimeout(() => {
+      signal.removeEventListener("abort", onAbort);
+      resolve();
+    }, ms);
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+}
 const jitter = (base, spread) => base + (Math.random() * 2 - 1) * spread;
+
+function clearResults() {
+  ++latestRun;
+  runController.abort();
+  runController = new AbortController();
+  $("#sends").replaceChildren();
+  $("#empty").hidden = false;
+  $("#clear").disabled = true;
+  setTimeline(0);
+  $(".shell").scrollTop = 0;
+  window.scrollTo(0, 0);
+}
 
 // --- a send ---------------------------------------------------------------
 
@@ -50,6 +73,7 @@ function send(preset) {
     if (run === latestRun && reached[milestone] === INSTANCES.length) setTimeline(steps[milestone]);
   };
   setTimeline(1);
+  $("#clear").disabled = false;
 
   $("#empty").hidden = true;
   const group = document.createElement("section");
@@ -64,7 +88,7 @@ function send(preset) {
   for (const inst of INSTANCES) {
     const card = buildCard(inst);
     cards.append(card);
-    runCard(card, inst, preset[inst.key], report);
+    runCard(card, inst, preset[inst.key], report, runController.signal);
   }
 
 }
@@ -75,7 +99,7 @@ function buildCard(inst) {
   return card;
 }
 
-async function runCard(card, inst, outcome, report) {
+async function runCard(card, inst, outcome, report, signal) {
   const reply = $('[data-slot="reply"]', card);
   const stage = $('[data-slot="stage"]', card);
   const progressLabel = $('[data-slot="progress-label"]', card);
@@ -85,53 +109,58 @@ async function runCard(card, inst, outcome, report) {
     progressTime.textContent = `${Math.round((performance.now() - started) / 1000)}s`;
   }, 250);
 
-  // 1. Time to first token, then the reply streams at the instance's speed.
-  stage.textContent = "inferring";
-  progressLabel.textContent = "Generating answer";
-  await sleep(jitter(inst.key === "liar" ? 420 : 650, 150));
-  reply.textContent = "";
-  // Each token gets a target time; occasional longer gaps mimic batching on
-  // a shared GPU. Emission is driven by the clock rather than one token per
-  // timer tick, so a throttled background tab catches up instead of crawling.
-  const perToken = 1000 / inst.tokens_per_second;
-  const schedule = [];
-  let at = 0;
-  for (const token of outcome.tokens) {
-    at += Math.random() < 0.06 ? jitter(perToken * 4, perToken) : jitter(perToken, perToken * 0.35);
-    schedule.push({ token, at });
-  }
-  const streamStart = performance.now();
-  let next = 0;
-  while (next < schedule.length) {
-    const elapsed = performance.now() - streamStart;
-    let emitted = "";
-    while (next < schedule.length && schedule[next].at <= elapsed) emitted += schedule[next++].token;
-    if (emitted) {
-      reply.textContent += emitted;
-      reply.scrollTop = reply.scrollHeight;
+  try {
+    // 1. Time to first token, then the reply streams at the instance's speed.
+    stage.textContent = "inferring";
+    progressLabel.textContent = "Generating answer";
+    await sleep(jitter(inst.key === "liar" ? 420 : 650, 150), signal);
+    reply.textContent = "";
+    // Each token gets a target time; occasional longer gaps mimic batching on
+    // a shared GPU. Emission is driven by the clock rather than one token per
+    // timer tick, so a throttled background tab catches up instead of crawling.
+    const perToken = 1000 / inst.tokens_per_second;
+    const schedule = [];
+    let at = 0;
+    for (const token of outcome.tokens) {
+      at += Math.random() < 0.06 ? jitter(perToken * 4, perToken) : jitter(perToken, perToken * 0.35);
+      schedule.push({ token, at });
     }
-    if (next < schedule.length) await sleep(Math.max(8, schedule[next].at - (performance.now() - streamStart)));
+    const streamStart = performance.now();
+    let next = 0;
+    while (next < schedule.length) {
+      const elapsed = performance.now() - streamStart;
+      let emitted = "";
+      while (next < schedule.length && schedule[next].at <= elapsed) emitted += schedule[next++].token;
+      if (emitted) {
+        reply.textContent += emitted;
+        reply.scrollTop = reply.scrollHeight;
+      }
+      if (next < schedule.length) await sleep(Math.max(8, schedule[next].at - (performance.now() - streamStart)), signal);
+    }
+
+    report("generated");
+
+    // 2. The tap records the event in the ledger.
+    stage.textContent = "awaiting ledger event";
+    progressLabel.textContent = "Waiting for the ledger to record the inference";
+    await sleep(jitter(900, 300), signal);
+
+    // 3. The verifier is kept warm, so it is ready almost at once.
+    report("verifying");
+    stage.textContent = "verifying";
+    progressLabel.textContent = "Verifying: recomputing the answer and comparing logits";
+    await sleep(jitter(1800 + outcome.tokens.length * 28, 500), signal);
+
+    // 4. Verdict.
+    $('[data-slot="progress"]', card).hidden = true;
+    stage.textContent = "done";
+    renderResult(card, outcome);
+    report("complete");
+  } catch (error) {
+    if (!signal.aborted) throw error;
+  } finally {
+    clearInterval(ticker);
   }
-
-  report("generated");
-
-  // 2. The tap records the event in the ledger.
-  stage.textContent = "awaiting ledger event";
-  progressLabel.textContent = "Waiting for the ledger to record the inference";
-  await sleep(jitter(900, 300));
-
-  // 3. The verifier is kept warm, so it is ready almost at once.
-  report("verifying");
-  stage.textContent = "verifying";
-  progressLabel.textContent = "Verifying: recomputing the answer and comparing logits";
-  await sleep(jitter(1800 + outcome.tokens.length * 28, 500));
-
-  // 4. Verdict.
-  clearInterval(ticker);
-  $('[data-slot="progress"]', card).hidden = true;
-  stage.textContent = "done";
-  renderResult(card, outcome);
-  report("complete");
 }
 
 function renderResult(card, outcome) {
@@ -175,3 +204,4 @@ function renderResult(card, outcome) {
 // --- boot -----------------------------------------------------------------
 
 renderExamples();
+$("#clear").addEventListener("click", clearResults);

@@ -99,6 +99,10 @@ a { color: var(--terracotta); text-decoration: none; }
 .example-button:active { background: var(--paper); }
 .example-button:focus-visible { outline: 2px solid var(--teal); outline-offset: 3px; }
 
+.clear-button { width:auto; padding:0 16px; margin-left:auto; background:transparent; font-size:.8125rem; }
+.clear-button:disabled { opacity:.4; cursor:default; }
+.clear-button:disabled:hover { background:transparent; border-color:var(--hairline); }
+
 .verification-timeline { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:0; list-style:none; margin:0; padding:0 0 16px; border-bottom:1px solid var(--divider); }
 .verification-timeline li { position:relative; display:flex; flex-direction:column; align-items:flex-start; gap:8px; padding-right:12px; color:var(--muted); font-size:.6875rem; line-height:1.45; }
 .verification-timeline li:not(:last-child)::after { content:""; position:absolute; top:10px; left:28px; width:calc(100% - 36px); height:1px; background:var(--divider); }
