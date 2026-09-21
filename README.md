@@ -90,3 +90,7 @@ The palette follows [Iceberg Light](https://terminalcolors.com/themes/iceberg/li
 In the installation and text-free presentation, backend fading and rack separation happen simultaneously. Each clear rack gap increases by 0.3 m (from 0.1 m to 0.4 m).
 
 The real-hardware step adds the supplied `compute.jpg`, `recompute.jpeg` and `TAP.jpg` as image-only callouts. Blue, green and orange leaders stay attached to the compute rack, verifier and shared TAP while the camera orbits. The photographs illustrate the corresponding roles; they are not a claim that all pictured hardware is the modeled GB200 NVL72 implementation.
+
+## Hosting on Amodo Apps Playground
+
+The root `Dockerfile` packages the text-free presentation as the homepage, using an unprivileged nginx server on port 8080. No secrets, database or persistent volume are required. See [DEPLOYMENT.md](DEPLOYMENT.md) for registration, build and verification instructions for `Amodo-Design/LVHEM_EXPLAINER`.

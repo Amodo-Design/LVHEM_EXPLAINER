@@ -1,0 +1,27 @@
+# Only files required by the deployed presentation enter the build context.
+**
+!Dockerfile
+!deploy/
+!deploy/nginx.conf
+!presentation.html
+!src/
+!src/install_viewer.js
+!src/rack_geometry.js
+!src/fleet_layout.js
+!src/fleet_bundles.js
+!src/data_hall.js
+!src/verification_scene.js
+!src/iceberg_theme.js
+!src/photo_callouts.js
+!src/photo_callouts.css
+!src/cable_routes.js
+!vendor/
+!vendor/three.module.js
+!vendor/three.core.js
+!vendor/OrbitControls.js
+!vendor/THREE-LICENSE.txt
+!assets/
+!assets/model-data.js
+!assets/compute.jpg
+!assets/recompute.jpeg
+!assets/TAP.jpg
