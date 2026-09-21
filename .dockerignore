@@ -30,3 +30,8 @@ assets/**
 assets/web/**
 !assets/web/*.webp
 !assets/web/photos.js
+
+!assets/fonts/
+assets/fonts/**
+!assets/fonts/*.woff2
+!assets/fonts/OFL.txt

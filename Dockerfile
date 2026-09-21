@@ -12,6 +12,7 @@ COPY vendor/three.module.js vendor/three.core.js vendor/OrbitControls.js \
      vendor/THREE-LICENSE.txt /opt/presentation/vendor/
 COPY assets/model-data.js /opt/presentation/assets/
 COPY assets/web/ /opt/presentation/assets/web/
+COPY assets/fonts/ /opt/presentation/assets/fonts/
 
 # Must be the only port in the image's ExposedPorts, including inherited ports.
 EXPOSE 8080/tcp
