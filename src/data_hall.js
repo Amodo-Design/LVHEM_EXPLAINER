@@ -39,7 +39,7 @@ export function buildDataHall(layout){
 
 // Persistent frontend access paths. The focused 15 paths live in verification_scene;
 // this adds all remaining rack paths, row access switches, paired aggregation, and border uplinks.
-export function buildHallFrontend(layout,focusIds,focusEdge){
+export function buildHallFrontend(layout,focusIds,frontendExit){
  const group=new THREE.Group(),matrix=new THREE.Matrix4(),boxes=[],segments=[],ports=[],focusSet=new Set(focusIds);
  const right=Math.max(...layout.positions.map(p=>p[0]))+1.4,back=Math.max(...layout.positions.map(p=>p[1]))+1.35;
  const spine=[new V(right,back,.75),new V(right+1.1,back,.75)],leaves=[];
@@ -51,14 +51,14 @@ export function buildHallFrontend(layout,focusIds,focusEdge){
   spine.forEach((s,j)=>path([leaf,new V(right+.22+j*.12,leaf.y,2.65),new V(right+.22+j*.12,back,2.65),s]));
  }
  layout.positions.forEach((p,id)=>{if(focusSet.has(id))return;const row=Math.floor(id/layout.cols),leaf=leaves[row],lane=(id%layout.cols)*.005;const nic=new V(p[0]+.19,p[1]-.63,.4);path([nic,new V(nic.x,p[1]-.81,.25),new V(nic.x,p[1]-.9-lane,2.57),new V(leaf.x,p[1]-.9-lane,2.57),leaf]);});
- spine.forEach((s,j)=>{cabinet(s,.7,.6,1.3);path([focusEdge,new V(focusEdge.x+.25+j*.1,focusEdge.y,.25),new V(right+.45+j*.1,focusEdge.y,.25),new V(right+.45+j*.1,back,.25),s]);});
+ spine.forEach(s=>cabinet(s,.7,.6,1.3));
  const border=new V(right+1.3,back-2,.7);cabinet(border,.65,.5,1.2);spine.forEach(s=>path([s,new V(s.x,back-1,.35),new V(border.x,back-1,.35),border]));
  // Two schematic uplinks leave the customer-edge cabinet at the hall boundary.
- const boundary=new V(right+3.65,back-2,.7);
- for(const offset of[-.05,.05])path([border.clone().add(new V(0,offset,0)),boundary.clone().add(new V(0,offset,0))]);
+ const boundary=frontendExit.clone();
+ for(const offset of[-.05,.05])path([border.clone().add(new V(0,offset,0)),new V(right+2.8+offset,border.y,.075),new V(right+2.8+offset,boundary.y+offset,.075),boundary.clone().add(new V(0,offset,0))]);
  const cableMat=new THREE.MeshStandardMaterial({color:0x168eaa,roughness:.65}),tube=new THREE.CylinderGeometry(1,1,1,5),cables=new THREE.InstancedMesh(tube,cableMat,segments.length);
  segments.forEach(([a,b],i)=>{matrix.compose(a.clone().add(b).multiplyScalar(.5),new THREE.Quaternion().setFromUnitVectors(new V(0,1,0),b.clone().sub(a).normalize()),new V(.014,a.distanceTo(b),.014));cables.setMatrixAt(i,matrix);});cables.computeBoundingSphere();group.add(cables);
  const cases=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshStandardMaterial({color:0x354d52,roughness:.6}),boxes.length);boxes.forEach(([x,y,z,w,d,h],i)=>{matrix.compose(new V(x,y,z),new THREE.Quaternion(),new V(w,d,h));cases.setMatrixAt(i,matrix);});cases.computeBoundingSphere();group.add(cases);
  const sockets=new THREE.InstancedMesh(new THREE.BoxGeometry(.045,.015,.035),cableMat,ports.length);ports.forEach((p,i)=>{matrix.makeTranslation(...p);sockets.setMatrixAt(i,matrix);});sockets.computeBoundingSphere();group.add(sockets);
- return{group,stats:{retainedRackPaths:layout.positions.length,contextRackPaths:layout.positions.length-focusIds.length,rowAccessSwitches:leaves.length,aggregationSwitches:2,borderSwitches:1,focusUplinks:2}};
+ return{group,stats:{retainedRackPaths:layout.positions.length,contextRackPaths:layout.positions.length-focusIds.length,rowAccessSwitches:leaves.length,aggregationSwitches:2,borderSwitches:1,focusUplinks:0,frontendDestination:'outside DC'}};
 }

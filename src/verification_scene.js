@@ -3,7 +3,7 @@ const V=THREE.Vector3;
 export function buildVerificationScene(points,rackGeometry,rackMaterial,options={}){
  const root=new THREE.Group(),sections={},moving=[],labels=[],geometries=new Set(),materials=new Set(),textures=new Set();let phase=3,sampleActive=true,sampleIndex=null,checkState="idle";
  const xs=points.map(p=>p.x),ys=points.map(p=>p.y),minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys),cy=(minY+maxY)/2;
- const edge=new V(maxX+2.0,minY-.8,.75),aggregator=new V(maxX+2.4,cy+.35,.55),verifier=new V(maxX+4.5,cy,0),report=new V(maxX+8,cy,.8);
+ const edge=options.frontendExit?new V(...options.frontendExit):new V(maxX+2.0,minY-.8,.75),aggregator=new V(maxX+2.4,cy+.35,.55),verifier=new V(maxX+4.5,cy,0),report=new V(maxX+8,cy,.8);
  function section(n){const g=new THREE.Group();root.add(g);sections[n]=g;return g;}
  const units=section('units'),storage=section('storage'),slow=section('slow'),taps=section('taps'),copies=section('copies'),verify=section('verify'),sampling=section('sampling'),reporting=section('reporting'),monitoring=section('monitoring');
  function material(color){const m=new THREE.MeshStandardMaterial({color,roughness:.65,metalness:.15});materials.add(m);return m;}
@@ -23,17 +23,17 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
   box(storage,p.clone().add(new V(0,-.48,.24)),[.42,.23,.1],dark);for(let d=0;d<6;d++)box(storage,p.clone().add(new V(-.16+d*.064,-.603,.24)),[.05,.008,.064],silver);
   const nic=p.clone().add(new V(.19,-.63,.4)),tap=p.clone().add(new V(.46,-.91,.25));tapPoints.push(tap);
   const nicMesh=box(slow,nic,[.055,.06,.035],silver);
-  const before=cable(slow,[nic,nic.clone().add(new V(0,-.08,-.08)),tap],teal,.018,true);
+  const before=cable(slow,[nic,nic.clone().add(new V(0,-.08,-.08)),tap],teal,.018,false);
   const laneY=minY-1.05-i*.021;
-  const after=cable(slow,[tap,new V(tap.x+.16,tap.y-.13,.09),new V(tap.x+.2,laneY,.075),new V(edge.x-.3,laneY,.075),edge],teal,.018,true,i%2===0);
+  const after=cable(slow,[tap,new V(tap.x+.16,tap.y-.13,.09),new V(tap.x+.2,laneY,.075),new V(edge.x-.3,laneY,.075),edge],teal,.018,false,i%2===0);
   before.tube.name='frontend-in-'+i;after.tube.name='frontend-out-'+i;
   frontendRoutes.push({before,after,nicMesh,unitOutline,unitLabel,base:p.clone(),last:p.clone()});
   box(taps,tap,[.24,.17,.13],orange);for(const x of[-.065,.065])box(taps,tap.clone().add(new V(x,-.09,0)),[.038,.012,.03],dark);
   const monitor= tap.clone().add(new V(.125,0,0));
   const copy=cable(copies,[monitor,new V(monitor.x+.13,monitor.y,.32),new V(maxX+.85+i*.024,monitor.y,.32),new V(maxX+1.1+i*.024,cy+.35,.32),aggregator],green,.009,true);arrow(copies,copy,.9,green);
  });
- box(slow,edge,[.6,.4,.65],dark);for(let i=0;i<4;i++)box(slow,edge.clone().add(new V(0,-.206,-.19+i*.12)),[.48,.008,.035],silver);
- label(slow,'Remaining frontend\n~1 Gb/s per unit · proposal',edge.clone().add(new V(0,0,.7)),2.65);
+ if(!options.frontendExit){box(slow,edge,[.6,.4,.65],dark);for(let i=0;i<4;i++)box(slow,edge.clone().add(new V(0,-.206,-.19+i*.12)),[.48,.008,.035],silver);
+ label(slow,'Remaining frontend\n~1 Gb/s per unit · proposal',edge.clone().add(new V(0,0,.7)),2.65);}
  label(storage,'Local cold storage\nKV cache / approved weights',points[0].clone().add(new V(0,-1.02,.7)),2.2);
  label(taps,'Active FPGA TAPs\nForward traffic + copy',tapPoints[0].clone().add(new V(-.3,-.3,.55)),2.15,'#946035');
  box(copies,aggregator,[.48,.36,.2],green);for(let i=0;i<8;i++)box(copies,aggregator.clone().add(new V(-.18+i*.05,-.185,0)),[.032,.008,.052],dark);
@@ -59,6 +59,6 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
  function setTapInstall(progress){taps.position.z=(1-progress)*1.1;}
  function setPhase(n){phase=n;units.visible=n>=3;storage.visible=options.storage!==false&&n>=4;slow.visible=options.frontendFromStart||n>=4;taps.visible=n>=5;copies.visible=n>=6;verify.visible=n>=6;sampling.visible=n>=7;reporting.visible=n>=8;monitoring.visible=n>=9;}
  function update(t){if(!matchMedia('(prefers-reduced-motion:reduce)').matches)for(const p of moving)p.dot.position.copy(p.curve.getPoint((p.reverse?1:0)+(p.reverse?-1:1)*((t*.00013+p.offset)%1)));else for(const p of moving)p.dot.position.copy(p.curve.getPoint(.5));sampleRing.visible=phase>=7&&sampleActive;if(phase>=7&&sampleActive){const index=sampleIndex??Math.floor(t/2300)%points.length;sampleRing.position.copy(points[index]).add(new V(0,0,2.45));sampleRing.visible=true;}verifyMesh.material.emissive.set(checkState==='replay'?0x164936:checkState==='fail'?0x531f18:0x000000);verifyMesh.material.emissiveIntensity=checkState==='replay'?.6+.4*Math.sin(t*.005):.6;}
- function cameraPoints(n){return [...points,...(n>=4?[edge]:[]),...(n>=6?[verifier,verifier.clone().add(new V(1,0,0))]:[]),...(n>=8?[report]:[])];}
- setPhase(3);return{root,frontendEdge:edge.clone(),setPhase,setFrontendLayout,setTapInstall,update,cameraPoints,annotations(){return labels.filter(({sprite,text})=>{let p=sprite.parent;while(p){if(!p.visible)return false;p=p.parent;}return !/^U\d/.test(text);}).map(({sprite,text})=>({text,position:sprite.getWorldPosition(new V())}));},setSampling(active,index=null,state="idle"){sampleActive=active;sampleIndex=index;checkState=state;},diagnostics(){return{phase,units:points.length,frontendObjects:frontendRoutes.flatMap(r=>[r.before.tube.id,r.after.tube.id]),frontendEndpointError:Math.max(...frontendRoutes.map(r=>r.before.points[0].distanceTo(r.nicMesh.position)+r.before.points.at(-1).distanceTo(r.after.points[0])+r.after.points.at(-1).distanceTo(edge))),slowLinks:slow.visible?points.length:0,taps:phase>=5?points.length:0,verifierUnits:phase>=6?1:0,copyDirection:'TAP to verifier only',reporting:phase>=8?'restricted schema':'hidden',outOfBandMonitoring:phase>=9};},dispose(){geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
+ function cameraPoints(n){return [...points,...(n>=4&&!options.frontendExit?[edge]:[]),...(n>=6?[verifier,verifier.clone().add(new V(1,0,0))]:[]),...(n>=8?[report]:[])];}
+ setPhase(3);return{root,frontendEdge:edge.clone(),setPhase,setFrontendLayout,setTapInstall,update,cameraPoints,annotations(){return labels.filter(({sprite,text})=>{let p=sprite.parent;while(p){if(!p.visible)return false;p=p.parent;}return !/^U\d/.test(text);}).map(({sprite,text})=>({text,position:sprite.getWorldPosition(new V())}));},setSampling(active,index=null,state="idle"){sampleActive=active;sampleIndex=index;checkState=state;},diagnostics(){return{phase,units:points.length,frontendTrafficAnimated:moving.some(p=>p.dot.parent===slow),frontendCabinet:!options.frontendExit,frontendDestination:options.frontendExit?'outside DC':'local switch',frontendObjects:frontendRoutes.flatMap(r=>[r.before.tube.id,r.after.tube.id]),frontendEndpointError:Math.max(...frontendRoutes.map(r=>r.before.points[0].distanceTo(r.nicMesh.position)+r.before.points.at(-1).distanceTo(r.after.points[0])+r.after.points.at(-1).distanceTo(edge))),slowLinks:slow.visible?points.length:0,taps:phase>=5?points.length:0,verifierUnits:phase>=6?1:0,copyDirection:'TAP to verifier only',reporting:phase>=8?'restricted schema':'hidden',outOfBandMonitoring:phase>=9};},dispose(){geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());}};
 }
