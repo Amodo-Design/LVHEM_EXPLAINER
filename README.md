@@ -51,3 +51,18 @@ python3 src/rasterize.py
 Read **TECHNICAL_BASIS.md** before making technical claims. Architecture/counts are sourced; rack placement, cable routes and small mechanical features are illustrations. The selected topology is a single eight-rack scalable unit with four compute racks populated, not a four-rack NVLink domain or a complete multi-SU facility design.
 
 The **Cable bundles** and **Cable trays** layers add substantial 3D looms, curved rack drops and overhead ladder trays. These follow the spacing controls. Representative strands convey cable density while the separate network model retains the more explicit architectural inventory.
+
+## Solid rendering and individual fibres
+
+Solid, shaded hardware is now the default. Dark frames, metallic fascia, port recesses, drive handles, fan details, shaded round cable jackets, connector boots and metal tray supports replace the former flat linework. X-ray remains available as an optional layer treatment. Nearby racks show 144 front host cable paths as 3D tubes with smooth bends and strain-relief details; overview bundles use representative strands to keep large scenes practical.
+
+## Animation
+
+The **Animation** panel has **Next** and **Reset** controls. Each click advances one stage:
+
+1. Full data centre, using the current array.
+2. Fly into a fifteen-rack group and isolate it.
+3. Fade out backend bundles, trays, individual host fibres and management cables. Rack-local NVLink remains.
+4. Add **1 metre** to both the rack gaps and row gaps, moving the racks and camera smoothly.
+
+Layout controls are locked during the sequence. Reset restores the original layout and connection-layer settings. Motion respects the operating system's reduced-motion preference. The animation is a visual presentation sequence, not a physical procedure for disconnecting live equipment. The current-view PNG export captures any stage.

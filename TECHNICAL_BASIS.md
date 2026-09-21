@@ -75,3 +75,13 @@ Close-up NVLink paths group eight logical links per tray pair. Mechanical cable 
 
 ### Bundled cable appearance
 The rack field now depicts raised ladder trays, dense row and cross-row cable bundles, curved paired rack drops and retaining bands. Visible strands represent cable groups; exact cable counts, active switching, tray loading and rated bend radii are not certified by the illustration. The visual treatment follows the separation and support principles described in NVIDIA's cable-management guide: https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/cable-management-guidance.html .
+
+### Solid rendering and photographic comparison
+
+The solid study was compared visually against NVIDIA's GB200 front elevation (`references/hardware-rack-configuration.png`) and a real Digital Realty facility photograph published with this release:
+https://www.prnewswire.com/news-releases/digital-realty-adds-renewable-energy-expands-colocation-capacity-in-dallas-portfolio-301116811.html
+Photo: https://mma.prnewswire.com/media/1232073/Digital_Realty_inside_data_center.jpg?p=publish&w=950
+
+Observed cues applied: opaque dark frames, metallic equipment fronts, supported yellow fibre bundles, separate individual jackets, broad overhead pathways, curved transitions, and dark retaining straps. The facility photograph is a cabling/material reference, not evidence of a GB200 installation. The original GB200 tray counts and documented front-face port positions remain the hardware reference.
+
+Close-view host cables are modelled as 4.8 mm outside-diameter jackets, with rounded transitions, connector bodies and boots. This is a visual assumption rather than a specification for a selected cable SKU. Bundle display strands, tray capacity, exact bend-radius compliance and port-to-switch allocation are illustrative; active leaf/spine switching remains abstracted in the rack-field study. Front-face detail is simplified relief, not manufacturer mechanical CAD. The result is a reference-informed 3D illustration, not a photogrammetric replica or certified installation model.

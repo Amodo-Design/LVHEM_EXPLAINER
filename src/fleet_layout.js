@@ -7,7 +7,7 @@ export function layoutRacks(count, columns, rackGap, rowGap) {
 // Shared route bundles, not electrical bus junctions. Leaf/spine switching is abstracted.
 export function routeField(layout) {
  const {positions,cols,rows,width}=layout, segments=[],edges=[],rackNodes=[],nodes=new Map();
- const z=2.94,yOffset=0,spineX=width/2+1.0;
+ const z=2.94,yOffset=0,spineX=Math.max(...positions.map(p=>p[0]))+1.3;
  function node(id,point){nodes.set(id,point);return id;}
  function edge(a,b){edges.push([a,b]);segments.push(...nodes.get(a),...nodes.get(b));}
  for(let row=0;row<rows;row++){
