@@ -4,7 +4,8 @@ import {createRackGeometries} from './rack_geometry.js';
 import {layoutRacks} from './fleet_layout.js';
 import {buildCableBundles} from './fleet_bundles.js';
 import {buildDataHall,buildHallFrontend} from './data_hall.js';
-import {buildVerificationScene} from './verification_scene.js';
+import {buildVerificationScene} from './verification_scene.js?v=photo-callouts';
+import {createPhotoCallouts} from './photo_callouts.js?v=layout-2';
 import {iceberg,applyIcebergTheme} from './iceberg_theme.js';
 const presentation=document.documentElement.dataset.presentation==='iceberg';
 const $=id=>document.getElementById(id),stage=$('stage'),V=THREE.Vector3;
@@ -36,6 +37,7 @@ const installation=buildVerificationScene(separated,geometries.medium,rackMateri
 const hall=buildDataHall(originalLayout);scene.add(hall.group);
 const hallFrontend=buildHallFrontend(originalLayout,focusIds,installation.frontendEdge,installation.frontendTrunkX);scene.add(hallFrontend.group);
 if(presentation)applyIcebergTheme(scene);
+const photoCallouts=presentation?createPhotoCallouts(stage,camera,()=>installation.calloutAnchors()):null;
 const contextTarget=new THREE.WebGLRenderTarget(1,1),quadScene=new THREE.Scene(),quadCamera=new THREE.OrthographicCamera(-1,1,1,-1,0,1),quadMaterial=new THREE.MeshBasicMaterial({map:contextTarget.texture,transparent:true,depthTest:false,depthWrite:false,toneMapped:false});quadScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),quadMaterial));
 let current=0,busy=false,transition=null,dirty=true,lastLOD=0,netOpacity=1,contextOpacity=1,check=null,scenario='match',checkPhase='idle',lastDiagnostics=0;
 const diagnostic={main:256,context:0,near:0};
@@ -43,7 +45,7 @@ function fill(mesh,ids){mesh.count=ids.length;ids.forEach((id,i)=>{matrix.makeTr
 function hardwareLOD(){const lists={far:[],medium:[],high:[]},background={far:[],medium:[],high:[]},ppm=stage.clientHeight/(2*Math.tan(camera.fov*Math.PI/360));const sorted=positions.map((p,id)=>({id,d:camera.position.distanceTo(p.clone().add(new V(0,0,1.1)))})).sort((a,b)=>a.d-b.d);for(const {id,d}of sorted){const px=2.236*ppm/Math.max(.5,d);if(current>0&&!focusSet.has(id)){background[px>32?'medium':'far'].push(id);continue;}lists[px>185&&lists.high.length<16?'high':px>32?'medium':'far'].push(id);}for(const level of ['far','medium','high']){fill(mainBatches[level],lists[level]);fill(contextBatches[level],background[level]);}diagnostic.main=lists.far.length+lists.medium.length+lists.high.length;diagnostic.context=background.far.length+background.medium.length;diagnostic.near=lists.high.length;dirty=false;lastLOD=performance.now();}
 function fade(group,value){group.visible=value>.001;group.traverse(o=>{if(!o.material)return;const ms=Array.isArray(o.material)?o.material:[o.material];for(const m of ms){m.userData.baseOpacity??=m.opacity;m.userData.baseDepthWrite??=m.depthWrite;m.opacity=m.userData.baseOpacity*value;const transparent=value<1||m.userData.baseOpacity<1;if(m.transparent!==transparent){m.transparent=transparent;m.needsUpdate=true;}m.depthWrite=value<1?false:m.userData.baseDepthWrite;}});}
 function fit(points){const target=new V();points.forEach(p=>target.add(p));target.multiplyScalar(1/points.length);target.z=1.35;const dir=new V(.58,-.88,.7).normalize(),right=new V().crossVectors(new V(0,0,1),dir).normalize(),up=new V().crossVectors(dir,right).normalize(),tv=Math.tan(camera.fov*Math.PI/360);let distance=7;for(const p of points)for(const x of[-.5,1.4])for(const y of[-1.2,.7])for(const z of[0,3.4]){const q=p.clone().add(new V(x,y,z)).sub(target);distance=Math.max(distance,q.dot(dir)+Math.abs(q.dot(right))/(tv*camera.aspect)*1.12,q.dot(dir)+Math.abs(q.dot(up))/tv*1.18);}return{target,position:target.clone().addScaledVector(dir,distance)};}
-function desiredView(step){if(step===0)return fit([...original,...hall.frame]);if(step===1)return fit(focusIds.map(id=>original[id]));return fit(installation.cameraPoints(step<4?4:step===4?5:step===5?6:8));}
+function desiredView(step){if(step===7)step=5;if(step===0)return fit([...original,...hall.frame]);if(step===1)return fit(focusIds.map(id=>original[id]));return fit(installation.cameraPoints(step<4?4:step===4?5:step===5?6:8));}
 function updateUI(){if(presentation){$('previous').disabled=busy||current===0;$('next').disabled=busy;$('next').setAttribute('aria-label',current===6?'Restart presentation':'Next view');return;}const c=chapters[current];$('chapter').textContent=c.eyebrow;$('title').textContent=c.title;$('description').textContent=c.description;$('status-list').replaceChildren(...c.facts.map(text=>{const d=document.createElement('div');d.append(document.createElement('i'),document.createTextNode(text));return d;}));$('check-panel').hidden=current!==6;$('previous').disabled=busy||current===0;$('next').disabled=busy;$('next').textContent=current===6?'Restart →':'Next step →';$('camera-home').disabled=busy;document.querySelectorAll('.step').forEach((button,i)=>{button.disabled=busy;button.setAttribute('aria-current',i===current?'step':'false');});const legend=current<2?[['#cfb149','Fast compute / storage'],['#168eaa','Frontend → outside DC']]:current<5?[['#168eaa','Frontend → outside DC'],...(current===4?[['#c37d3f','Inline TAP']]:[])]:[['#168eaa','Requests / replies'],['#c37d3f','Shared TAP'],['#4d9479','Packet copies'],...(current===6?[['#c37d3f','Restricted result']]:[])];$('legend').innerHTML=legend.map(([color,text])=>`<span><i style="background:${color}"></i>${text}</span>`).join('');}
 if(!presentation)chapters.forEach((chapter,i)=>{const b=document.createElement('button');b.className='step';b.innerHTML=`<b>${String(i+1).padStart(2,'0')}</b>${chapter.short}`;b.onclick=()=>goTo(i);$('steps').append(b);});
 function cancelCheck(){check=null;checkPhase='idle';installation.setSampling(false);if(presentation)return;$('run-check').disabled=false;$('result').className='result';$('result').textContent='Ready to replay a sampled request.';$('observed-reply').textContent='—';$('recomputed-reply').textContent='—';$('sample-unit').textContent='Sample one inference unit';for(const id of ['observe','replay','compare'])$(id).classList.remove('active');}
@@ -56,7 +58,8 @@ function goTo(index,instant=false){
  const destination=desiredView(index),duration=instant||matchMedia('(prefers-reduced-motion:reduce)').matches?0:strip?3200:1600;
  const from=focusIds.map(id=>positions[id].clone()),to=focusIds.map((id,i)=>index>=2?separated[i].clone():original[id].clone());
  const surroundings=index>0?contextScene:scene;surroundings.add(fullBundles.group,hall.group,hallFrontend.group);
- installation.setPhase(index<2?2:index<4?4:index===4?5:index===5?6:8);
+ installation.setPhase(index<2?2:index<4?4:index===4?5:index===5||index===7?6:8);
+ photoCallouts?.setVisible(index===7);
  installation.root.visible=true;
  installation.setTapInstall(installTaps?0:1);
  installation.setFrontendLayout(from);
@@ -76,7 +79,7 @@ function tickTransition(t){
  if(u===1){transition=null;busy=false;controls.enabled=true;installation.root.visible=true;updateUI();if(presentation&&current===6)startCheck();}
 }
 
-const navigationOrder=presentation?[0,1,2,4,5,6]:chapters.map((_,i)=>i);
+const navigationOrder=presentation?[0,1,2,4,5,7,6]:chapters.map((_,i)=>i);
 function navigate(direction){const index=navigationOrder.indexOf(current),next=direction>0?(index+1)%navigationOrder.length:Math.max(0,index-1);goTo(navigationOrder[next]);}
 $('next').onclick=()=>navigate(1);$('previous').onclick=()=>navigate(-1);if(!presentation){$('restart').onclick=()=>goTo(0,true);$('camera-home').onclick=()=>{const view=desiredView(current);camera.position.copy(view.position);controls.target.copy(view.target);controls.update();dirty=true;};
 for(const id of ['match','different'])$(id).onclick=()=>{scenario=id;cancelCheck();$('match').setAttribute('aria-pressed',id==='match');$('different').setAttribute('aria-pressed',id==='different');};
@@ -97,4 +100,4 @@ $('close-export').onclick=()=>$('export-dialog').close();}
 if(presentation)window.addEventListener('keydown',event=>{if(event.altKey||event.ctrlKey||event.metaKey||busy)return;if(event.key==='ArrowRight'){event.preventDefault();navigate(1);}else if(event.key==='ArrowLeft'&&current>0){event.preventDefault();navigate(-1);}});
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();dirty=true;}new ResizeObserver(resize).observe(stage);controls.addEventListener('change',()=>dirty=true);
 resize();goTo(0,true);hardwareLOD();$('loading')?.remove();
-function animate(t){requestAnimationFrame(animate);tickTransition(t);tickCheck(t);controls.update();installation.update(t);if(dirty&&t-lastLOD>65)hardwareLOD();draw();if(t-lastDiagnostics>700){stage.dataset.diagnostics=JSON.stringify({stage:current,busy,mainRacks:diagnostic.main,contextRacks:diagnostic.context,contextOpacity,networkOpacity:netOpacity,storageShown:false,rackGap:+(positions[focusIds[1]].x-positions[focusIds[0]].x-.6).toFixed(3),rowGap:focusIds.length>focusCols?+(positions[focusIds[focusCols]].y-positions[focusIds[0]].y-1.2).toFixed(3):null,frontendVisible:installation.root.visible,frontend:hallFrontend.stats,hall:hall.stats,installation:installation.diagnostics(),checkPhase,result:presentation?checkPhase:$('result').textContent,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles});lastDiagnostics=t;}}requestAnimationFrame(animate);
+function animate(t){requestAnimationFrame(animate);tickTransition(t);tickCheck(t);controls.update();installation.update(t);photoCallouts?.update();if(dirty&&t-lastLOD>65)hardwareLOD();draw();if(t-lastDiagnostics>700){stage.dataset.diagnostics=JSON.stringify({stage:current,busy,mainRacks:diagnostic.main,contextRacks:diagnostic.context,contextOpacity,networkOpacity:netOpacity,storageShown:false,rackGap:+(positions[focusIds[1]].x-positions[focusIds[0]].x-.6).toFixed(3),rowGap:focusIds.length>focusCols?+(positions[focusIds[focusCols]].y-positions[focusIds[0]].y-1.2).toFixed(3):null,frontendVisible:installation.root.visible,frontend:hallFrontend.stats,hall:hall.stats,installation:installation.diagnostics(),checkPhase,result:presentation?checkPhase:$('result').textContent,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles});lastDiagnostics=t;}}requestAnimationFrame(animate);

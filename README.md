@@ -83,8 +83,10 @@ The shared TAP forwards the three original links outside the DC and branches cop
 
 ## Text-free presentation
 
-Open **`presentation.html`** for the full-canvas Iceberg Light edition. Only two small circular back/forward controls are visible; Left/Right arrow keys also navigate. Six views run directly from full DC → zoom → separation and backend fade → shared TAP → verifier → automatic illustrative matching recomputation. The redundant hold after separation is skipped in both directions. Forward from the last stage restarts. Drag and scroll still orbit and zoom. The annotated `install.html` interface is retained.
+Open **`presentation.html`** for the full-canvas Iceberg Light edition. Only two small circular back/forward controls are visible; Left/Right arrow keys also navigate. Seven views run from full DC → zoom → separation and backend fade → shared TAP → verifier → real hardware photos → automatic illustrative matching recomputation. The redundant hold after separation is skipped in both directions. Forward from the last stage restarts. Drag and scroll still orbit and zoom. The annotated `install.html` interface is retained.
 
 The palette follows [Iceberg Light](https://terminalcolors.com/themes/iceberg/light/): background `#e8e9ec`, hardware `#33374c` / `#262a3f`, frontend blue `#2d539e`, copies green `#668e3d`, and TAP / removed fabric orange `#c57339`. Shaded hardware and metal use cool neutral variations. No animated packet markers are introduced.
 
 In the installation and text-free presentation, backend fading and rack separation happen simultaneously. Each clear rack gap increases by 0.3 m (from 0.1 m to 0.4 m).
+
+The real-hardware step adds the supplied `compute.jpg`, `recompute.jpeg` and `TAP.jpg` as image-only callouts. Blue, green and orange leaders stay attached to the compute rack, verifier and shared TAP while the camera orbits. The photographs illustrate the corresponding roles; they are not a claim that all pictured hardware is the modeled GB200 NVL72 implementation.
