@@ -16,13 +16,14 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
  }
  function cable(g,positions,m,r=.012,packet=false,reverse=false){const curve=roundedCablePath(positions,.09);curve.tube=mesh(g,new THREE.TubeGeometry(curve,128,r,8,false),m,new V());curve.radius=r;if(packet){const dot=mesh(g,new THREE.SphereGeometry(.043,8,6),m,new V());moving.push({dot,curve,offset:moving.length*.137,reverse});}return curve;}
  function arrow(g,curve,t,m){const tip=curve.getPoint(t),dir=curve.getTangent(t);const o=mesh(g,new THREE.ConeGeometry(.048,.14,8),m,tip);o.quaternion.setFromUnitVectors(new V(0,1,0),dir);}
+ const columns=options.columns??Math.min(5,points.length),rows=Math.ceil(points.length/columns),laneCenter=(points.length-1)/2;
  const tapPoints=[],frontendRoutes=[],rowTrays=[],rowStraps=[];
  const jacket=[material(0x416f80),material(0x547d88),material(0x638c98)],trayMaterial=material(0x7f898b),strapMaterial=material(0x363c3e);
  const trunkX=maxX+1.0,trayZ=2.60;
  function frontendPoints(p,i){
-  const col=i%5,nic=p.clone().add(new V(.19,-.635,.4)),tap=p.clone().add(new V(.275,-.70,1.13));
-  const laneY=p.y-.88+(col-2)*.014,laneX=trunkX+(i-7)*.012;
-  const end=edge.clone().add(new V(0,(i-7)*.012,0));end.z=trayZ+.0115;
+  const col=i%columns,nic=p.clone().add(new V(.19,-.635,.4)),tap=p.clone().add(new V(.275,-.70,1.13));
+  const laneY=p.y-.88+(col-(columns-1)/2)*.014,laneX=trunkX+(i-laneCenter)*.012;
+  const end=edge.clone().add(new V(0,(i-laneCenter)*.012,0));end.z=trayZ+.0115;
   // A small restrained service loop at the rack, followed by a vertical guide.
   const before=[nic,new V(nic.x,nic.y-.12,.4),new V(p.x-.015,nic.y-.12,.4),new V(p.x-.015,nic.y-.12,.68),new V(tap.x,tap.y,.64),tap];
   const after=[tap,new V(tap.x,tap.y,1.37),new V(p.x+.275,laneY,1.37),new V(p.x+.275,laneY,trayZ+.0115),new V(laneX,laneY,trayZ+.0115),new V(laneX,end.y,trayZ+.0115),end];
@@ -30,8 +31,8 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
  }
  function frontendCable(points,i){const curve=roundedCablePath(points);curve.radius=.0045;curve.tube=mesh(slow,new THREE.TubeGeometry(curve,128,curve.radius,8,false),jacket[i%3],new V());return curve;}
  function replaceGeometry(object,geometry){geometries.delete(object.geometry);object.geometry.dispose();object.geometry=geometry;geometries.add(geometry);}
- for(let row=0;row<3;row++){
-  const p=points[row*5],restraints=new THREE.Group();slow.add(restraints);restraints.position.y=p.y-.88;rowStraps.push(restraints);for(let x=minX+.4;x<trunkX;x+=.85){box(restraints,new V(x,0,trayZ+.022),[.016,.085,.006],strapMaterial);for(const y of[-.042,.042])box(restraints,new V(x,y,trayZ+.011),[.016,.006,.024],strapMaterial);}rowTrays.push(mesh(slow,ladderTray(new V(p.x-.2,p.y-.88,trayZ),new V(trunkX+.18,p.y-.88,trayZ)),trayMaterial,new V()));
+ for(let row=0;row<rows;row++){
+  const p=points[row*columns],restraints=new THREE.Group();slow.add(restraints);restraints.position.y=p.y-.88;rowStraps.push(restraints);for(let x=minX+.4;x<trunkX;x+=.85){box(restraints,new V(x,0,trayZ+.022),[.016,.085,.006],strapMaterial);for(const y of[-.042,.042])box(restraints,new V(x,y,trayZ+.011),[.016,.006,.024],strapMaterial);}rowTrays.push(mesh(slow,ladderTray(new V(p.x-.2,p.y-.88,trayZ),new V(trunkX+.18,p.y-.88,trayZ)),trayMaterial,new V()));
  }
  // Transverse collection tray and an independent exit tray remain after fast fabric removal.
  mesh(slow,ladderTray(new V(trunkX,edge.y-.15,trayZ),new V(trunkX,maxY-.65,trayZ),.40),trayMaterial,new V());
@@ -61,7 +62,7 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
   box(taps,tap.clone().add(new V(-.043,-.058,-.068)),[.006,.004,.006],green);
   for(const z of[-.12,.12]){box(taps,tap.clone().add(new V(0,0,z)),[.032,.035,.021],dark);box(taps,tap.clone().add(new V(0,0,z*1.17)),[.016,.024,.028],silver);}
   const monitor= tap.clone().add(new V(.072,0,.02));
-  const copyLane=trunkX-.07+i*.009;
+  const copyLane=trunkX+(i-laneCenter)*.009;
   const copy=cable(copies,[monitor,new V(p.x+.36,p.y-.70,monitor.z),new V(p.x+.36,p.y-.70,2.69),new V(p.x+.36,p.y-.81,2.69),new V(copyLane,p.y-.81,2.69),new V(copyLane,cy+.35,2.69),new V(aggregator.x,cy+.35,2.69),aggregator],green,.0045,true);arrow(copies,copy,.94,green);
 
  });
@@ -94,7 +95,7 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
    const next=frontendPoints(p,i);routes.nicMesh.position.copy(next.nic);routes.end=next.end;
    for(const key of ['before','after']){const old=routes[key],curve=roundedCablePath(next[key]);curve.radius=old.radius;curve.tube=old.tube;replaceGeometry(curve.tube,new THREE.TubeGeometry(curve,128,curve.radius,8,false));routes[key]=curve;}
   });
-  if(changed)for(let row=0;row<3;row++){const p=locations[row*5];rowStraps[row].position.y=p.y-.88;rowStraps[row].children.forEach((strap,j)=>{const x=p.x+.4+Math.floor(j/3)*.85;strap.position.x=x;strap.visible=x<trunkX-.15;});replaceGeometry(rowTrays[row],ladderTray(new V(p.x-.2,p.y-.88,trayZ),new V(trunkX+.18,p.y-.88,trayZ)));}
+  if(changed)for(let row=0;row<rows;row++){const p=locations[row*columns];rowStraps[row].position.y=p.y-.88;rowStraps[row].children.forEach((strap,j)=>{const x=p.x+.4+Math.floor(j/3)*.85;strap.position.x=x;strap.visible=x<trunkX-.15;});replaceGeometry(rowTrays[row],ladderTray(new V(p.x-.2,p.y-.88,trayZ),new V(trunkX+.18,p.y-.88,trayZ)));}
  }
 
  function setTapInstall(progress){taps.position.z=(1-progress)*1.1;}

@@ -7,8 +7,8 @@ Open `install.html` through the local server. It is separate from `fleet.html`, 
 | Screen | Visual action | Message |
 | --- | --- | --- |
 | 1. Connected DC | Show a tiled, open-roof data hall, 256 solid racks, service cabinets, busways, coolant routes, gold fast fabric and blue frontend Ethernet. | Both networks exist from the first frame. |
-| 2. Zoom in | Focus on 15 racks with all high-bandwidth cabling still present; fade the surrounding DC to 18%. | Zoom before altering the network. |
-| 3. Remove network | Remove fast cabling first, then add one metre to rack and row gaps. Keep 15 slow frontend links visible and connected as racks move. | Remove scale-out and most frontend networking; retain rack-local NVLink and one slow frontend per unit. |
+| 2. Zoom in | Focus on 3 racks with all high-bandwidth cabling still present; fade the surrounding DC to 18%. | Zoom before altering the network. |
+| 3. Remove network | Remove fast cabling first, then add one metre to rack and row gaps. Keep 3 slow frontend links visible and connected as racks move. | Remove scale-out and most frontend networking; retain rack-local NVLink and one slow frontend per unit. |
 | 4. Inference units | Hold the separated layout and show the surviving request/reply network. | One rack serves the approved model independently; the draft proposes a single slow NIC/link per unit. |
 | 5. Install TAPs | Lower an orange TAP into each existing frontend link; leave the frontend in place. | Forward traffic and independently copy it; the proposed active TAP enforces the example link rate. |
 | 6. Recompute system | Add green copy paths, an aggregator, and a verifier rack with supporting hardware. | The verifier inside the DC receives one-way copies and has enough compute for the approved model. |
@@ -20,7 +20,7 @@ The network selection follows the draft’s “Reduce high-bandwidth networking 
 
 ## Visual and scientific scope
 
-- **Fifteen racks means fifteen inference units**, not one fifteen-rack NVLink domain. One NVL72 rack retains its 72-GPU scale-up network.
+- **Three racks means three inference units**, not one three-rack NVLink domain. One NVL72 rack retains its 72-GPU scale-up network.
 - The approximately **1 Gb/s** frontend is the draft's example, not a general workload-sizing result. The model must fit in the unit with adequate serving memory.
 - Added rack spacing is for legibility; the animation does not assert that a metre of separation enforces isolation.
 - The illustration removes the original management fabric. Permitted telemetry would use the monitored frontend; update and weight-loading procedures still require agreement. The alternate air-gapped-management option is not depicted.
@@ -36,7 +36,7 @@ Next / Back move between screens; stage buttons allow direct access. Restart res
 
 ## Persistent frontend and data hall
 
-The blue frontend exists at screen 1 for all 256 racks. The 15 focused paths are the same mesh objects before and after network removal, rack separation, and TAP installation. Frontend traffic has no animated packet dots. Moving racks updates their existing cable geometry so they remain attached; TAP insertion only adds the orange inline devices. Green verifier-copy branches are added in the subsequent verifier installation, as required by the proposal.
+The blue frontend exists at screen 1 for all 256 racks. The 3 focused paths are the same mesh objects before and after network removal, rack separation, and TAP installation. Frontend traffic has no animated packet dots. Moving racks updates their existing cable geometry so they remain attached; TAP insertion only adds the orange inline devices. Green verifier-copy branches are added in the subsequent verifier installation, as required by the proposal.
 
 The contextual frontend includes row access switches, paired aggregation switches, customer-edge switching and two border uplinks. The focused links are shown routing out through the DC boundary; their intermediate switching is abstracted, with no local frontend cabinet. This is a service-path schematic, not a port-complete or capacity-sized DGX SuperPOD cabling plan. Existing routes are retained visually; the draft’s NIC/media conversion is abstracted. Gold looms represent the fast paths being removed, including excess frontend/storage connectivity.
 
@@ -51,3 +51,7 @@ Frontend cabling uses 9 mm illustrative jackets with short local service loops, 
 Straight segments with local rounded bends replace unconstrained interpolating splines. Restraints, rack brackets, tray stanchions and anchored baseplates give the routes physical support. The 9 mm jacket, bends, TAP brackets and tray sizes are illustrative geometry, not a manufacturer-qualified installation specification. Frontend copper paths are kept separate from the removed fast-fabric looms and overhead power/cooling. Verifier-copy routes use the managed overhead paths too.
 
 Design reference: [NVIDIA cable management guidance](https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/cable-management-guidance.html), covering supported bends, segregation, strain support and ladder/basket/fiber tray systems.
+
+## Three-rack presentation
+
+The zoom highlights three adjacent racks in one row; the other 253 racks remain visible at 18% opacity. Subsequent steps keep this three-unit selection, including its three frontend links and TAPs. The 3D canvas has no text cards, callouts, counters, legend or controls overlaid on it. Step narration, cable colours and camera/export controls live in the sidebar.

@@ -71,8 +71,10 @@ Layout controls are locked during the sequence. Reset restores the original layo
 
 Open **`install.html`** for the separate presentation interface. Seven click-through screens explain the proposed installation: connected DC → zoom with cabling intact → remove fast links and separate racks → inference units → inline TAPs → verifier compute → an illustrative recomputation check. Both matching and differing replies can be demonstrated as sample PASS/FAIL outcomes. Storage relocation is deliberately omitted. Read `INSTALLATION_STORYBOARD.md` for the proposal assumptions and the distinction between this visual analogy and an actual recomputation algorithm.
 
-The installation now starts inside an open-roof data hall with separate gold fast fabric and blue frontend Ethernet. Frontend paths exist for all 256 racks from the start; the same 15 focused paths remain through removal and separation, and TAPs are inserted onto them. Hall architecture and switch routes are schematic; see the storyboard for the scope.
+The installation now starts inside an open-roof data hall with separate gold fast fabric and blue frontend Ethernet. Frontend paths exist for all 256 racks from the start; the same 3 focused paths remain through removal and separation, and TAPs are inserted onto them. Hall architecture and switch routes are schematic; see the storyboard for the scope.
 
 Frontend routes are static (no moving traffic markers), leave the data-centre boundary, and have no local “slow frontend” cabinet or label. Cable geometry follows rack separation to preserve attachment; verifier-copy and recomputation animation remains.
 
 Frontend cable detail uses managed overhead ladder trays, rack-side guides, short service loops, rack-mounted TAPs, restrained parallel cable lanes and anchored supports. Unbounded sweeping floor splines have been removed. The cable-routing helper is `src/cable_routes.js`.
+
+The installation zoom now highlights three adjacent racks, with 253 racks remaining as faded context. The 3D scene has no text overlays; narration and controls remain in the sidebar.

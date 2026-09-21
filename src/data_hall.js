@@ -33,12 +33,10 @@ export function buildDataHall(layout){
  for(const x of[left+.35,right-.5])box(colors.steel,x,(front+back)/2,3.95,.11,back-front,.12);
  for(const y of[front+.5,back-.5]){box(colors.steel,(left+right)/2,y,3.95,right-left,.10,.12);for(let x=left+2;x<right-1;x+=3)box(colors.white,x,y,3.84,1.8,.11,.05);}
  for(const[color,entries]of items){const m=new THREE.MeshStandardMaterial({color,roughness:.85,metalness:.1});const mesh=new THREE.InstancedMesh(new THREE.BoxGeometry(1,1,1),m,entries.length);entries.forEach(([x,y,z,w,d,h],i)=>{matrix.compose(new V(x,y,z),new THREE.Quaternion(),new V(w,d,h));mesh.setMatrixAt(i,matrix);});mesh.computeBoundingSphere();group.add(mesh);}
- const canvas=document.createElement('canvas');canvas.width=1024;canvas.height=128;const c=canvas.getContext('2d');c.fillStyle='#e6eae5';c.fillRect(0,0,1024,128);c.fillStyle='#637b70';c.font='40px monospace';c.fillText('COMPUTE HALL 01   /   256 RACKS',45,82);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
- const sign=new THREE.Mesh(new THREE.PlaneGeometry(8,1),new THREE.MeshBasicMaterial({map:texture,side:THREE.DoubleSide}));sign.rotation.x=Math.PI/2;sign.position.set((left+right)/2,back-.1,2.5);group.add(sign);
  return{group,frame:[new V(left,front,0),new V(right,back,0)],stats:{rows:layout.rows,serviceCabinets:layout.rows}};
 }
 
-// Persistent frontend access paths. The focused 15 paths live in verification_scene;
+// Persistent frontend access paths. The focused rack paths live in verification_scene;
 // this adds all remaining rack paths, row access switches, paired aggregation, and border uplinks.
 export function buildHallFrontend(layout,focusIds,frontendExit,focusTrunkX){
  const group=new THREE.Group(),matrix=new THREE.Matrix4(),boxes=[],paths=[],ports=[],focusSet=new Set(focusIds);
