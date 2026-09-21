@@ -1,0 +1,1995 @@
+             MGX Accelerated Computing Rack and Trays Specification
+
+                                  Revision 1.1
+
+                                     Version
+                      Product Specification Template v1.3
+                           Effective August 29, 2024
+
+
+
+
+Author: NVIDIA
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+Table of Contents
+1. License                                                                                  4
+  1.1. OPTION B: Open Web Foundation (OWF) CLA                                              4
+  1.2 Acknowledgements                                                                      5
+2. Compliance with OCP Tenets                                                               6
+  2.1. Openness                                                                             6
+  2.2. Efficiency                                                                           6
+  2.3. Impact                                                                               6
+  2.4. Scale                                                                                6
+3. Change Log                                                                               8
+4. Scope                                                                                    9
+5. Overview                                                                                10
+  5.1 Accompanying Design Specifications                                                   12
+6. Environmental / Regulatory Requirements                                                 13
+7. Physical Specifications                                                                 14
+  7.1 Compute and Switch Tray Mechanical Form Factor                                       14
+  7.2 Rack Form Factor                                                                     17
+  7.2.1 19” EIA IT Gear Support and Front Cabling                                          17
+  7.2.2 Rear Rack Extender                                                                 18
+  7.2.3 Rack Manifold Mounting                                                             20
+  7.3 Slide Rail Interface                                                                 29
+  7.3.1 Standard Chassis Rail Interface                                                    29
+  7.3.2 Blind Mate Slide Rail                                                              30
+  7.4 MGX DC-SCM Module                                                                    30
+  7.5 MGX Power Distribution Board                                                         33
+8. Bus Bar Requirements                                                                    33
+  8.1 Busbar Electrical Requirements                                                       33
+  8.2 Busbar Grounding Requirements                                                        34
+  ○    8.2.1 Chassis to RTN connection                                                     35
+  8.2.2 Ground connection to rack                                                          35
+
+
+Date: January 14, 2024                                                            Page 2
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+  8.3 Busbar Mechanical Requirements                                                     36
+  8.4 Busbar Environmental Requirements                                                  38
+  8.4 Busbar Reliability Requirements                                                    38
+  8.5 Busbar Labeling Requirements                                                       38
+  8.6 Busbar Compliance Requirements                                                     39
+9. Compute Tray Board and IO Bay Form Factors                                            40
+  9.1. Board Form Factors                                                                40
+  9.2 Micro MGX Outline                                                                  40
+  9.2.1 Micro MGX Mounting Holes                                                         42
+  9.2.2 Micro MGX Keepout Zones                                                          42
+  9.2.3 Micro MGX Board Pan                                                              46
+  9.3 MGX Board Outline                                                                  46
+  9.3.1 MGX Board Outline                                                                47
+  9.3.1 MGX Board Mounting Holes                                                         48
+  9.3.2 MGX Board Keepout Zones                                                          48
+  9.2.6 MGX Board Pan                                                                    51
+  9.3. IO Bay Form Factors                                                               52
+  9.3.1 Bay Design and Location                                                          54
+  9.3.2 Type A Bay Module                                                                55
+  9.3.3 Type B Bay Module                                                                57
+  9.3.4 Type C Bay Module                                                                58
+  9.3.5 Type D Bay Module                                                                61
+  9.3.6 Type E Bay Module                                                                63
+  9.3.7 IO Bay Chassis Interface                                                         64
+10. Interconnect and Liquid Cooling Interfaces                                           67
+  10.1 Universal Quick Disconnect Interface                                              67
+  10.1.1 Blind Mate Float Mechanism Overview                                             67
+  10.1.2 UQD Component Design Requirements                                               68
+  10.1.3 Blind Mate Mechanism Mechanical Features                                        68
+  10.1.5 Compute Tray Liquid Cooling Interface                                           71
+  10.2 Interconnect Cartridge Definition                                                 71
+  10.2.1 Interconnect Cartridge Drawing                                                  71
+
+
+Date: January 14, 2024                                                          Page 3
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+  10.2.2 Interconnect Cartridge Loading and Support                                           74
+  10.2.3 Key Bracket and Support 2D                                                           75
+11. Rack and Tray Thermal Requirements                                                        90
+12. Prescribed Materials                                                                      91
+13. References (recommended)                                                                  92
+Appendix A - Checklist for IC approval of this Specification (to be completed by contributor(s)
+of this Spec)                                                                                 93
+
+
+
+
+1. License
+PLEASE PICK EITHER THE OCP CLA OPTION OR THE OWF OPTION. ONLY ONE CAN BE
+USED. DELETE THE ONE NOT USED.
+
+🗹🗹 OPTION B: Open Web Foundation (OWF) CLA
+
+
+       1.1. OPTION B: Open Web Foundation (OWF) CLA
+Contributions to this Specification are made under the terms and conditions set forth in Modified
+OWF-CLA-1.0 (As of August 16, 2021) (“Contribution License”) by:
+
+NVIDIA
+
+Usage of this Specification is governed by the terms and conditions set forth in Modified
+OWFa1.0 Final Specification Agreement (FSA) (As of August 16, 2021) (“Specification
+License”).
+
+You can review the applicable Specification License(s) referenced above by the contributors to
+this Specification on the OCP website at http://www.opencompute.org/participate/legal-
+documents/. For actual executed copies of either agreement, please contact OCP directly.
+
+Notes:
+
+   1) The above license does not apply to the Appendix or Appendices. The information in the
+      Appendix or Appendices is for reference only and non-normative in nature.
+
+NOTWITHSTANDING THE FOREGOING LICENSES, THIS SPECIFICATION IS PROVIDED
+BY OCP "AS IS" AND OCP EXPRESSLY DISCLAIMS ANY WARRANTIES (EXPRESS,
+IMPLIED, OR OTHERWISE), INCLUDING IMPLIED WARRANTIES OF MERCHANTABILITY,
+NON-INFRINGEMENT, FITNESS FOR A PARTICULAR PURPOSE, OR TITLE, RELATED TO
+THE SPECIFICATION. NOTICE IS HEREBY GIVEN, THAT OTHER RIGHTS NOT GRANTED
+
+
+Date: January 14, 2024                                                            Page 4
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+AS SET FORTH ABOVE, INCLUDING WITHOUT LIMITATION, RIGHTS OF THIRD PARTIES
+WHO DID NOT EXECUTE THE ABOVE LICENSES, MAY BE IMPLICATED BY THE
+IMPLEMENTATION OF OR COMPLIANCE WITH THIS SPECIFICATION. OCP IS NOT
+RESPONSIBLE FOR IDENTIFYING RIGHTS FOR WHICH A LICENSE MAY BE REQUIRED
+IN ORDER TO IMPLEMENT THIS SPECIFICATION. THE ENTIRE RISK AS TO
+IMPLEMENTING OR OTHERWISE USING THE SPECIFICATION IS ASSUMED BY YOU. IN
+NO EVENT WILL OCP BE LIABLE TO YOU FOR ANY MONETARY DAMAGES WITH
+RESPECT TO ANY CLAIMS RELATED TO, OR ARISING OUT OF YOUR USE OF THIS
+SPECIFICATION, INCLUDING BUT NOT LIMITED TO ANY LIABILITY FOR LOST PROFITS
+OR ANY CONSEQUENTIAL, INCIDENTAL, INDIRECT, SPECIAL OR PUNITIVE DAMAGES
+OF ANY CHARACTER FROM ANY CAUSES OF ACTION OF ANY KIND WITH RESPECT TO
+THIS SPECIFICATION, WHETHER BASED ON BREACH OF CONTRACT, TORT
+(INCLUDING NEGLIGENCE), OR OTHERWISE, AND EVEN IF OCP HAS BEEN ADVISED OF
+THE POSSIBILITY OF SUCH DAMAGE.
+
+
+       1.2 Acknowledgements
+The Contributors of this Specification would like to acknowledge the following companies for
+their feedback:
+            Aivres             Envicool            Microsoft          SUNON
+            Amphenol           FIT                 Molex              Supermicro
+            Asrock Rack        GIGABYTE            MotivAir           Taicheng
+            Astron             Google              Nidec              TE Connectivity
+            Asus               HPE                 nVent              Vertiv
+            Auras              Ingrasys            Oracle             Western Digital
+            AVC                Interplex           Parker             Wistron
+            AWS                Inventec            Pegatron           Wiwynn
+            Behee              Jonhon              Quanta
+            BizLink            Kingslide           Rafas
+            Boyd               Kioxia              Readore
+            CoolerMaster       LEAD WEALTH Recochem
+            CoolIT             Lenovo              Repon
+            CPC                LiteOn              Rittal
+            Danfoss            Lotes               Samsung
+            Dell               Luxshare            Schneider Electric
+            Delta              Meta                SK Hynix
+            Eaton              Micron              Staubli
+
+
+
+
+Date: January 14, 2024                                                           Page 5
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+2. Compliance with OCP Tenets
+This contribution complies with the OCP Tenets of Openness, Efficiency, Impact, Scale, and
+Sustainability. The MGX Accelerated Computing Rack and Tray specification is built on top of
+existing OCP specifications to extend the utility of those specification for higher power and liquid
+cooled AI devices. This specification allows any third party to build racks and trays with
+common blind mate power and liquid cooling interfaces and mounting locations.
+
+
+2.1. Openness
+Third parties may build to this specification such that trays and racks are interoperable in power,
+cooling and latching interfaces. In addition, a volumetric and mounting locations are supported
+for tray to tray connectivity that may be implemented at the discretion of the implementer. Tray
+to tray connectivity electrical and mechanical specifics are not detailed in this specification given
+the myriad of options in the industry and silicon specific requirements of such interconnects.
+Implementers of this specification may deviate or build upon this specification as needed to
+meet product requirements.
+
+
+2.2. Efficiency
+This specification builds upon existing OCP contributions. These include:
+    • Open Rack V3 Base Specification
+    • Open Rack Busbar Specification
+    • Universal Quick Disconnect (UQD) Specification
+In addition, this specification defines the first modular IO bay system for an OCP 1RU server
+which allows customization by end users with limited impact to existing infrastructure.
+By leveraging and then building upon existing specifications, the MGX Accelerated Computing
+Rack and Tray Specification brings continuous improvement to the OCP community and allows
+leveraging of existing OpEx investments in datacenters and datacenter components.
+
+
+2.3. Impact
+Through establishing common infrastructure for an accelerated computing platform, this
+specification will streamline deployment of new hardware to enable new workloads. By
+leveraging this common infrastructure, users can reduce time-to-market and OpEx while
+increasing supply chain assurance and reducing technical risk. Known suppliers of relevant
+components are shared in this specification.
+
+
+2.4. Scale
+Accompanying and within this specification are the necessary documents (2D, 3D, design
+documentation) to kick off and scale production of the rack infrastructure specified. All designs
+
+
+Date: January 14, 2024                                                               Page 6
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+shown are available from a variety of sources and may be procured by the implementor as
+desired.
+
+2.5. Sustainability
+By integrating liquid cooling into the rack and tray architecture, this specification maximizes heat
+capture and enables the implementor to reach a more sustainable datacenter PUE compared to
+air cooling. In addition, by leveraging existing specifications, this specification eliminates waste
+and encourages reuse.
+
+
+
+
+Date: January 14, 2024                                                              Page 7
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+3. Change Log
+
+
+ Date                    Version #              Author                  Description
+
+ 10/10/24                1.0                    NVIDIA                  Initial draft
+
+ 01/07/25                1.1                    NVIDIA                  Corrected drawings
+                                                                        and CAD errors in
+                                                                        KOZs. Updated EIA
+                                                                        flange position in
+                                                                        Rack and
+                                                                        corresponding
+                                                                        braces.
+
+
+
+
+Date: January 14, 2024                                                            Page 8
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+4. Scope
+This document defines a Hardware Product Specification for the MGX Accelerated Computing
+Rack and Trays. The following details are defined within this specification.
+
+   •   Rack overview design documentation (2D and 3D)
+          • Rack alignment and reinforcement components for multi-node connectors and
+             blind mate liquid
+          • 1400A Bus Bar design based on ORV3 bus bar
+          • Adaption to support 19” EIA hardware
+          • Mounting locations, brackets and UQDB components for blind mate liquid cooling
+             manifolds
+          • Blind Mate Slide Rails for compute and switch trays
+          • Rack level thermal requirements
+   •   Compute and Switch tray mechanical form factors
+          o Multi-node connector zones
+          o UQD location and float mechanism design
+          o Locking ejector design
+          o MGX IO bay design
+          o MGX Compute board form factor
+          o MGX DC-SCM Form Factor
+
+The following components are outside the scope of this specification:
+   • Power shelves
+   • TOR and MGMT Switches
+   • CDUs
+   • IO and Power cabling designs
+
+
+
+
+Date: January 14, 2024                                                          Page 9
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+5. Overview
+This specification describes and documents a rack and tray infrastructure design that supports
+blind mate liquid cooling, intra-rack tray interconnectivity zones, higher bus bar power, rack
+reinforcements, modular compute trays and switch trays. The goal of the design is to build on
+top of existing OCP specifications and increase utility by adding the features above. The rack,
+trays, and internal components specified here were derived from the MGX architecture to build a
+modular and reusable infrastructure for AI on top of existing standards. The following figures
+show additions to the ORV3 base rack progressively for clarity, each building on the figure
+before.
+
+
+
+
+     Figure 5-1.    MGX Rack Overview 1 – Rack Extender, Blind Mate latching, and Manifold/Cartridge Supports
+
+
+
+
+Date: January 14, 2024                                                                           Page 10
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+     Figure 5-2.    MGX Rack Overview 2 – Rack Extender, Blind Mate latching, and Manifold/Cartridge Supports
+
+
+
+
+Date: January 14, 2024                                                                           Page 11
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 5-3.   MGX Rack Overview 3 – Manifold and Cartridges
+
+
+5.1 Accompanying Design Specifications
+The following specifications are references throughout this document.
+
+   •   Open Rack V3 Base Specification
+   •   Open Rack Busbar Specification
+   •   Universal Quick Disconnect (UQD) Specification
+   •   OCP DC-SCM Module Specification
+
+
+
+
+Date: January 14, 2024                                                                 Page 12
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+6. Environmental / Regulatory Requirements
+The rack and tray infrastructure is designed to support “rack and roll” deployment with the option to be
+charged with liquid. The following environmental ratings and shock and vibration testing are used to
+validate the L11 implementation:
+
+    ●   Packaged L11 Shock and Vibration requirements
+             ○ 2 hours ISTA 3B vibration. 1-200 Hz, 0.54 Grms. No top load.
+             ○ 2 hours of air vibration per ASTM D4169-23 e1.
+    ●   Rotational Drop Test – ISFTA 3B Palletized/Skidded, 6 inch drop, Front and left flat side, 2
+        opposing corners, 4 drops total
+    ●   Incline Impact Test – 4 sides, 4.0 ft/s
+    ●   Packaged L11 Handling Requirements
+             ○ Tip Test – 22° in all directions (Front, Back, Left, Right)
+             ○ Fork Lift Handling – Refer to ISTA 3B for details
+
+
+
+
+Date: January 14, 2024                                                                     Page 13
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+7. Physical Specifications
+This specification defines the rack design and tray form factors for Accelerated Computing systems and
+form factors for IO bays and boards. Datacenter layout, specific module and IO board designs are not
+included in this specification. Unless otherwise specified, tolerances in this document are shown below.
+                            Table 7-1. Controlling Tolerances Unless Otherwise Specified
+
+   Dimension Type                                   Tolerance
+   Center of hole to center of hole                 +/- 0.127 mm (+/- 0.005 inch)
+   Center of hole to edge                           +/- 0.254 mm (+/- 0.010 inch)
+   Edge to edge                                     +/- 0.127 mm (+/- 0.005 inch)
+   Feature size                                     +/- 0.100 mm (+/- 0.004 inch)
+   PCB thickness                                    +/- 10% of nominal
+
+
+
+
+7.1 Compute and Switch Tray Mechanical Form Factor
+This section details the mechanical form factor of the compute tray and switch tray. In this specification, a
+compute tray refers to a 1RU server chassis that contains some element of CPU and/or GPU. A switch
+tray refers to a 1RU server chassis that contains the necessary ASICs and interconnects to create a
+multi-node network of compute trays. Both the compute tray and switch tray leverage the MGX 1RU
+reference chassis specified below. Refer to 3D models provided for design details not shown here.
+
+
+
+
+                                Figure 7-1.        1RU Common chassis dimensions
+
+
+
+
+Date: January 14, 2024                                                                      Page 14
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                           Figure 7-2.     1RU Common chassis dimensions – Top view
+
+
+
+The figures below illustrate the compute tray design and key aspects of this specification.
+
+
+
+
+                             Figure 7-3.     MGX 1RU System Overview – Front view
+
+
+
+
+Date: January 14, 2024                                                                        Page 15
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 7-4.    MGX 1RU System Overview – Rear view
+
+
+
+
+                         Figure 7-5.    MGX 1RU Switch Overview – Front view
+
+
+
+
+Date: January 14, 2024                                                          Page 16
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                           Figure 7-6.    MGX 1RU Switch Overview – Rear view
+
+
+
+
+7.2 Rack Form Factor
+This section defines the MGX rack features built on top of the ORV3 rack specification. These
+include native 19” component support, rear extender to 1200mm, expanded IO cabling volume,
+full rack blind mate manifold, interconnect cartridge mounting, and additional rack structural
+support. Refer to 3D models provided for design details not shown here. Note that for rack
+supports, rear brackets and primary load bearing components SGC400 material or equivalent is
+recommended.
+
+
+       7.2.1 19” EIA IT Gear Support and Front Cabling
+As previously mentioned, the MGX rack adapts the ORV3 rack to support 19” EIA gear and
+deploy on a 1RU pitch. For AI applications, this brings the benefits of additional front cabling
+volume for IO and management connectivity, space for latching and slide components, and
+additional structure to support blind mate liquid and interconnect forces. In addition, existing
+EIA native hardware such as switches, servers and CDUs may be supported.
+
+
+
+
+Date: January 14, 2024                                                              Page 17
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                  Figure 7-7.   Front cabling volume expansion using 19” EIA rack mounting
+
+
+       7.2.2 Rear Rack Extender
+Shown below is the rear rack extender which increase to the depth of the rack to 1200mm. This
+optional addition provides protection to rear rack components such as a the cable bracing and
+manifold fittings while maintain the existing OCP ORV3 rear hole pattern for seismic bracing and
+doors as needed. Refer to the 3D database for more details.
+
+
+
+
+Date: January 14, 2024                                                                       Page 18
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                              Figure 7-8.    Rack Extender Overview
+
+
+
+
+Date: January 14, 2024                                                          Page 19
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       7.2.3 Rack Manifold Mounting
+       The following figures define the manifold detailed design, sub components,
+       manufacturing requires, mounting brackets and mounting position within the MGX Rack
+       and the ORV3 OCP Rack.
+
+
+
+
+                         Figure 7-9.   ORv3 Rack Manifold Location – Top View
+
+
+
+
+Date: January 14, 2024                                                          Page 20
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                          Figure 7-10.   Orv3 Rack Manifold Locations Detail
+
+
+
+
+Date: January 14, 2024                                                          Page 21
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                               Figure 7-11.   MGX Rack – Top View
+
+
+
+
+Date: January 14, 2024                                                          Page 22
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                           Figure 7-12.   MGX Rack Manifold Locations Detail
+
+Unless otherwise specified, the tolerances below apply to Figure 7-13 to Figure 7-22.
+
+
+
+
+Date: January 14, 2024                                                           Page 23
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                                Figure 7-13.         MGX Rack Assembly Drawing
+
+
+
+
+                         Figure 7-14.          MGX Rack Manifold Assembly Requirements
+
+
+
+
+Date: January 14, 2024                                                                   Page 24
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                     Figure 7-15.       MGX Rack Manifold Drawing – Main Tube Assembly
+
+
+
+
+                         Figure 7-16.      MGX Rack Manifold Drawing – Port and Cap
+
+
+Date: January 14, 2024                                                                   Page 25
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                   Figure 7-17.   MGX Rack Manifold Drawing – Drain Port and Weld Nut
+
+
+
+
+Date: January 14, 2024                                                                  Page 26
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+                    Figure 7-18.      MGX Rack Manifold Drawing – Locating Pins, Inlet/Exit Port
+
+
+
+
+            Figure 7-19.       MGX Rack Manifold Drawing – Manifold Top and Bottom Mounting Brackets
+
+
+
+
+Date: January 14, 2024                                                                             Page 27
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                 Figure 7-20.    MGX Rack Manifold Drawing – Top Right Bracket and UQD Cap
+
+
+
+
+                Figure 7-21.    MGX Rack Manifold Drawing – Top rear and right bottom bracket
+
+
+
+
+Date: January 14, 2024                                                                          Page 28
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 7-22.        MGX Rack Manifold Drawing – Hose Assembly
+
+The hose assembly specified above is one of many possible options that the infrastructure
+supports. The number of hoses per feed, the sizes of those hoses and the type and size of the
+connection to the datacenter may be customized as needed by end users to suit their
+datacenter liquid cooling requirements.
+
+
+7.3 Slide Rail Interface
+To ensure interoperability of rack slides pre-defined t-pin locations on the chassis side wall to
+enable a common slide rail interface. The specified t-pin locations and t-pin design are used
+across the MGX ecosystem as discussed in the following sections and allow for use of a
+standard slide rail design.
+
+
+       7.3.1 Standard Chassis Rail Interface
+Figure 7-23 shows the preferred location of the t-pins referenced from chassis Datum A on a
+1RU system. Using these pre-defined locations is strongly preferred for the MGX ecosystem as
+any variance from the following figure will require unique slide rail designs.
+
+
+
+
+                                        Figure 7-23. Slide Rail T-Pin Locations
+
+
+
+
+Date: January 14, 2024                                                                   Page 29
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       7.3.2 Blind Mate Slide Rail
+The following figures illustrate positioning and mounting enablement features included in the
+slide rail design. These features are used to properly support and align the tray to the
+interconnect and rack level manifolds. In addition, a latching surface is specified to enable latch
+designs for the blind mate liquid implementations and interoperability between slide and
+chassis.
+
+
+
+
+                           Figure 7-24.    Blind Mate System Slide Rail Features
+
+
+
+
+                            Figure 7-25.    Blind Mate System Slide Rail Detail
+
+
+7.4 MGX DC-SCM Module
+This section defines the PCB outline and pinout of the MGX DC-SCM module. The module is
+designed to enable vertical installation within a 1RU server using the same SFF-TA-1002 based
+interface as existing DC-SCM form factors. The figures below show the module mated to a
+board connector and support bracket. Refer to 3D models for details not specified here.
+
+
+
+
+Date: January 14, 2024                                                              Page 30
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 7-26.   Compact 1RU DCSCM Module Overview
+
+The module implements a subset of the DC-SCI pinout as shown in the table below.
+
+
+
+
+Date: January 14, 2024                                                          Page 31
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+                                           Table 7-2. 1RU DC-SCM Module Pinout
+
+             DC-SCI                              DC-SCI                             DC-SCI
+                        NV BMC DC-SCI PIN name              NV BMC DC-SCI PIN name             NV BMC DC-SCI PIN name
+              PIN#                                PIN#                               PIN#
+             OA02   NC(USB3_SCMHOST2_SCM_HPM_ B03       ESPI_HPMCNTRL_RESET_N/GPIO A49     I2C_3V3_6_SCL/GPIO
+             OA03   NC(USB3_SCMHOST2_SCM_HPM_ B04       ESPI_HPMCNTRL_IO_0/GPIO     A50    I2C_3V3_6_SDA/GPIO
+             OB02   NC(USB3_SCMHOST2_HPM_SCM_ B05       ESPI_HPMCNTRL_IO_1/GPIO     A58    I2C_I3C_1V8_12_SCL/GPIO
+             OB03   NC(USB3_SCMHOST2_HPM_SCM_ B06       ESPI_HPMCNTRL_IO_2/GPIO     A59    I2C_I3C_1V8_12_SDA/GPIO
+             OB05   DISPLAYPORT_AUX_DN/(VGA_B) B07      ESPI_HPMCNTRL_IO_3/GPIO     A61    I2C_I3C_1V8_13_SCL/GPIO
+             OB06   DISPLAYPORT_AUX_DP/(DDC_SCL B08     ESPI_HPMCNTRL_ALERT0_N/GPIO A62    I2C_I3C_1V8_13_SDA/GPIO
+             OA05   DISPLAYPORT_LANE0_DN/(VGA_R) A63    UART0_HPM_SCM_DATA / GPIO / B39    I2C_I3C_1V8_14_SCL/GPIO
+                                                        UART0_SCM_HPM_DATA /
+                    DISPLAYPORT_LANE0_DP/(VSYNC
+                                                        PCIE_SCM_HPM_PERST_N /
+                    )
+             OA06                                B51    NCSI2_SCM_HPM_TX_EN         B40    I2C_I3C_1V8_14_SDA/GPIO
+             OA11   DISPLAYPORT_LANE1_DN/(VGA_G B56     UART1_SCM_HPM_DATA /        B41    I2C_I3C_1V8_15_SCL/GPIO
+             OA12   DISPLAYPORT_LANE1_DP/(DDC_S B57     UART1_HPM_SCM_DATA /        B42    I2C_I3C_1V8_15_SDA/GPIO
+             OB11   USB2_SCMHOST3_DN             A08    JTAG_TCK_CPU_BMC            A51    I2C_1V8_16_SCL/GPIO
+             OB12   USB2_SCMHOST3_DP             A09    JTAG_TDI_CPU_BMC            A52    I2C_1V8_16_SDA/GPIO
+                                                                                           I2C_1V8_17_SCL /
+             OA08   SGMII_SCM_HPM_DN             A10    JTAG_TDO_CPU_BMC            B09    ESPI0_HPMCNTRL_CS1_N/GPIO
+                                                                                           I2C_1V8_17_SDA /
+             OA09   SGMII_SCM_HPM_DP             A11    JTAG_TMS_CPU_BMC            B10    ESPI0_HPMCNTRL_ALERT1_N/GPI
+                                                                                           I2C_3V3_7_SCL / SGPIO_CLK
+             OB08   SGMII_HPM_SCM_DN             A12    JTAG_TRST_CPU_BMC_L         B52    /NCSI2_HPM_SCM_CLK/ GPIO
+                                                                                           I2C_3V3_7_SDA / SGPIO_LD
+             OB09   SGMII_HPM_SCM_DP             A20    NC(LTPI_SCM_HPM_DATA_DN)    B53    /NCSI2_HPM_SCM_CRS_DV / GPIO
+                                                                                           I2C_3V3_8_SCL / SGPIO_DATAOUT
+             A28    PCIE_HPM_SCM_PERST_N         A21    NC(LTPI_SCM_HPM_DATA_DP)    B54    /NCSI2_SCM_HPM_D0 / GPIO
+                                                                                           I2C_3V3_8_SDA / SGPIO_DATAIN
+             A30    PCIE_HPMROOT_SCM_HPM_DN A23         NC(LTPI_SCM_HPM_CLK_DN)     B55    /NCSI2_SCM_HPM_D1 / GPIO
+             A31    PCIE_HPMROOT_SCM_HPM_DP      A24    NC(LTPI_SCM_HPM_CLK_DP)     A01    P12V_AUX
+             B30    PCIE_HPMROOT_HPM_SCM_DN B20         NC(LTPI_HPM_SCM_DATA_DN)    A02    P12V_AUX
+             B31    PCIE_HPMROOT_HPM_SCM_DP      B21    NC(LTPI_HPM_SCM_DATA_DP)    A03    P12V_AUX
+             A36    PCIE_HPM_SCM_CLK_100M_0_DN B23      NC(LTPI_HPM_SCM_CLK_DN)     A04    P12V_AUX
+             A37    PCIE_HPM_SCM_CLK_100M_0_DP B24      NC(LTPI_HPM_SCM_CLK_DP)     OA01 GND
+             A65    NC(USB3_SCMHOST1_SCM_HPM_ B43       NCSI_HPM_SCM_CLK / GPIO     OA04 GND
+             A66    NC(USB3_SCMHOST1_SCM_HPM_ B44       NCSI_HPM_SCM_CRS_DV / GPIO OA07 GND
+             B65    NC(USB3_SCMHOST1_HPM_SCM_ B45       NCSI_SCM_HPM_TX_EN / GPIO   OA10 GND
+             B66    NC(USB3_SCMHOST1_HPM_SCM_ B46       NCSI_SCM_HPM_D0 / GPIO      OA13 GND
+             A33    PCIE_SCMROOT_SCM_HPM_DN B47         NCSI_SCM_HPM_D1 / GPIO      A05    GND
+             A34    PCIE_SCMROOT_SCM_HPM_DP      B48    NCSI_HPM_SCM_D0 / GPIO      A06    GND
+             B33    PCIE_SCMROOT_HPM_SCM_DN B49         NCSI_HPM_SCM_D1 / GPIO      A19    GND
+             B34    PCIE_SCMROOT_HPM_SCM_DP      A07    PRSNT1_HPM_SCM_N            A22    GND
+             A68    PCIE_HPM_SCM_CLK_100M_1_DN B58      PRSNT0_SCM_HPM_N            A25    GND
+             A69    PCIE_HPM_SCM_CLK_100M_1_DP A13      SCM_HPM_STBY_RST_N          A29    GND
+             B36    USB2_SCMHOST1_DN /           A14    SCM_HPM_STBY_EN             A32    GND
+             B37    USB2_SCMHOST1_DP /           B26    HPM_SCM_STBY_RDY            A35    GND
+                    NC(USB2_SCMHOST2_DN /
+             B68    USB2_HPMHOST2_DN)            B27    HPM_SCM_INTRUSION_N         A38    GND
+                    NC(USB2_SCMHOST2_DP /
+             B69    USB2_HPMHOST2_DP)            B28    P3V0_HPM_SCM_BAT            A53    GND
+             B60    SPI_SCMCNTRL_CLK             B50    VCC_SCM_HPM_FRU             A64    GND
+             B61    SPI_SCMCNTRL_MISO            OA14 PECI_HPM_SCM                  A67    GND
+             B62    SPI_SCMCNTRL_MOSI            OB14 PECI_VREF_HPM_SCM             A70    GND
+             B63    SPI_SCMCNTRL_CS0_N           A39    I2C_I3C_1V0_18_SCL /        OB01 GND
+             A60    GPIO/SPI_SCMCNTRL_IRQ0_N     A40    I2C_I3C_1V0_18_SDA /        OB04 GND
+             B59    SPI_SCMCNTRL_CS1_N / GPIO    A41    I2C_I3C_1V0_19_SCL /        OB07 GND
+             B12    QSPI_HPMCNTRL_CLK/GPIO       A42    I2C_I3C_1V0_19_SDA /        OB10 GND
+             B13    QSPI_HPMCNTRL_CS0_N/GPIO     A15    I2C_3V3_0_SCL/GPIO          OB13 GND
+             B14    QSPI_HPMCNTRL_IO_0/GPIO      A16    I2C_3V3_0_SDA/GPIO          B11    GND
+             B15    QSPI_HPMCNTRL_IO_1/GPIO      A17    I2C_3V3_1_SCL/GPIO          B19    GND
+             B16    QSPI_HPMCNTRL_IO_2/GPIO      A18    I2C_3V3_1_SDA/GPIO          B22    GND
+             B17    QSPI_HPMCNTRL_IO_3/GPIO      A26    I2C_3V3_2_SCL/GPIO          B25    GND
+             B18    QSPI_HPMCNTRL_CS1_N/GPIO     A27    I2C_3V3_2_SDA/GPIO          B29    GND
+             A54    SPI_HPMCNTRL_TPM_CLK         A43    I2C_3V3_3_SCL/GPIO          B32    GND
+             A55    SPI_HPMCNTRL_TPM_CS_N        A44    I2C_3V3_3_SDA/GPIO          B35    GND
+             A56    SPI_HPMCNTRL_TPM_MOSI        A45    I2C_3V3_4_SCL/GPIO          B38    GND
+             A57    SPI_HPMCNTRL_TPM_MISO        A46    I2C_3V3_4_SDA/GPIO          B64    GND
+             B01    ESPI_HPMCNTRL_CLK/GPIO       A47    I2C_3V3_5_SCL/MDC/GPIO      B67    GND
+             B02    ESPI_HPMCNTRL_CS0_N/GPIO     A48    I2C_3V3_5_SDA/MDIO/GPIO     B70    GND
+
+
+
+
+Date: January 14, 2024                                                                                                Page 32
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+7.5 MGX Power Distribution Board
+The power distribution board (PDB) is illustrated below. Mounting location, a reference air
+cooled heat design are shown along with example power connector that connects from the
+35mm bus bar connector to the PDB. For details refer to the 3D CAD provided with this
+specification.
+
+
+
+
+8. Bus Bar Requirements
+The MGX Rack supports a 48VDC nominal, 40 – 59.5VDC, bus bar that supports up to 1400A. The bus
+bar assembly is the same width as the existing ORV3 bus bar but supports greater ampacity by growing
+deeper. The bus bar assembly may also be implemented in an existing ORV3 rack. The electrical and
+mechanical requirements for the bus bar are specified below.
+
+
+       8.1 Busbar Electrical Requirements
+The busbar shall be capable of meeting 1400A at 45 C ambient, 3050 m elevation, static airflow
+(natural convection only), and meet all touch temperature safety requirements and stay within
+the specified IT busbar clip’s temperature rating.
+
+Typical power shelf output voltages are 48V, 51V, or 54V nominal (note some variance based
+off droop compensation etc... see specific power shelf spec for detailed voltage ranges).
+
+
+
+
+Date: January 14, 2024                                                                Page 33
+            Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+   Both power and ground busbar components within the assembly shall be continuous electrically
+   for the entire height of the busbar to form a single power zone.
+
+   The busbar assembly is expected to have the following parasitic resistance, inductance, and
+   capacitance per RU when measured at 25C.
+
+
+
+
+                                     Figure 8-1. Electrical Parasitics Model
+
+                                      Table 8-3. 1400A Busbar Parasitics
+
+                                              Min.    Typ.        Max.         Unit
+Resistance per RU positive or return          -       1.5         1.6          µΩ / RU (44.45 mm)
+Loop Inductance per RU positive and           -       8.3         8.8          nH / RU (44.45 mm)
+return
+Capacitance positive to return per RU         -       49          52           pF / RU (44.45 mm)
+   Note: Presently these are calculated values and more conservative than Finite Element Analysis
+   derived values. Tolerance is ±5% off typical.
+
+   See compliance section for HiPot requirements.
+
+
+          8.2 Busbar Grounding Requirements
+   The busbar shall have two orderable SKUs, one with isolated chassis and return and another
+   with a hard ground tie between the chassis return. This opens the possibility of two different
+   rack grounding schemes with minimal hardware changes.
+
+
+
+
+   Date: January 14, 2024                                                            Page 34
+            Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+              ○ 8.2.1 Chassis to RTN connection
+
+
+
+
+   Figure 8-2. [Left] Top view cross section showing power busbars in Red (Positive and Return) and Chassis in Green [Right]
+                  Illustration of grounding bolt and/or conductive mounting spacer used to tie RTN to chassis.
+
+
+                  8.2.2 Ground connection to rack
+The busbar chassis / U-channel must connect to the rack electrically to maintain a common
+ground potential. This is done with a connection at the top and the bottom of the rack.
+
+The connection at the top and bottom of the rack requires either masking or serrated washers to
+make an electrical connection between the rack and the busbar. The inside of the rack where
+the busbar surface contacts the rack shall be masked to minimize impedance.
+
+
+
+
+Figure 8-3. [Left] Busbar top mounting holes with masked section shown in green. [Right] Bolts with serrated washers mounting
+                                     through the rack and to the masked section of busbar.
+
+
+
+
+Date: January 14, 2024                                                                                      Page 35
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+   Figure 8-4. [Left] Bottom of the busbar and masked section. [Right] Busbar mounted onto the rack with bottoms of tabs
+                                                   connecting to the rack
+
+
+        8.3 Busbar Mechanical Requirements
+The busbar is designed to be replaceable within the rack by a trained technician.
+
+The busbar and its position within the rack has the following dimensions:
+
+
+
+
+                            Figure 8-5. Busbar Maximum Depth and Position within MGX Rack.
+
+
+
+Date: January 14, 2024                                                                                   Page 36
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+              Figure 8-6. Key busbar dimensions to ensure interoperability across ORV3 and MGX racks.
+
+
+
+
+                                    Figure 8-7. Busbar Cross Section Dimensions
+
+
+
+
+Date: January 14, 2024                                                                              Page 37
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+The busbar shall be positioned in the center of the rack per the Open Rack Base Frame V3
+Specification. Refer to that specification for all other dimensioning and tolerancing of the bus
+bar.
+
+The busbar shall have 48 RU total rack positions for IT equipment.
+
+The busbar shall have venting on both side and rear surfaces to maximize airflow across the
+busbar without compromising structural rigidity as needed. Perforations shall conform to UL
+62368-1.
+
+The power and return busbars shall be constructed of C11000, H02 temper copper or
+equivalent.
+
+The chassis ground busbars shall be constructed of Aluminum 4047.
+
+The busbar should have a typical weight of 31 kg.
+
+
+       8.4 Busbar Environmental Requirements
+The busbar shall meet the below required operating conditions.
+
+                                  Table 8-2. Busbar operating conditions
+
+                     Min.                 Typ.                     Max.         Units
+ Operating           10                   35                       45           C
+ Temperature
+ Storage             -40                  25                       70           C
+ Temperature
+ Operating and       10%                  50%                      90%
+ Storage
+ Humidity
+ Elevation                                                         3050         m
+
+
+
+       8.4 Busbar Reliability Requirements
+The busbar shall withstand 50 cycles of mating and un-mating with the specified IT connector in
+the Mechanical section of this document without wearing out the plating.
+
+
+       8.5 Busbar Labeling Requirements
+100% of units shall be labeled with the following markings
+   1. Part Number / Revision
+   2. Date Code
+   3. Hi-pot Stamp
+
+
+
+Date: January 14, 2024                                                              Page 38
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       8.6 Busbar Compliance Requirements
+The busbar shall be designed to comply with the latest edition, revision, and amendments of
+safety standards required to ship globally. Priority should be given to North America
+certifications as soon as possible with global certifications to follow.
+
+The busbar shall conform to the following standards at a minimum:
+   • UL/IEC62368-1
+   • UL/IEC60950-1 – for legacy sites and jurisdictions
+
+   HiPot Requirements:
+The assembly must comply with the following HiPot requirements on 100% of Busbar
+assemblies.
+
+Measured from power busbar to return busbar:
+Minimum of 1.2 kV, 10 second ramp, 30 second hold with a maximum leakage of 10 µA.
+
+Measured from power busbar to chassis ground and return busbar to chassis ground (Not
+applicable to the hard grounded versions):
+Minimum of 1.2 kV, 10 second ramp, 30 second hold with a maximum leakage of 10 µA.
+
+
+
+
+Date: January 14, 2024                                                          Page 39
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+9. Compute Tray Board and IO Bay Form Factors
+The following sections specifies the Board and IO bays for the compute tray. These form factors are
+derived from the MGX architecture to enable modularity and re-usability. The board form factors
+employed in this specification are termed the “MGX board” (a full tray width form factor) and the “micro
+MGX” board (a half width form factor that allows two assemblies to be place side by side in a 19” EIA
+standard tray). This form factor shares common elements with OCP DC-MHS form factors as described
+below.
+
+
+9.1. Board Form Factors
+The micro MGX board is compliant with the outline and mounting holes defined in the DC-MHS
+DNO Type 2 specification. The following figure shows the approximate locations of major parts
+of the micro MGX motherboard.
+
+
+
+
+                                 Figure 9-1.     Micro MGX Board Overview
+
+
+9.2 Micro MGX Outline
+The micro MGX board outline is shown in below. The units are in millimeters. Refer to 3D
+models provided for design details not shown here.
+
+
+
+
+Date: January 14, 2024                                                                   Page 40
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                              Figure 9-2.    Micro MGX Board Outline
+
+
+
+
+Date: January 14, 2024                                                          Page 41
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       9.2.1 Micro MGX Mounting Holes
+The following figure defines the required mounting hole locations and sizes. Additional mounting
+holes may be necessary for mechanical stability based on technological and design needs. The
+implementer of this specification may introduce additional mounting holes as needed. All
+fasteners or mounting methodologies contacting the motherboard must stay within the ground
+pad diameter as shown in the following figure.
+
+
+
+
+                           Figure 0-3.    Micro MGX Board Mounting Holes
+
+
+       9.2.2 Micro MGX Keepout Zones
+Maximum component height restrictions define an absolute maximum height of components
+terminated to the PCB post processing for both the primary and the secondary sides of the
+board. Implementers must use best practices for supporting other components within the
+system added after the board process. Examples of these types of components include, but are
+not limited to, heat sinks, air baffles, cable management hardware, and so on.
+There are two options available for the primary side keepout zone. The first, a more generic
+option, considers DIMM based HPMs and provides a large region suitable for placing DIMMs.
+The second option is more detailed and intended to be used for non-DIMM layouts. The CAD
+contributed with this specification includes the micro MGX non-DIMM layout. Other options
+specified here are for the purpose to show other possible implementations
+
+
+
+
+Date: January 14, 2024                                                           Page 42
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+      Figure 9-4.    Micro MGX Primary Side Maximum Component Height Keepouts DIMM Based HPM Option
+
+
+
+
+Date: January 14, 2024                                                                   Page 43
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+      Figure 9-5.    Micro MGX Primary Side Maximum Component Height Keepouts Non-DIMM Based Option
+
+Component height restrictions on the secondary side of the PCB do not include supporting
+mechanical structures that may be necessary for the motherboard (such as, sub-pans, stiffening
+plates, or other mechanical parts). If this additional hardware is required in the design,
+necessary keep-in or keepout zones should be added as required. However, there are
+predefined areas where zero height is required to be compatible with other systems based on
+an OCP DC-MHS architecture for M-DNO.
+
+
+Date: January 14, 2024                                                                   Page 44
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+             Figure 9-6.   Micro MGX Board Secondary Side Maximum Component Height Definition
+
+
+Date: January 14, 2024                                                                    Page 45
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       9.2.3 Micro MGX Board Pan
+The micro MGX board allows use of a supporting board pan. The micro MGX board secondary
+side component height constraints assume using this pan as a part of an overall assembly
+accounting for compatibility to a common chassis. The board pan design may vary based on
+implementation. An example use of this pan is illustrated in Error! Reference source not
+found..
+
+
+
+
+                            Figure 9-7.    Micro MGX Board Pan Example
+
+
+9.3 MGX Board Outline
+The MGX board defined in this specification takes advantage of the allowable motherboard
+zone in the chassis to maximize available board space. The following figure shows the
+approximate locations of major parts of the MGX motherboard. Refer to 3D models provided for
+design details not shown here.
+
+
+
+
+Date: January 14, 2024                                                          Page 46
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                               Figure 9-8.    MGX Board Overview
+
+
+       9.3.1 MGX Board Outline
+The MGX board outline is defined in Error! Reference source not found.. The units shown are
+in millimeters.
+
+
+
+
+Date: January 14, 2024                                                          Page 47
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+                                 Figure 9-9.      MGX Board Outline
+
+
+       9.3.1 MGX Board Mounting Holes
+The following figure defines the required mounting hole locations and their sizing. Additional
+mounting holes may be necessary for mechanical security based on technological and design
+needs. The designer may introduce additional mounting holes as needed. All fasteners or
+mounting methodologies contacting the motherboard must stay within the ground pad diameter
+as shown in the following figure.
+
+
+
+
+                             Figure 9-10.      MGX Board Mounting Holes
+
+
+       9.3.2 MGX Board Keepout Zones
+Maximum component height restrictions define an absolute maximum height of the components
+terminated to the PCB following the processing for both the primary and secondary sides of the
+board. The designer must use best practices for supporting other components within the system
+added in the post board process. Examples for these types of components include, but are not
+limited to, heat sinks, air baffles, cable management hardware, and so on.
+Again, there are two options available for the primary side keepout zone. The first, a more
+generic option, considers DIMM based HPMs and provides a large region suitable for placing
+DIMMs. This board form factor is defined here to show additional implementation options of the
+compute tray HPM.
+
+
+Date: January 14, 2024                                                          Page 48
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+.
+
+
+
+
+    Figure 9-11.   MGX Board Primary Side Maximum Height Component Height Keepouts DIMM Based HPM Option
+
+
+
+
+Date: January 14, 2024                                                                     Page 49
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+       Figure 9-12.   MGX Board Primary Side Maximum Component Height Keepouts Non-DIMM Based Option
+
+
+
+Component height restrictions on the secondary side of the PCB do not include supporting
+mechanical structures that may be necessary for the motherboard (such as subpans, stiffening
+plates, or other mechanical parts). If this additional hardware is required, necessary keep-in or
+keepout zones should be added as required. However, there are predefined areas where zero
+height is required to be compatible with other systems based on an OCP DC-MHS architecture
+for M-FLW.
+
+
+
+
+Date: January 14, 2024                                                                    Page 50
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+               Figure 9-13.   MGX Board Secondary Side Maximum Component Height Definition
+
+
+
+
+       9.2.6 MGX Board Pan
+Like the micro MGX board, the MGX board form factor allows for a supporting board pan. Its
+secondary side component height constraints assume that the pan is part of an overall
+assembly accounting for compatibility to a common chassis. An example use of this pan is
+illustrated in Error! Reference source not found..
+
+
+
+
+Date: January 14, 2024                                                                       Page 51
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                              Figure 9-14.   MGX Board Pan Example
+
+
+
+
+9.3. IO Bay Form Factors
+The MGX architecture from which the Compute Trays are derived contains several sizes of bay
+modules that are suitable for many chassis lengths, chassis heights, and desired system
+technology layout configurations. The configuration shown below is the example
+implementation in the CAD of this contribution. This configuration supports 4 air cooled OSFP
+transceivers, 2 PCIe card slots, 8 E1.S SSDs, Power buttons, status LEDs, a MGMT port and
+serial pull tab. Refer to 3D models provided for design details not shown here.
+
+
+
+
+Date: January 14, 2024                                                          Page 52
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                              Figure 9-15.    Compute Tray IO Bay Examples
+
+
+
+However, many options are available so that implementers may customize the front
+configuration to meet their specific IO needs. The following section details the options for IO
+configurations and defines the architecture around them.
+
+Across the various modular bay types are common interfaces within the system to permit
+compatibility of a short bay module within the same space required for a long bay module, the
+use of two 1RU bay modules within the space of a single 2RU bay module, or the use of wider
+bays in place of narrower options. An overview of each bay module is described in this section
+for reference and to show all available options when implementing a compute tray to this
+specification.
+
+                             Table 9-1.      Bay Module Attribute Description
+
+ Bay Module Attribute      Background
+ Type A                    Description of bay module width. Width inspired to support E1.s EDSFF
+                           storage or power input connectors.
+ Type B                    Description of bay module width. Width inspired to support full-height PCIe
+                           AIC with standard faceplate.
+ Type C                    Description of bay module width. Width inspired to span the width of a Type A,
+                           Type B, and the divider. It will also support two CRPS units side by side with
+                           room for pass-through power cable.
+
+
+
+Date: January 14, 2024                                                                    Page 53
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+ Bay Module Attribute      Background
+ Type D                    Description of bay module width. Width inspired to span the width of two
+                           Type B bays and the divider. It can support designs requiring more space than
+                           standard PCIe AIC widths.
+ Type E                    Description of bay module width. Width inspired to span the width of a Type B
+                           and Type C bay and the divider. It is able to support designs requiring more
+                           space than a standard double width Type B bay.
+ Short                     Description of bay depth. Short depth bays can be used in bays designated as
+                           short or long and may support storage devices such as NVMe E1.S, E3.S, U.2
+ Long                      Description of bay depth. Long bays can only be used in bays designated as
+                           long and cannot be used in short bay locations. Depth inspired to support a
+                           long PCIe AIC length.
+
+
+          9.3.1 Bay Design and Location
+As described in Table table above, five different bay types are possible. Each bay type has a
+required width dimension but can support different heights and depths. The bay depth is
+classified as either short or long depending upon the max depth dimension of the bay and the
+height can vary in increments of an RU (for example, 1RU, 2RU, 4RU, and so on).
+The bays can be placed in a system in many configurations, but the location is restricted by its
+type and depth. These restrictions, along with the chassis design, will dictate the bay quantities
+and locations allowed in a system and are interfaced with a bay naming methodology. The bay
+naming assumes that every system has four bay locations across the width in both the front and
+back labeled 1 through 4. The height of the chassis is designated by rows with every row
+number indicating 1RU of height. The bay name then communicates depth, chassis location,
+and type as follows:
+
+Bay Location = Row Location + Depth (Short/Long) + Location (1,2,3,4) + Type (A,B,C,D,E)
+
+When using one of the wide bays, types C, D, or E bays, the 1 through 4 chassis location
+numbering system is still maintained by listing all the chassis locations the bay uses. For
+example, a Type D long bay located on the leftmost chassis location in the bottom RU would be
+assigned the name ‘Row 1 - Long 1.2.D.’ The name communicates that the Type D Bay uses
+locations 1 and 2 in the chassis and is located on the bottom RU of height. In a similar fashion, if
+using a bay taller than 1RU, the bay name would list all the rows the bay uses. For example, if
+the bay just discussed was 2RU in height, the assigned name would be ‘Row1.2 – Long 1.2.D.’
+Other bay numbering examples and an illustration of row locations in a 2RU system are
+provided in the following figures.
+
+
+
+
+Date: January 14, 2024                                                                   Page 54
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 9-16.   Example Bay Location Names
+
+
+       9.3.2 Type A Bay Module
+The Type A Bay module is sized to support the width necessary for existing standard form
+factors such as an E1.S EDSFF device or an input power connection enabling pass through
+PDU to PSU connectivity. However, the use of this bay module is not limited to these form
+factors.
+The Type A Bay can be constructed into any RU height with the 1RU form factor being the main
+use case. It can also come in either a short or long depth with the short bay having a max
+dimension of 132.8 mm and long bay 318 mm. However, the width of the bay of 29.8 mm is a
+
+
+
+Date: January 14, 2024                                                          Page 55
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+requirement. The module envelope dimensions shown here are nominal outside envelope
+dimensions.
+
+
+
+
+                                   Figure 9-17.      Bay Type A Detail
+
+
+
+
+                           Figure 9-18.       Bay Type A Dimensional Envelope
+
+
+Date: January 14, 2024                                                          Page 56
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+       9.3.3 Type B Bay Module
+The Type B Bay module is sized to support the depth necessary for a full-length PCIe AIC form
+factor. However, the use of this bay module is not limited to a PCIe AIC form factor. Other form
+factors available within the industry may be supported. In addition, should there be a need for a
+unique I/O board, or other technology, the developer is able to support this implementation
+within the envelope of the bay module form factor.
+Like the Type A Bay, a Type B Bay can be constructed into any RU height with the 1RU form
+factor being the main use case. It can also come in either a short or long depth with the short
+bay having a max dimension of 132.8 mm and long bay 318 mm. The required width of the Type
+B Bay is 129.5 mm.
+
+
+
+
+                            Figure 9-19.   Bay Type B Dimensional Envelope
+
+
+
+
+Date: January 14, 2024                                                            Page 57
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                                 Figure 9-20.   Bay Type B Detail
+
+
+
+
+Some form factors (such as PCIe AICs) may include geometry that must extend beyond the
+datum surface. Any protrusion beyond the datum surface is the responsibility of the system
+designer.
+
+
+       9.3.4 Type C Bay Module
+The Type C Bay module is sized to support the depth necessary for a full-length PCIe AIC form
+factor but with a greater allowable width than the Type B Bay. It is sized to accommodate two
+CRPS units side by side. The Type C Bay module consumes the same width as a Type A and a
+Type B Bay module together.
+
+
+
+Date: January 14, 2024                                                          Page 58
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+The Type C Bay can also be constructed into any RU height and can be made in either short,
+CRPS optimized short or long depth. The max dimension for the short bay is the same as the
+other short bays. However, the Type C Bay has a CRPS optimized option which allows for a
+longer depth due to it being used for standard CRPS power supplies. The optimized short bay
+max dimension is 185 mm. The width of the bay is 163.5 mm.
+
+
+
+
+Date: January 14, 2024                                                          Page 59
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+                           Figure 9-21.       Bay Type C Dimensional Envelope
+
+
+
+
+                                   Figure 9-22.      Bay Type C Detail
+
+
+
+
+Some form factors (such as PCIe AICs) may include geometry that must extend beyond the
+datum surface. Any protrusion beyond the datum surface is the responsibility of the system
+designer.
+
+
+
+
+Date: January 14, 2024                                                          Page 60
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       9.3.5 Type D Bay Module
+The Type D Bay module is sized to be the equivalent width of two Type B bays plus the divider.
+It is sized to accommodate two PCIe full-height cards side by side or for a micro-MGX
+motherboard. However, the use of this bay can be used for other content if the overall
+dimensional requirements are satisfied.
+The Type D Bay can also be constructed into any RU height. It can be made in either a short or
+long depth with the short bay having a max dimension of 132.8 mm and long bay 318 mm. The
+required width of the Type D Bay is 263.2 mm.
+
+
+
+
+                          Figure 9-23.   1RU Type D Bay Dimensional Envelope
+
+
+
+
+Date: January 14, 2024                                                          Page 61
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                                 Figure 9-24.   Bay Type D Detail
+
+
+
+
+Date: January 14, 2024                                                          Page 62
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       9.3.6 Type E Bay Module
+The Type E Bay module is sized to be the equivalent width of a Type B plus a Type C Bay with
+the divider. It can be constructed into any RU height and can be made in either a short or long
+depth with the short bay having a max dimension of 132.8 mm and long bay 318 mm. The
+required width of the Type E Bay is 297.2 mm.
+
+
+
+
+                            Figure 9-25.   Type E Bay Dimensional Envelope
+
+
+
+
+Date: January 14, 2024                                                            Page 63
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                                  Figure 9-26.   Bay Type E Detail
+
+
+       9.3.7 IO Bay Chassis Interface
+Each bay module is secured to the chassis during configuration assembly using one of two
+methodologies. A single spring latch and catch, internal to the system, or a camming latch
+handle (external to the system), retains the bay in place. Each bay in the chassis may be
+designed to support a short bay, long bay, or both by allowing for spring or camming latch
+positions as shown in the following figures. Refer to 3D models provided for design details not
+shown here.
+
+
+
+
+Date: January 14, 2024                                                            Page 64
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 9-27.   Bay Module Retention to Chassis Detail
+
+
+
+
+Date: January 14, 2024                                                           Page 65
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                          Figure 9-28.    Spring Latch Location from Bay Datum
+
+
+
+
+                         Figure 9-29.    Cantilever Latch Location from Bay Datum
+
+
+
+
+Date: January 14, 2024                                                              Page 66
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+10. Interconnect and Liquid Cooling Interfaces
+The following section specifies the interfaces for the interconnect cartridge and blind mate liquid cooling in
+the tray and rack.
+
+
+10.1 Universal Quick Disconnect Interface
+The following section specifies the blind mate interface designed around the OCP UQD and
+UQDB specifications.
+
+
+        10.1.1 Blind Mate Float Mechanism Overview
+The figure below illustrates the key components and dimensions of the blind mate float
+mechanism. The mechanism employs the UQD-04 insert on the tray side and captures it on a
+hose adaptor between two washers with a pre-loaded spring. This allows simultaneous
+rotational and radial motion. On the rack manifold side, a UQDB-04 socket is mounted to a
+thread adaptor that contains a slot on which a lead-in cap is mounted to increase gatherability of
+the socket. The hose adaptor is customized for each specific supplier to maintain a consistent
+mating dimension of 53.19mm as shown. The thread adaptor on the socket is also customized
+for each supplier to maintain a mating depth of 45.51mm as shown.
+    • Blind Mate Float Mechanism Primary components
+            • UQD-04 Insert – Off the shelf UQD from supply base
+            • UQDB-04 Socket – Off the shelf UQD from supply base with lead-in.
+            • Hose and Thread Adaptor – Enables multi-vendor support, addresses supplier to
+                supplier dimensional variability
+            • Coil Spring and Washers – Ensures full mate, allows for angular and linear
+                misalignment
+            • Chassis Mount – Mechanical support and connection to chassis
+            • Lead-in Cap – Increases socket gatherability
+
+
+
+
+                                Figure 10-1.     UQD Float Mechanism Overview
+
+
+
+
+Date: January 14, 2024                                                                       Page 67
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+       10.1.2 UQD Component Design Requirements
+This specification establishes additional requirements beyond those in the UQD/B specs to
+ensure interoperability between different suppliers and improve blindmatability in this
+application.
+   • Dual O-ring Seal on UQDB Socket
+
+
+
+
+   •   Radii and chamfer on leading edge of UQD Insert
+
+
+
+
+   •   Nominal OD of UQDB Socket of 24.89mm to maintain consistent piloting on Lead-in Cap
+
+
+
+
+       10.1.3 Blind Mate Mechanism Mechanical Features
+This section describes the features of the blind mate float mechanism.
+   • Linear Gatherability - Up to 3.25mm linear offset between chassis and manifold
+
+
+
+
+Date: January 14, 2024                                                          Page 68
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+   •    Radial Float – +/-2mm, 4mm total travel
+
+
+
+
+   •   Analysis of allowable radial offset vs rigid angular offset. As noted in OCP BMQC
+       Specification there is an inverse relationship between fixed angular offset and radial
+       offset. The values below were calculated using the same method as BMQC. Note: The
+       mounting feature to the chassis may be toolless, in which case addition radial float of
+       approximately 0.2mm could be observed.
+
+
+
+
+   •   Z-Float, Pre-load and Nominal Engagement Position
+
+
+
+
+Date: January 14, 2024                                                          Page 69
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                           Figure 10-2.         UQD Z-Float and nominal position
+
+
+
+
+                                 Figure 10-3.         UQD Z-Float Loading
+
+
+
+
+   •   Preload Spring – Supplier load varies 18-14lbs @ 35psi. In addition, mating force will
+       vary based on operating temperature. Mechanism spring and preload may be adjusted
+       as needed to meet end user’s needs.
+
+
+
+
+Date: January 14, 2024                                                             Page 70
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 10-4.        Observed UQD force range from suppliers
+
+
+
+
+       10.1.5 Compute Tray Liquid Cooling Interface
+The figure below specifies the location of the UQD assemblies on the compute an switch tray.
+
+
+
+
+                              Figure 10-5.        UQD Locations in 1RU Chassis
+
+
+10.2 Interconnect Cartridge Definition
+
+This section defines the interconnect cartridge volumetric and mounting locations within the
+MGX rack.
+
+
+       10.2.1 Interconnect Cartridge Drawing
+       The drawing below specifies the mounting and alignment locations of the Interconnect
+Cartridge volumetric. Note that specific connectors, guide pins etc. are not specified in
+document as design will vary based on specific interconnect. Details of the interconnect
+
+
+Date: January 14, 2024                                                                 Page 71
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+architecture are dependent upon specific accelerator and system architecture and are not
+specified in this document.
+
+
+
+
+Date: January 14, 2024                                                          Page 72
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+Date: January 14, 2024                                                          Page 73
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+                         Figure 10-6.       Interconnect Cartridge Detailed Dimensions
+
+
+
+
+       10.2.2 Interconnect Cartridge Loading and Support
+       The following figures describe the cartridge mounting, loading and support structure.
+
+
+
+
+                          Figure 10-7.       Cartridge loading and support overview
+
+
+
+
+                             Figure 10-8.       Switch tray interface loading (lbs.)
+
+
+
+
+Date: January 14, 2024                                                                   Page 74
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                             Figure 10-9.   Compute Tray Loading (lbs.)
+
+
+
+
+       10.2.3 Key Bracket and Support 2D
+The following drawings detail the critical to function dimensions and tolerances of the key
+support and alignment components of the rack for the manifolds and interconnect cartridges.
+Refer to the 3D CAD for additional details not specified.
+
+
+
+
+Date: January 14, 2024                                                          Page 75
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                               Figure 10-10.   Rack Stiffener Drawing
+
+
+
+
+Date: January 14, 2024                                                          Page 76
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                           Figure 10-11.   Right bracket channel drawing 1
+
+
+
+
+Date: January 14, 2024                                                          Page 77
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                           Figure 10-12.   Right channel bracket drawing 2
+
+
+
+
+Date: January 14, 2024                                                          Page 78
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+                           Figure 10-13.   Right channel bracket drawing 3
+
+
+
+
+                           Figure 10-14.   Right channel bracket drawing 4
+
+
+
+
+Date: January 14, 2024                                                          Page 79
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 10-15.   Left channel bracket drawing 1
+
+
+
+
+Date: January 14, 2024                                                          Page 80
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 10-16.   Left channel bracket drawing 2
+
+
+
+
+Date: January 14, 2024                                                          Page 81
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 10-17.   Left channel bracket drawing 3
+
+
+
+
+Date: January 14, 2024                                                          Page 82
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 10-18.      Left channel bracket drawing 4
+
+
+
+
+                         Figure 10-19.      Cable Cartridge Rack Mount Top Right
+
+
+Date: January 14, 2024                                                             Page 83
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                          Figure 10-20.   Cable Cartridge Rack Mount Top Left
+
+
+
+
+Date: January 14, 2024                                                          Page 84
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 10-21.   Cable Cartridge Rack Mount Bottom Right
+
+
+
+
+Date: January 14, 2024                                                             Page 85
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                         Figure 10-22.      Cable Cartridge Rack Mount Bottom Left
+
+
+
+
+                            Figure 10-23.      Rear Rack Brace Center Assembly
+
+
+
+Date: January 14, 2024                                                               Page 86
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 10-24.   Rear Rack Brace Right Assembly
+
+
+
+
+Date: January 14, 2024                                                          Page 87
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+                            Figure 10-25.   Rear Rack Brace Left Assembly
+
+
+
+
+                           Figure 10-26.    Rear Rack Cross Brace Assembly
+
+
+
+Date: January 14, 2024                                                          Page 88
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+
+
+
+Date: January 14, 2024                                                          Page 89
+           Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+11. Rack and Tray Thermal Requirements
+The following section specifies the requirements for air and liquid cooling of individual trays and rack
+assembly.
+
+
+                             Rack Level Requirements for Liquid Cooling
+ System Target Sustained Flow Rate (lpm)                                             up to 130 LPM
+ Differential Pressure of Node at Target Flow Rate, 1x mated UQD pair                ~10 psid
+ Rack Power                                                                          120 kW
+ Rack Level Liquid Heat Capture Ratio                                                85%
+ Max Operating Pressure (gauge)                                                      5 bar (72 psig)
+ Min Burst Pressure (gauge)                                                          15 bar (217 psig)
+ Filtration                                                                          25um and 50um
+
+
+
+
+Date: January 14, 2024                                                                       Page 90
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+12. Prescribed Materials
+The system must meet all local laws and regulations for material content such as ROHS. Refer to the
+table below for approved wetted materials for the liquid cooling loop.
+
+
+                            Approved Wetted Materials List for PG/water-based fluids
+                        Metals                                     Notes
+          Brass with ,15% zinc content
+          Copper                              CDA110, CDA1020, CDA1220, CDA110
+          High Nickel Alloys
+                                              Most common SS alloys acceptable, including 410, 204L, 316L or higher
+          Steels - Stainless                  grades
+          Titanium Grade 2 (UNS R50400)
+               Plastics and Rubbers                                               Notes
+          EPDM                                Peroxide Cured required for hoses
+          FEP
+          HDPE - High Density Polyethylene
+          PEEK
+          PP - Polypropylene
+          Viton A
+          Viton ETP
+          Viton GF
+             Sealants and Lubricants                                              Notes
+          Parker Super O Lube
+          Staubli G11
+                                              Not required in manifold or QDs as all fittings are BSPP or SAE with O-ring.
+          Loctite 567
+                                              May be used if needed on tapered fittings in secondary loops, CDUs, etc.
+                 Brazing Materials                                                Notes
+          BCuP-2: Cu93/P7
+          BCuP-3: Cu89/Ag5/P6/Other0.15
+          BCuP-4: Cu87/Ag6/P7
+          BCuP-5: Cu80/Ag15/P6
+          B-Ni-6: Ni88.9/P11
+          TF-H600F: Cu74.9/Sn15.6/P5.3/N4.2
+                 Materials to Avoid                                               Notes
+          Aluminum
+          ABS
+          CR
+          CPVC
+          Hastelloy B
+          Lead
+          Non-stainless steels
+          PVC
+          Zinc
+
+
+
+
+Date: January 14, 2024                                                                                               Page 91
+         Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+13. References
+1. “Open Rack V3 Base Specification”, OCP,Link: Open Rack V3 Base Specification, URL:
+https://drive.google.com/file/d/1-8JbXl10MwaVs8pctSAsa5It5czUyKff/view
+2. “Open Rack Busbar Specification”, OCP, Link: Open Rack Busbar Specification, URL:
+https://www.opencompute.org/contributions?refinementList%5Bproject%5D%5B0%5D=Rack%2
+0%26%20Power&refinementList%5Bfamily%5D%5B0%5D=OpenRack%20v2&refinementList%
+5Bcontributor%5D%5B0%5D=RITTAL&page=1&configure%5BfacetFilters%5D%5B0%5D=arch
+ived%3Afalse
+3. “Universal Quick Disconnect Blind-Mate (UQDB) Specification”, OCP, Link: Universal Quick
+Disconnect Blind-Mate Specification, URL: https://www.opencompute.org/documents/uqdb-
+spec-1-0-pdf
+4. “Universal Quick Disconnect (UQD) Specification”, OCP, Link: Universal Quick Disconnect
+(UQD) Specification. URL: https://www.opencompute.org/documents/ocp-universal-quick-
+disconnect-uqd-specification-rev-1-0-2-pdf
+5. “OCP DC-SCM Specification”, OCP, OCP DC-SCM Rev 2.1 Ver1.1 RC3
+
+
+
+
+Date: January 14, 2024                                                          Page 92
+          Open Compute Project • MGX Accelerated Computing Rack and Trays Specification
+
+Appendix A - Checklist for IC approval of this Specification (to be
+completed by contributor(s) of this Spec)
+Complete all the checklist items in the table with links to the section where it is described in this
+spec or an external document .
+ Item                                            Status          Link to detailed explanation
+
+            Has this contribution been         Yes or No         If “No”, please state the reason.
+  presented to an OCP Project group
+   during a project call or engineering
+                             workshop?
+
+           Approval by Project Leads           Yes or No         If “No”, please state the reason.
+
+   Is this contribution entered into the       Yes or No         If “No”, please state the reason.
+             OCP Contribution Portal?
+
+          Was it approved in the OCP           Yes or No         If “No”, please state the reason.
+                  Contribution Portal?
+
+
+
+
+Date: January 14, 2024                                                                Page 93
+

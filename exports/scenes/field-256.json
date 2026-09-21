@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "count": 256,
+  "podsPerRow": 8,
+  "selectedRack": 16,
+  "camera": [
+    35.845623325798506,
+    -45.861312196241734,
+    43.27132155976252
+  ],
+  "target": [
+    0,
+    0,
+    1.1
+  ],
+  "appearance": "teal",
+  "connections": true,
+  "layers": {
+    "nvlink": true,
+    "front": true,
+    "management": true
+  },
+  "xray": false,
+  "floor": false
+}

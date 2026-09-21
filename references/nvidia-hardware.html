@@ -1,0 +1,786 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hardware &#8212; NVIDIA DGX GB Rack Scale Systems User Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/nvidia-sphinx-theme.css?v=933278ad" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=890d343d" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=890d343d" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+
+<script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js" type="text/javascript"
+  data-document-language="true" charset="UTF-8" data-domain-script="3e2b62ff-7ae7-4ac5-87c8-d5949ecafff5">
+</script>
+<script type="text/javascript">
+  function OptanonWrapper() {
+    var event = new Event('bannerLoaded');
+    window.dispatchEvent(event);
+  }
+</script>
+<script src="https://images.nvidia.com/aem-dam/Solutions/ot-js/ot-custom.js" type="text/javascript">
+</script>
+
+
+    <script rel="preload" src="_static/modal-table.js"></script>
+    <script src="_static/documentation_options.js?v=b08bce9f"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/scrollspy-patch.js?v=edc4054a"></script>
+    <script src="_static/external-links.js"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=65e89d2a"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'hardware';</script>
+    <script src="_static/version-patch.js?v=3e13fdd2"></script>
+
+<script type="text/javascript" src="https://assets.adobedtm.com/5d4962a43b79/c1061d2c5e7b/launch-191c2462b890.min.js"></script>
+
+    <link rel="icon" href="_static/favicon.ico"/>
+
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Networking" href="networking.html" />
+    <link rel="prev" title="NVIDIA DGX GB Rack Scale Systems User Guide" href="index.html" />
+
+<link rel="preload" as="image" href="https://www.nvidia.com/content/dam/1x1-00000000.png">
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+    <meta name="docbuild:last-update" content="Sep 17, 2026"/>
+
+
+  </head>
+
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+<img src="https://www.nvidia.com/content/dam/1x1-00000000.png" width="1" height="1" style="display:none;" alt="country_code">
+
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/nvidia-logo-horiz-rgb-blk-for-screen.svg" class="logo__image only-light" alt="NVIDIA DGX GB Rack Scale Systems User Guide - Home"/>
+    <img src="_static/nvidia-logo-horiz-rgb-wht-for-screen.svg" class="logo__image only-dark pst-js-only" alt="NVIDIA DGX GB Rack Scale Systems User Guide - Home"/>
+  
+  
+    <p class="title logo__title">NVIDIA DGX GB Rack Scale Systems User Guide</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/nvidia-logo-horiz-rgb-blk-for-screen.svg" class="logo__image only-light" alt="NVIDIA DGX GB Rack Scale Systems User Guide - Home"/>
+    <img src="_static/nvidia-logo-horiz-rgb-wht-for-screen.svg" class="logo__image only-dark pst-js-only" alt="NVIDIA DGX GB Rack Scale Systems User Guide - Home"/>
+  
+  
+    <p class="title logo__title">NVIDIA DGX GB Rack Scale Systems User Guide</p>
+  
+</a>
+
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Table of Contents">
+  <p class="bd-links__title" role="heading" aria-level="1">Table of Contents</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Overview</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="networking.html">Networking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="storage.html">Storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="software.html">Software</a></li>
+<li class="toctree-l1"><a class="reference internal" href="safety.html">Safety</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Rack Operations</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="control-config.html">System Control and Configuration</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="compute-tray-redfish-commands.html">Redfish Commands</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="rack-reboot-sequence.html">Rack Reboot Sequence</a></li>
+<li class="toctree-l1"><a class="reference internal" href="health-check.html">System Health Check</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Legal Information</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="legal/compliance.html">Compliance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="legal/licenses.html">Third-Party License Notices</a></li>
+<li class="toctree-l1"><a class="reference internal" href="legal/notices.html">Notices</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="https://docs.nvidia.com">NVIDIA Docs Hub</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="https://docs.nvidia.com/dgx">NVIDIA DGX Platform</a>
+    </li>
+    <li class="breadcrumb-item">
+      <a href="https://docs.nvidia.com/dgx-systems">NVIDIA DGX Systems</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Hardware</li>
+  </ul>
+</nav></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+<div class="header-article-item">
+  <div class="d-flex justify-content-end w-100">
+    <a href="https://surveys.hotjar.com/4904bf71-6484-47a7-83ff-4715cceabdb5" id="openPopupButton">Is this page helpful?</a>
+  </div>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="hardware">
+<span id="gb200-hardware-overview"></span><h1>Hardware<a class="headerlink" href="#hardware" title="Link to this heading">#</a></h1>
+<p>DGX Grace Blackwell rack scale systems are rack scale solutions for graphics processing units (GPUs) connected by NVLink through the NVLink passive copper cable cartridge backplane. The complete DGX GB rack system comprises compute trays with one or two compute boards, NVLink switch trays, an NVLink passive copper cable backplane, power shelves, a bus bar, and liquid cooling manifolds.</p>
+<section id="rack-configuration">
+<span id="gb200-rack-configuration"></span><h2>Rack Configuration<a class="headerlink" href="#rack-configuration" title="Link to this heading">#</a></h2>
+<p>An NVL72 rack is an NVIDIA rack with 72-GPU NVL domains. Each NVL72 rack contains:</p>
+<ul class="simple">
+<li><p>18x 1RU compute trays, each with 2 Grace CPUs and 4 Blackwell GPUs.</p></li>
+<li><p>9x 1RU NVLink switch trays.</p></li>
+<li><p>2x TOR Switches for management.</p></li>
+<li><p>Power shelves for supplying power to all trays and switches.</p></li>
+</ul>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-0" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-0">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id1">
+<img alt="Image showing four 72-GPU racks side-by-side" src="_images/hardware-rack-configuration.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 Rack Configuration - Front view of four 72-GPU racks</span><a class="headerlink" href="#id1" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-1" name="sd-tab-set-0" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-1">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id2">
+<img alt="Image showing four 72-GPU racks side-by-side" src="_images/hardware-rack-configuration-gb300.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB300 Rack Configuration - Front view of four 72-GPU racks</span><a class="headerlink" href="#id2" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The rear side of the system provides access to the cable management system, the inlets and outlets to the liquid cooling manifolds and the manifolds themselves, the cable cartridges, and the power bus bar.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-2" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-2">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id3">
+<img alt="Image showing the rear view of a DGX GB rack" src="_images/hardware-rack-rear.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 Rack Configuration - Rear view</span><a class="headerlink" href="#id3" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-3" name="sd-tab-set-1" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-3">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id4">
+<img alt="Image showing the rear view of a DGX GB rack" src="_images/hardware-rack-rear-gb300.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB300 Rack Configuration - Rear view</span><a class="headerlink" href="#id4" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="compute-trays">
+<span id="gb200-compute-trays"></span><h2>Compute Trays<a class="headerlink" href="#compute-trays" title="Link to this heading">#</a></h2>
+<p>The compute tray in a DGX GB rack system is an enclosure that holds the compute boards and peripheral accessory boards and runs an OS image. The compute trays are cooled by liquid that runs up and down the rack through manifolds, then through the cold plates that are attached to the CPUs and the GPUs in the tray. The rest of the components like networking and storage devices are air cooled, which is pushed through the system by the fans. The compute trays in a rack are interconnected via NVLink through the connectors at the back of the tray, which enables communication with the other compute trays via the NVSwitch trays.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-4" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-4">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id5">
+<img alt="Image showing DGX GB compute tray" src="_images/hardware-compute-tray.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 Compute Tray</span><a class="headerlink" href="#id5" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-5" name="sd-tab-set-2" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-5">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id6">
+<img alt="Image showing DGX GB compute tray" src="_images/hardware-compute-tray-gb300.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB300 Compute Tray</span><a class="headerlink" href="#id6" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The following table provides information about the DGX GB rack system compute tray configuration.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Component</p></th>
+<th class="head" colspan="2"><p>Function</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Compute</strong></p></td>
+<td><p>Compute node</p></td>
+<td><p>2x Grace™ CPUs and  4x Blackwell™ GPUs</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="4"><p><strong>Networking</strong></p></td>
+<td><p>Cluster network</p></td>
+<td><p>DGX GB200:
+4x NVIDIA ConnectX-7 single port 400G OSFP NIC</p>
+<p>DGX GB300:
+4x NVIDIA ConnectX-8 single port 800G OSFP NIC</p>
+</td>
+</tr>
+<tr class="row-even"><td><p>Storage/management network</p></td>
+<td><p>2x NVIDIA BlueField-3 DPU, dual port 400G Infiniband or Ethernet</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p>Out-of-band management network</p></td>
+<td><p>1x 1GbE x RJ45 from the compute tray BMC module</p></td>
+</tr>
+<tr class="row-even"><td><p>2x 1GbE x RJ45 from the BlueField-3 BMC interface</p></td>
+</tr>
+<tr class="row-odd"><td rowspan="2"><p><strong>Storage</strong></p></td>
+<td><p>Data cache</p></td>
+<td><p>4x 3.84TB E1.S NVMe per compute tray with software RAID 0</p></td>
+</tr>
+<tr class="row-even"><td><p>Boot drive</p></td>
+<td><p>1x 1.92TB M.2 NVMe</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-6" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-6">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id7">
+<img alt="DGX GB compute tray block diagram" src="_images/hardware-compute-tray-block-diagram.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 Compute Tray - Block diagram</span><a class="headerlink" href="#id7" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-7" name="sd-tab-set-3" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-7">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id8">
+<img alt="DGX GB compute tray block diagram" src="_images/hardware-compute-tray-block-diagram-gb300.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB300 Compute Tray - Block diagram</span><a class="headerlink" href="#id8" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Out-of-Band (OOB) management of the compute tray hardware resources is provided by a combination of Board Management Controller (BMC) and Host Management Controller (HMC) microcontrollers. External access is available through standard BMC and console interfaces.</p>
+<p>The figure below shows a top view of the DGX GB rack system compute tray and identifies the main components.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-8" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-8">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id9">
+<img alt="Image showing top view of the DGX GB compute tray" src="_images/hardware-compute-tray-top.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 Compute Tray - Top view</span><a class="headerlink" href="#id9" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-9" name="sd-tab-set-4" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-9">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id10">
+<img alt="Image showing top view of the DGX GB compute tray" src="_images/hardware-compute-tray-top-gb300.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB300 Compute Tray - Top view</span><a class="headerlink" href="#id10" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<p>The figure below shows a front view of the DGX GB rack system compute tray and identifies the main components.</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-10" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-10">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id11">
+<img alt="Image showing front view of the DGX GB compute tray" src="_images/hardware-compute-tray-front.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 Compute Tray - Front view</span><a class="headerlink" href="#id11" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-11" name="sd-tab-set-5" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-11">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id12">
+<img alt="Image showing front view of the DGX GB compute tray" src="_images/hardware-compute-tray-front-gb300.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB300 Compute Tray - Front view</span><a class="headerlink" href="#id12" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="nvlink-switch-trays">
+<span id="gb200-nvlink-switch-trays"></span><h2>NVLink Switch Trays<a class="headerlink" href="#nvlink-switch-trays" title="Link to this heading">#</a></h2>
+<p>The NVLink switch system delivers an unprecedented 57.6 terabits per second (Tbps) of full duplex bandwidth for the fifth-generation NVLink in a 1U design.</p>
+<p>Each switch tray has 2x NVLink switches, and each switch tray has the following components:</p>
+<ul class="simple">
+<li><p>2x NVLink NVSwitches, each of which has 72 NVLink ports</p></li>
+<li><p>NVOS 2.0 or later for NVLink switch life cycle provisioning and telemetry</p></li>
+<li><p>BMC for attestation and recovery</p></li>
+<li><p>FM and SM as the NVLink control planes that run on the switch tray</p></li>
+<li><p>CPU ERoT for security</p></li>
+</ul>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="sd-tab-item-12" name="sd-tab-set-6" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB200" for="sd-tab-item-12">
+DGX GB200</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id13">
+<img alt="Image showing top view of the NVLink switch tray" src="_images/hardware-nvlink-switch-tray.png" />
+<figcaption>
+<p><span class="caption-text">NVLink Switch Tray - Top view</span><a class="headerlink" href="#id13" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="sd-tab-item-13" name="sd-tab-set-6" type="radio">
+<label class="sd-tab-label" data-sync-group="platform" data-sync-id="GB300" for="sd-tab-item-13">
+DGX GB300</label><div class="sd-tab-content docutils">
+<figure class="align-center" id="id14">
+<img alt="Image showing top view of the NVLink switch tray" src="_images/hardware-nvlink-switch-tray-gb300.png" />
+<figcaption>
+<p><span class="caption-text">NVLink Switch Tray - Top view</span><a class="headerlink" href="#id14" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+</section>
+<section id="power-shelves">
+<span id="gb200-power-shelves"></span><h2>Power Shelves<a class="headerlink" href="#power-shelves" title="Link to this heading">#</a></h2>
+<p>The DGX GB rack system uses a bus bar structure to distribute power in the rack. Power whips energize power shelves from a remote power panel. The power shelves convert AC power into nominal 50V-51V DC output and distribute it through the bus bar to the rack components. Multiple power shelves are used in the rack to supply redundant power.</p>
+<p>The rack power consumption is approximately 120kW. The power shelf uses six air-cooled 5.5kW PSUs in eight power shelves that provide N+N redundancy and the required input power of 33kW per power shelf.</p>
+<figure class="align-center" id="id15">
+<img alt="Image showing top view of power shelf" src="_images/hardware-power-shelf.png" />
+<figcaption>
+<p><span class="caption-text">Power Shelf - Top view</span><a class="headerlink" href="#id15" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="top-of-rack-ethernet-switches">
+<span id="gb200-tor-ethernet"></span><h2>Top-of-Rack Ethernet Switches<a class="headerlink" href="#top-of-rack-ethernet-switches" title="Link to this heading">#</a></h2>
+<p>Top-of-rack (TOR) switches are used to connect all BMCs in the compute trays (including BlueField-3 BMCs) and the switch trays to the management network. The following system and switch ports are connected to this switch:</p>
+<ul class="simple">
+<li><p>Out-of-band management BMC from the compute trays</p></li>
+<li><p>BlueField-3 BMCs from the compute trays</p></li>
+</ul>
+<figure class="align-center" id="id16">
+<img alt="Image showing TOR ethernet switch" src="_images/hardware-tor-ethernet.png" />
+<figcaption>
+<p><span class="caption-text">DGX GB200 TOR Ethernet Switch</span><a class="headerlink" href="#id16" title="Link to this image">#</a></p>
+</figcaption>
+</figure>
+</section>
+<section id="console-access">
+<span id="gb200-console-access"></span><h2>Console Access<a class="headerlink" href="#console-access" title="Link to this heading">#</a></h2>
+<p>Each NVLink switch provides an RJ45 interface for RS232 serial access. The default serial baud rate is 115200 baud.</p>
+</section>
+<section id="leak-detection">
+<span id="gb200-leak-detection"></span><h2>Leak Detection<a class="headerlink" href="#leak-detection" title="Link to this heading">#</a></h2>
+<p>Leak detection in the DGX GB rack system’s liquid cooling system prevents damage to equipment, ensures system reliability and uptime, protects data integrity, and maintains safety. Early detection helps avoid costly repairs, downtime, and regulatory compliance issues, optimizes the cooling efficiency, and prevents secondary damage to infrastructure.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">NVIDIA DGX GB Rack Scale Systems User Guide</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="networking.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Networking</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+
+
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#rack-configuration">Rack Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compute-trays">Compute Trays</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nvlink-switch-trays">NVLink Switch Trays</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#power-shelves">Power Shelves</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#top-of-rack-ethernet-switches">Top-of-Rack Ethernet Switches</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#console-access">Console Access</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#leak-detection">Leak Detection</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+
+<script type="text/javascript">if (typeof _satellite !== "undefined") {_satellite.pageBottom();}</script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+<a class="footer-brand logo" href="https://www.nvidia.com">
+  <img src="_static/nvidia-logo-horiz-rgb-1c-blk-for-screen.svg" class="logo__image only-light" alt="NVIDIA"/>
+  <img src="_static/nvidia-logo-horiz-rgb-1c-wht-for-screen.svg" class="logo__image only-dark" alt="NVIDIA"/>
+</a></div>
+      
+        <div class="footer-item">
+
+<div class="footer-links">
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/privacy-policy/">Privacy Policy</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/privacy-center/">Your Privacy Choices</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/terms-of-service/">Terms of Service</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/accessibility/">Accessibility</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/about-nvidia/company-policies/">Corporate Policies</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/product-security/">Product Security</a>
+   | 
+  
+  
+  
+  <a class="external" href="https://www.nvidia.com/en-us/contact/">Contact</a>
+  
+  
+  
+</div>
+</div>
+      
+        <div class="footer-item">
+
+
+
+
+  <p class="copyright">
+    
+      Copyright © 2022-2026, NVIDIA Corporation.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item"><p class="last-updated">
+  Last updated on Sep 17, 2026.
+  <br/>
+</p></div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

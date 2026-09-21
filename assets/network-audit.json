@@ -1,0 +1,10 @@
+{
+  "nvlink_logical_links": 5184,
+  "compute_host_ports": 288,
+  "bf3_host_ports": 288,
+  "rack_oob_endpoints": 356,
+  "ib_leaf_spine_links": 576,
+  "ib_leaves": 32,
+  "ib_spines": 9,
+  "sn5600_switches": 8
+}
