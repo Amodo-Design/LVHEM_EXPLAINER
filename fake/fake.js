@@ -49,10 +49,7 @@ function send(preset) {
 
 function buildCard(inst) {
   const card = $("#card-template").content.firstElementChild.cloneNode(true);
-  $('[data-slot="model"]', card).textContent = inst.model_name;
-  $('[data-slot="host"]', card).textContent = inst.hostname;
-  $('[data-slot="guid"]', card).textContent = inst.deployment_id.slice(0, 8);
-  $('[data-slot="guid"]', card).title = `Deployment ${inst.deployment_id}`;
+  $('[data-slot="model"]', card).textContent = inst.key === "honest" ? "Correct model" : "Illegal model";
   return card;
 }
 
