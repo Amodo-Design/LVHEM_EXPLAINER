@@ -80,3 +80,9 @@ Frontend cable detail uses managed overhead ladder trays, rack-side guides, shor
 The installation zoom now highlights three adjacent racks, with 253 racks remaining as faded context. The 3D scene has no text overlays; narration and controls remain in the sidebar.
 
 The shared TAP forwards the three original links outside the DC and branches copies to exactly one ordinary verifier rack just inside the boundary. No aggregator or extra verifier cabinet is shown.
+
+## Text-free presentation
+
+Open **`presentation.html`** for the full-canvas Iceberg Light edition. Only two small circular back/forward controls are visible; Left/Right arrow keys also navigate. The same seven installation stages remain, with the illustrative matching recomputation check running automatically on the last stage. Forward from the last stage restarts. Drag and scroll still orbit and zoom. The annotated `install.html` interface is retained.
+
+The palette follows [Iceberg Light](https://terminalcolors.com/themes/iceberg/light/): background `#e8e9ec`, hardware `#33374c` / `#262a3f`, frontend blue `#2d539e`, copies green `#668e3d`, and TAP / removed fabric orange `#c57339`. Shaded hardware and metal use cool neutral variations. No animated packet markers are introduced.
