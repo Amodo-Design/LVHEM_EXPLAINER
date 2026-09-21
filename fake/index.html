@@ -57,7 +57,7 @@
       </ul>
       <span class="chat-card-stage mono" data-slot="stage">inferring</span>
     </header>
-    <pre class="chat-reply" data-slot="reply">…</pre>
+    <div class="chat-reply" data-slot="reply">…</div>
     <div class="chat-progress-row" data-slot="progress" role="status" aria-live="polite">
       <span class="chat-spinner" aria-hidden="true"></span>
       <span data-slot="progress-label">Generating answer</span>
@@ -86,15 +86,6 @@
           </dd>
         </div>
       </dl>
-      <details class="diff-details" open>
-        <summary data-slot="diff-summary"></summary>
-        <div class="token-diff">
-          <div class="token-row-label">Prover</div>
-          <pre class="token-row" data-slot="diff-prover"></pre>
-          <div class="token-row-label">Verifier</div>
-          <pre class="token-row" data-slot="diff-verifier"></pre>
-        </div>
-      </details>
     </section>
   </article>
 </template>

@@ -151,12 +151,27 @@ async function runCard(card, inst, outcome) {
   progressLabel.textContent = "Generating answer";
   await sleep(jitter(inst.key === "liar" ? 420 : 650, 150));
   reply.textContent = "";
+  // Each token gets a target time; occasional longer gaps mimic batching on
+  // a shared GPU. Emission is driven by the clock rather than one token per
+  // timer tick, so a throttled background tab catches up instead of crawling.
   const perToken = 1000 / inst.tokens_per_second;
+  const schedule = [];
+  let at = 0;
   for (const token of outcome.tokens) {
-    reply.textContent += token;
-    reply.scrollTop = reply.scrollHeight;
-    // Occasional longer pauses mimic batching on a shared GPU.
-    await sleep(Math.random() < 0.06 ? jitter(perToken * 4, perToken) : jitter(perToken, perToken * 0.35));
+    at += Math.random() < 0.06 ? jitter(perToken * 4, perToken) : jitter(perToken, perToken * 0.35);
+    schedule.push({ token, at });
+  }
+  const streamStart = performance.now();
+  let next = 0;
+  while (next < schedule.length) {
+    const elapsed = performance.now() - streamStart;
+    let emitted = "";
+    while (next < schedule.length && schedule[next].at <= elapsed) emitted += schedule[next++].token;
+    if (emitted) {
+      reply.textContent += emitted;
+      reply.scrollTop = reply.scrollHeight;
+    }
+    if (next < schedule.length) await sleep(Math.max(8, schedule[next].at - (performance.now() - streamStart)));
   }
 
   // 2. The tap records the event in the ledger.
@@ -201,20 +216,33 @@ function renderResult(card, outcome) {
     $('[data-slot="bar-fill"]', card).style.width = `${fill}%`;
   });
 
-  $('[data-slot="diff-summary"]', card).textContent = `${differing} / ${cmp.length} different`;
-  const prover = $('[data-slot="diff-prover"]', card);
-  const verifier = $('[data-slot="diff-verifier"]', card);
+  // The streamed reply pane becomes the diff: prover tokens with the ones the
+  // verifier could not reproduce highlighted, and the recomputation beneath.
+  const reply = $('[data-slot="reply"]', card);
+  reply.textContent = "";
+  reply.classList.add("chat-reply-verified");
+  const prover = document.createElement("div");
+  prover.className = "chat-reply-row";
+  prover.setAttribute("aria-label", "Prover output");
+  const divider = document.createElement("div");
+  divider.className = "chat-reply-divider";
+  divider.setAttribute("aria-hidden", "true");
+  divider.textContent = "verifier recomputation";
+  const verifier = document.createElement("div");
+  verifier.className = "chat-reply-row";
+  verifier.setAttribute("aria-label", "Verifier output");
   for (const token of cmp) {
     const p = document.createElement("span");
     p.className = token.exact_match ? "token-piece" : "token-piece token-diff-prover";
     p.textContent = token.prover_text;
-    p.title = token.exact_match ? "" : `logit difference ${token.margin.toFixed(4)}`;
+    if (!token.exact_match) p.title = `logit difference ${token.margin.toFixed(4)}`;
     prover.append(p);
     const v = document.createElement("span");
     v.className = token.exact_match ? "token-piece" : "token-piece token-diff-verifier";
     v.textContent = token.verifier_text;
     verifier.append(v);
   }
+  reply.append(prover, divider, verifier);
 }
 
 // --- boot -----------------------------------------------------------------

@@ -400,16 +400,20 @@ a { color: var(--terracotta); text-decoration: none; }
 .chat-bar-marker { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink); transform: translateX(-1px); }
 .chat-bar-scale { position: absolute; top: 100%; left: 0; right: 0; display: flex; justify-content: space-between; margin-top: 2px; font-size: 0.625rem; color: var(--para); }
 
-/* Diff */
-.diff-details { width: 100%; }
-.diff-details summary { cursor: pointer; font-size: 0.75rem; font-weight: 500; color: var(--terracotta); }
-.token-diff { margin-top: 10px; border: 1px solid var(--hairline); border-radius: 6px; overflow: hidden; }
-.token-row-label { padding: 8px 12px; font-size: 0.6875rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--para); background: var(--field); border-bottom: 1px solid var(--divider); }
-.token-row-label + .token-row + .token-row-label { border-top: 1px solid var(--divider); }
-.token-row { margin: 0; padding: 12px; min-height: 120px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 0.8125rem; line-height: 1.7; color: var(--ink); }
+
+/* Reply pane after verification: the diff in place */
+.chat-reply-verified { height: auto; min-height: 200px; display: flex; flex-direction: column; gap: 8px; }
+.chat-reply-row { white-space: pre-wrap; overflow-wrap: anywhere; }
+.chat-reply-divider { border-top: 1px solid var(--divider); padding-top: 6px; font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--para); }
 .token-piece { border-radius: 2px; }
 .token-diff-prover { background: rgba(204, 81, 122, 0.16); box-shadow: inset 0 -1px 0 rgba(204, 81, 122, 0.65); }
 .token-diff-verifier { background: rgba(102, 142, 61, 0.18); box-shadow: inset 0 -1px 0 rgba(102, 142, 61, 0.65); }
+
+/* Header tags take the verdict colour */
+.chat-card-pass .chat-tag-model { background: var(--pass); }
+.chat-card-fail .chat-tag-model { background: var(--fail); }
+.chat-card-pass .chat-tag-container, .chat-card-pass .chat-tag-guid { border-color: var(--pass); color: var(--pass); }
+.chat-card-fail .chat-tag-container, .chat-card-fail .chat-tag-guid { border-color: var(--fail); color: var(--fail); }
 
 @keyframes chat-reveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
