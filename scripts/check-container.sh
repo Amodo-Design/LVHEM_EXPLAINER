@@ -26,13 +26,14 @@ for path in / /presentation.html /src/install_viewer.js /src/photo_callouts.css 
     /vendor/OrbitControls.js /vendor/THREE-LICENSE.txt /assets/model-data.js \
     /assets/web/photos.js /assets/fonts/ibm-plex-serif-regular-latin.woff2 /assets/fonts/OFL.txt \
     /assets/fonts/ibm-plex-mono-regular-latin.woff2 /assets/fonts/ibm-plex-mono-medium-latin.woff2 \
-    /assets/fonts/ibm-plex-mono-semibold-latin.woff2 /fake/ /fake/fake.css /fake/fake.js /fake/presets.js; do
+    /assets/fonts/ibm-plex-mono-semibold-latin.woff2 /fake/ '/fake/index.html?embed=1' /fake/fake.css /fake/fake.js /fake/presets.js; do
     curl --fail --silent --show-error "$base$path" -o /dev/null
 done
 # Verify each optimized photo exactly matches the current working-tree asset.
 for file in assets/web/*.webp; do
     curl --fail --silent --show-error "$base/$file" | cmp "$file" -
 done
+curl --fail --silent "$base/fake/" | grep -q 'id="card-template"'
 curl --fail --silent "$base/" | grep -q 'data-presentation="iceberg"'
 curl --fail --silent --head "$base/src/install_viewer.js" | grep -qi 'content-type:.*javascript'
 for path in /.git/config /README.md /references/ /missing-file.js /assets/compute.jpg /assets/recompute.jpeg /assets/TAP.jpg; do
