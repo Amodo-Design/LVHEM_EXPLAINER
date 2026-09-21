@@ -20,6 +20,20 @@ function renderExamples() {
   });
 }
 
+// The shared timeline follows the most recently sent example. Both model
+// cards must reach a milestone before it advances; older runs cannot reset it.
+let latestRun = 0;
+function setTimeline(step) {
+  $("#timeline").dataset.step = String(step);
+  [...$("#timeline").children].forEach((item, index) => {
+    item.classList.toggle("is-reached", index < step);
+    item.classList.toggle("is-current", index === step - 1);
+    if (index === step - 1) item.setAttribute("aria-current", "step");
+    else item.removeAttribute("aria-current");
+  });
+  $("#timeline-status").textContent = $("#timeline").children[step - 1].lastElementChild.textContent;
+}
+
 // --- timing ---------------------------------------------------------------
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -28,6 +42,14 @@ const jitter = (base, spread) => base + (Math.random() * 2 - 1) * spread;
 // --- a send ---------------------------------------------------------------
 
 function send(preset) {
+  const run = ++latestRun;
+  const reached = { generated: 0, verifying: 0, complete: 0 };
+  const steps = { generated: 2, verifying: 3, complete: 4 };
+  const report = milestone => {
+    reached[milestone]++;
+    if (run === latestRun && reached[milestone] === INSTANCES.length) setTimeline(steps[milestone]);
+  };
+  setTimeline(1);
 
   $("#empty").hidden = true;
   const group = document.createElement("section");
@@ -42,7 +64,7 @@ function send(preset) {
   for (const inst of INSTANCES) {
     const card = buildCard(inst);
     cards.append(card);
-    runCard(card, inst, preset[inst.key]);
+    runCard(card, inst, preset[inst.key], report);
   }
 
 }
@@ -53,7 +75,7 @@ function buildCard(inst) {
   return card;
 }
 
-async function runCard(card, inst, outcome) {
+async function runCard(card, inst, outcome, report) {
   const reply = $('[data-slot="reply"]', card);
   const stage = $('[data-slot="stage"]', card);
   const progressLabel = $('[data-slot="progress-label"]', card);
@@ -91,12 +113,15 @@ async function runCard(card, inst, outcome) {
     if (next < schedule.length) await sleep(Math.max(8, schedule[next].at - (performance.now() - streamStart)));
   }
 
+  report("generated");
+
   // 2. The tap records the event in the ledger.
   stage.textContent = "awaiting ledger event";
   progressLabel.textContent = "Waiting for the ledger to record the inference";
   await sleep(jitter(900, 300));
 
   // 3. The verifier is kept warm, so it is ready almost at once.
+  report("verifying");
   stage.textContent = "verifying";
   progressLabel.textContent = "Verifying: recomputing the answer and comparing logits";
   await sleep(jitter(1800 + outcome.tokens.length * 28, 500));
@@ -106,6 +131,7 @@ async function runCard(card, inst, outcome) {
   $('[data-slot="progress"]', card).hidden = true;
   stage.textContent = "done";
   renderResult(card, outcome);
+  report("complete");
 }
 
 function renderResult(card, outcome) {

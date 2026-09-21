@@ -23,6 +23,13 @@
         <span id="examples-label">Examples:</span>
         <div class="example-buttons" id="examples"></div>
       </div>
+      <ol class="verification-timeline" id="timeline" aria-label="Latest example progress">
+        <li><span class="timeline-dot" aria-hidden="true">1</span><span>Message sent</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">2</span><span>Response generated</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">3</span><span>Verification started</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">4</span><span>Verification complete</span></li>
+      </ol>
+      <span id="timeline-status" class="visually-hidden" role="status" aria-live="polite"></span>
       <div class="muted chat-empty" id="empty">
         Choose an example to compare the two model responses.
       </div>
