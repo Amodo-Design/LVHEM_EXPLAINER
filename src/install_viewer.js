@@ -31,7 +31,7 @@ const focusLayout={positions:focusIds.map(id=>original[id].toArray()),cols:5,row
 const focusBundles=buildCableBundles(focusLayout);scene.add(focusBundles.group);focusBundles.group.visible=false;
 const installation=buildVerificationScene(separated,geometries.high,rackMaterial,{storage:false,simple:true,frontendFromStart:true,frontendExit:[Math.max(...originalLayout.positions.map(p=>p[0]))+6.2,Math.min(...separated.map(p=>p.y))-1.25,.075]});scene.add(installation.root);installation.root.visible=false;installation.setSampling(false);
 const hall=buildDataHall(originalLayout);scene.add(hall.group);
-const hallFrontend=buildHallFrontend(originalLayout,focusIds,installation.frontendEdge);scene.add(hallFrontend.group);
+const hallFrontend=buildHallFrontend(originalLayout,focusIds,installation.frontendEdge,installation.frontendTrunkX);scene.add(hallFrontend.group);
 const contextTarget=new THREE.WebGLRenderTarget(1,1),quadScene=new THREE.Scene(),quadCamera=new THREE.OrthographicCamera(-1,1,1,-1,0,1),quadMaterial=new THREE.MeshBasicMaterial({map:contextTarget.texture,transparent:true,depthTest:false,depthWrite:false,toneMapped:false});quadScene.add(new THREE.Mesh(new THREE.PlaneGeometry(2,2),quadMaterial));
 const annotationElements=[];
 let current=0,busy=false,transition=null,dirty=true,lastLOD=0,netOpacity=1,contextOpacity=1,check=null,scenario='match',checkPhase='idle',lastDiagnostics=0;

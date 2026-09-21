@@ -74,3 +74,5 @@ Open **`install.html`** for the separate presentation interface. Seven click-thr
 The installation now starts inside an open-roof data hall with separate gold fast fabric and blue frontend Ethernet. Frontend paths exist for all 256 racks from the start; the same 15 focused paths remain through removal and separation, and TAPs are inserted onto them. Hall architecture and switch routes are schematic; see the storyboard for the scope.
 
 Frontend routes are static (no moving traffic markers), leave the data-centre boundary, and have no local “slow frontend” cabinet or label. Cable geometry follows rack separation to preserve attachment; verifier-copy and recomputation animation remains.
+
+Frontend cable detail uses managed overhead ladder trays, rack-side guides, short service loops, rack-mounted TAPs, restrained parallel cable lanes and anchored supports. Unbounded sweeping floor splines have been removed. The cable-routing helper is `src/cable_routes.js`.

@@ -43,3 +43,11 @@ The contextual frontend includes row access switches, paired aggregation switche
 Reference: [NVIDIA GB200 SuperPOD network fabrics](https://docs.nvidia.com/dgx-superpod/reference-architecture-scalable-infrastructure-gb200/latest/network-fabrics.html), especially Storage and In-band Ethernet Fabric and Customer Edge Connectivity. The vendor describes parallel storage/in-band paths, aggregation and customer-edge uplinks; the low-rate inference-unit configuration is the user’s proposal, not NVIDIA’s standard deployment.
 
 The cutaway hall adds tiled circulation aisles, row-end service/CDU cabinets, overhead power busways, coolant supply/return routes, perimeter columns, lighting and a back wall. These are architectural context, not engineered power or cooling sizing; no storage relocation is depicted. The hall and surrounding infrastructure fade together during the close-up.
+
+## Managed cable routing
+
+Frontend cabling uses 9 mm illustrative jackets with short local service loops, rack-side guides and clips, rack-mounted inline TAPs, supported ladder trays per row, a transverse collection tray, and a supported exit route. Cable lanes remain parallel and distinct at the DC exit; they do not converge to an invented electrical junction. The blue paths remain static and present from the first frame. They follow rack movement while retaining the same mesh identities.
+
+Straight segments with local rounded bends replace unconstrained interpolating splines. Restraints, rack brackets, tray stanchions and anchored baseplates give the routes physical support. The 9 mm jacket, bends, TAP brackets and tray sizes are illustrative geometry, not a manufacturer-qualified installation specification. Frontend copper paths are kept separate from the removed fast-fabric looms and overhead power/cooling. Verifier-copy routes use the managed overhead paths too.
+
+Design reference: [NVIDIA cable management guidance](https://docs.nvidia.com/dgx-superpod/design-guide-cabling-data-centers/latest/cable-management-guidance.html), covering supported bends, segregation, strain support and ladder/basket/fiber tray systems.
