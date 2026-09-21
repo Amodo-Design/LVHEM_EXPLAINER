@@ -7,13 +7,16 @@ Open `install.html` through the local server. It is separate from `fleet.html`, 
 | Screen | Visual action | Message |
 | --- | --- | --- |
 | 1. Connected DC | Show 256 solid racks and substantial shared cable bundles. | Start from a connected data centre. |
-| 2. Remove network | Zoom onto 15 racks; fade surrounding infrastructure to 18%; remove high-bandwidth cabling. | Remove scale-out and most frontend networking while retaining rack-local NVLink. |
-| 3. Inference units | Mark each rack as one unit; increase visual spacing; add a single slow frontend link per rack. | A unit serves an approved model without high-bandwidth communication to another unit. |
-| 4. Install TAPs | Insert an orange TAP into each of the 15 remaining links. | Forward traffic and independently copy it; the proposed active TAP enforces the example link rate. |
-| 5. Recompute system | Add green copy paths, an aggregator, and a verifier rack with supporting hardware. | The verifier inside the DC receives one-way copies and has enough compute for the approved model. |
-| 6. Sample check | Highlight a sampled unit; animate copy, replay and compare; demonstrate both PASS and FAIL. | Check a sampled reply and report a restricted outcome. |
+| 2. Zoom in | Focus on 15 racks with all high-bandwidth cabling still present; fade the surrounding DC to 18%. | Zoom before altering the network. |
+| 3. Remove network | Remove fast cabling first, then add one metre to rack and row gaps. Keep 15 slow frontend links visible and connected as racks move. | Remove scale-out and most frontend networking; retain rack-local NVLink and one slow frontend per unit. |
+| 4. Inference units | Hold the separated layout and show the surviving request/reply network. | One rack serves the approved model independently; the draft proposes a single slow NIC/link per unit. |
+| 5. Install TAPs | Lower an orange TAP into each existing frontend link; leave the frontend in place. | Forward traffic and independently copy it; the proposed active TAP enforces the example link rate. |
+| 6. Recompute system | Add green copy paths, an aggregator, and a verifier rack with supporting hardware. | The verifier inside the DC receives one-way copies and has enough compute for the approved model. |
+| 7. Sample check | Highlight a sampled unit; animate copy, replay and compare; demonstrate both PASS and FAIL. | Check a sampled reply and report a restricted outcome. |
 
 No storage is moved or added to the inference units in this walkthrough. The verifier’s extra support hardware is a schematic illustration, not a rack BOM. Existing cold-storage arrangements are assumed adequate for this visual explanation; the draft's storage question remains unresolved.
+
+The network selection follows the draft’s “Reduce high-bandwidth networking and segment the cluster” and “Install network TAPs” sections: remove the back-end scale-out fabric and most frontend links, replace the frontend NICs with one slow link per inference unit, retain internal NVLink, then TAP every surviving frontend link. The draft gives two management alternatives; this visual chooses telemetry over the monitored frontend and does not depict a separate air-gapped management fabric.
 
 ## Visual and scientific scope
 
