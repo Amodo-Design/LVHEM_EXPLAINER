@@ -10,8 +10,8 @@ const presentation=document.documentElement.dataset.presentation==='iceberg';
 const $=id=>document.getElementById(id),stage=$('stage'),V=THREE.Vector3;
 const chapters=[
  {short:'Connected DC',title:'A connected data centre.',eyebrow:'01 / THE STARTING POINT',description:'A connected data hall has separate compute and frontend Ethernet paths. Blue request/reply links already exist; they stay connected throughout the installation.',facts:['256 racks shown in context','Follow the installation on 3 of them'],count:'256 racks',subtitle:'Compute fabric + frontend Ethernet',caption:'Drag to orbit · scroll to zoom'},
- {short:'Zoom in',title:'First, look inside the network.',eyebrow:'02 / ZOOM INTO THE CLUSTER',description:'Focus on 3 racks while their high-bandwidth connections are still in place. The rest of the data centre stays visible in the background.',facts:['All connections remain during the zoom','3 racks selected for the installation'],count:'3 connected racks',subtitle:'Zoom first · network still connected',caption:'The next step removes the fast links before the units move apart.'},
- {short:'Remove network',title:'Remove the fast links.',eyebrow:'03 / LIMIT COMMUNICATION',description:'Remove the fast compute and extra frontend/storage paths, then move the units apart. Keep the existing blue request/reply link on each rack; the shared TAP will enforce its rate.',facts:['Remove scale-out + most frontend links','Keep internal NVLink + one frontend uplink per rack'],count:'3 racks in focus',subtitle:'Fast fabric removed · external frontend retained',caption:'This is a proposed installation, not a claim that removal alone prevents training.'},
+ {short:'Zoom in',title:'First, look inside the network.',eyebrow:'02 / ZOOM INTO THE CLUSTER',description:'Focus on 3 racks while their high-bandwidth connections are still in place. The rest of the data centre stays visible in the background.',facts:['All connections remain during the zoom','3 racks selected for the installation'],count:'3 connected racks',subtitle:'Zoom first · network still connected',caption:'The next step fades the fast links while moving the units apart.'},
+ {short:'Remove network',title:'Remove the fast links.',eyebrow:'03 / LIMIT COMMUNICATION',description:'Fade the fast compute and extra frontend/storage paths while adding 0.3 metres to the gaps between units. Keep the existing blue request/reply link on each rack; the shared TAP will enforce its rate.',facts:['Remove scale-out + most frontend links','Keep internal NVLink + one frontend uplink per rack'],count:'3 racks in focus',subtitle:'Fast fabric removed · external frontend retained',caption:'This is a proposed installation, not a claim that removal alone prevents training.'},
  {short:'Inference units',title:'One rack. One inference unit.',eyebrow:'04 / DEFINE THE UNITS',description:'Each rack must be able to serve the approved model on its own. Its retained frontend routes requests and responses out of the data centre.',facts:['72 GPUs remain connected inside each rack','~1 Gb/s per unit after rate enforcement'],count:'3 inference units',subtitle:'One NVL72 rack per unit · local NVLink retained',caption:'Spacing is enlarged for legibility. No storage relocation is shown.'},
  {short:'Install TAPs',title:'One checkpoint before the exit.',eyebrow:'05 / INSTALL NETWORK TAPS',description:'Fit one three-channel TAP across the outgoing bundle at the data-centre boundary. Every link from the three racks passes through it before leaving; a separate branch copies the traffic to the verifier.',facts:['One shared TAP · three monitored links','Original traffic continues out; copies stay inside'],count:'3 links · 1 TAP',subtitle:'Requests and responses continue through the TAP',caption:'The orange shared TAP monitors all three links independently.'},
  {short:'Recompute system',title:'Install the replay system.',eyebrow:'06 / CONNECT THE VERIFIER',description:'The shared TAP feeds one normal rack just inside the data-centre boundary. This verifier rack replays sampled requests using the approved model.',facts:['One-way packet copies reach the verifier','The approved model is prepared before checks begin'],count:'A separate verifier',subtitle:'Shared TAP → one verifier rack',caption:'One standard verifier rack, inside the boundary.'},
@@ -28,7 +28,7 @@ const originalLayout=layoutRacks(256,32,.1,1.8),original=originalLayout.position
 const focusCols=3;
 for(let col=28;col<31;col++)focusIds.push(3*32+col);
 const focusSet=new Set(focusIds),center=new V();focusIds.forEach(id=>center.add(original[id]));center.multiplyScalar(1/focusIds.length);
-const separated=layoutRacks(focusIds.length,focusCols,1.1,2.8).positions.map(p=>new V(...p).add(center));
+const separated=layoutRacks(focusIds.length,focusCols,.4,1.8).positions.map(p=>new V(...p).add(center));
 const fullBundles=buildCableBundles(originalLayout);scene.add(fullBundles.group);
 const focusLayout={positions:focusIds.map(id=>original[id].toArray()),cols:focusCols,rows:1,width:2.0};
 const focusBundles=buildCableBundles(focusLayout);scene.add(focusBundles.group);focusBundles.group.visible=false;
@@ -65,8 +65,8 @@ function goTo(index,instant=false){
 }
 function tickTransition(t){
  if(!transition)return;const tr=transition,u=tr.duration?Math.min(1,(t-tr.start)/tr.duration):1,e=smooth(u);
- // Strip first; only then add one metre to both clear gaps. The retained links follow the racks.
- const move=tr.strip?smooth((u-.42)/.58):e,network=tr.strip?smooth(u/.4):e;
+ // Fade the backend and add 0.3 m to clear rack gaps on the same easing curve.
+ const move=e,network=e;
  focusIds.forEach((id,i)=>positions[id].lerpVectors(tr.from[i],tr.to[i],move));
  installation.setFrontendLayout(focusIds.map(id=>positions[id]));
  installation.setTapInstall(tr.installTaps?e:1);

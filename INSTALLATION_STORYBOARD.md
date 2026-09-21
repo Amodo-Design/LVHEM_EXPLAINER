@@ -8,7 +8,7 @@ Open `install.html` through the local server. It is separate from `fleet.html`, 
 | --- | --- | --- |
 | 1. Connected DC | Show a tiled, open-roof data hall, 256 solid racks, service cabinets, busways, coolant routes, gold fast fabric and blue frontend Ethernet. | Both networks exist from the first frame. |
 | 2. Zoom in | Focus on 3 racks near the DC edge with all high-bandwidth cabling still present; fade the surrounding DC to 18%. | Zoom before altering the network. |
-| 3. Remove network | Remove fast cabling first, then add one metre to the rack gaps. Keep 3 slow frontend links visible and connected as racks move. | Remove scale-out and most frontend networking; retain rack-local NVLink and one slow frontend per unit. |
+| 3. Remove network | Fade fast cabling while adding 0.3 metres to the rack gaps, simultaneously. Keep 3 slow frontend links visible and connected as racks move. | Remove scale-out and most frontend networking; retain rack-local NVLink and one slow frontend per unit. |
 | 4. Inference units | Hold the separated layout and show the surviving request/reply network. | One rack serves the approved model independently; the draft proposes a single slow NIC/link per unit. |
 | 5. Install TAPs | Lower one orange three-channel TAP across the existing outgoing bundle just inside the DC boundary; leave the frontend in place. | Forward traffic and independently copy it; the proposed active TAP enforces the example link rate. |
 | 6. Recompute system | Add a static green copy branch to exactly one ordinary verifier rack near the boundary. | The verifier inside the DC receives one-way copies and has enough compute for the approved model. |
@@ -22,7 +22,7 @@ The network selection follows the draft’s “Reduce high-bandwidth networking 
 
 - **Three racks means three inference units**, not one three-rack NVLink domain. One NVL72 rack retains its 72-GPU scale-up network.
 - The approximately **1 Gb/s** frontend is the draft's example, not a general workload-sizing result. The model must fit in the unit with adequate serving memory.
-- Added rack spacing is for legibility; the animation does not assert that a metre of separation enforces isolation.
+- Added rack spacing is for legibility; the animation does not assert that physical separation enforces isolation.
 - The illustration removes the original management fabric. Permitted telemetry would use the monitored frontend; update and weight-loading procedures still require agreement. The alternate air-gapped-management option is not depicted.
 - The static green copy branch runs from the shared TAP directly to the verifier. It does not depict verifier NACKs or retries back to the inference units.
 - The approved model is prepared before checking begins. Installation and model-loading protocols are outside this animation.
