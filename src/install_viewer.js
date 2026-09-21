@@ -76,7 +76,9 @@ function tickTransition(t){
  if(u===1){transition=null;busy=false;controls.enabled=true;installation.root.visible=true;updateUI();if(presentation&&current===6)startCheck();}
 }
 
-$('next').onclick=()=>goTo(current===6?0:current+1);$('previous').onclick=()=>goTo(current-1);if(!presentation){$('restart').onclick=()=>goTo(0,true);$('camera-home').onclick=()=>{const view=desiredView(current);camera.position.copy(view.position);controls.target.copy(view.target);controls.update();dirty=true;};
+const navigationOrder=presentation?[0,1,2,4,5,6]:chapters.map((_,i)=>i);
+function navigate(direction){const index=navigationOrder.indexOf(current),next=direction>0?(index+1)%navigationOrder.length:Math.max(0,index-1);goTo(navigationOrder[next]);}
+$('next').onclick=()=>navigate(1);$('previous').onclick=()=>navigate(-1);if(!presentation){$('restart').onclick=()=>goTo(0,true);$('camera-home').onclick=()=>{const view=desiredView(current);camera.position.copy(view.position);controls.target.copy(view.target);controls.update();dirty=true;};
 for(const id of ['match','different'])$(id).onclick=()=>{scenario=id;cancelCheck();$('match').setAttribute('aria-pressed',id==='match');$('different').setAttribute('aria-pressed',id==='different');};
 $('run-check').onclick=startCheck;
 }
@@ -92,7 +94,7 @@ if(!presentation){$('save-view').onclick=()=>{
  $('export-image').src=url;$('download-image').href=url;$('download-image').download=`verification-installation-step-${current+1}.png`;$('export-dialog').showModal();
 };
 $('close-export').onclick=()=>$('export-dialog').close();}
-if(presentation)window.addEventListener('keydown',event=>{if(event.altKey||event.ctrlKey||event.metaKey||busy)return;if(event.key==='ArrowRight'){event.preventDefault();goTo(current===6?0:current+1);}else if(event.key==='ArrowLeft'&&current>0){event.preventDefault();goTo(current-1);}});
+if(presentation)window.addEventListener('keydown',event=>{if(event.altKey||event.ctrlKey||event.metaKey||busy)return;if(event.key==='ArrowRight'){event.preventDefault();navigate(1);}else if(event.key==='ArrowLeft'&&current>0){event.preventDefault();navigate(-1);}});
 function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h);camera.aspect=w/h;camera.updateProjectionMatrix();dirty=true;}new ResizeObserver(resize).observe(stage);controls.addEventListener('change',()=>dirty=true);
 resize();goTo(0,true);hardwareLOD();$('loading')?.remove();
 function animate(t){requestAnimationFrame(animate);tickTransition(t);tickCheck(t);controls.update();installation.update(t);if(dirty&&t-lastLOD>65)hardwareLOD();draw();if(t-lastDiagnostics>700){stage.dataset.diagnostics=JSON.stringify({stage:current,busy,mainRacks:diagnostic.main,contextRacks:diagnostic.context,contextOpacity,networkOpacity:netOpacity,storageShown:false,rackGap:+(positions[focusIds[1]].x-positions[focusIds[0]].x-.6).toFixed(3),rowGap:focusIds.length>focusCols?+(positions[focusIds[focusCols]].y-positions[focusIds[0]].y-1.2).toFixed(3):null,frontendVisible:installation.root.visible,frontend:hallFrontend.stats,hall:hall.stats,installation:installation.diagnostics(),checkPhase,result:presentation?checkPhase:$('result').textContent,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles});lastDiagnostics=t;}}requestAnimationFrame(animate);
