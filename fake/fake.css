@@ -402,7 +402,7 @@ a { color: var(--terracotta); text-decoration: none; }
 
 
 /* Reply pane after verification: the diff in place */
-.chat-reply-verified { height: auto; min-height: 200px; display: flex; flex-direction: column; gap: 8px; }
+.chat-reply-verified { display: flex; flex-direction: column; gap: 8px; } /* keeps .chat-reply's fixed, scrollable height */
 .chat-reply-row { white-space: pre-wrap; overflow-wrap: anywhere; }
 .chat-reply-divider { border-top: 1px solid var(--divider); padding-top: 6px; font-size: 0.6875rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--para); }
 .token-piece { border-radius: 2px; }
