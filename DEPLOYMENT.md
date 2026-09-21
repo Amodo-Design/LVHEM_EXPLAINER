@@ -2,7 +2,7 @@
 
 Repository: **Amodo-Design/LVHEM_EXPLAINER** (private).
 
-The root Dockerfile serves the text-free presentation at `/` and `/presentation.html`. The image includes the model, vendored Three.js and the three photo callouts. It does not serve the asset editors, reference downloads, Git history or export gallery.
+The root Dockerfile serves the text-free presentation at `/` and `/presentation.html`. The image includes the model, vendored Three.js and responsive WebP versions of the three photo callouts. Original JPEGs are retained in Git but excluded from the deployed image. Regenerate web assets with `python3 scripts/optimize-images.py` whenever a source photo changes. It does not serve the asset editors, reference downloads, Git history or export gallery.
 
 This follows the [Apps Playground requirements](https://apps.amodo.tools/docs/app-requirements): the platform builds the default branch using `docker build <repo-root>` without build arguments. No image registry upload or Compose configuration is needed.
 
@@ -27,7 +27,7 @@ scripts/check-container.sh lvhem-explainer:playground
 docker run --rm --name lvhem-explainer -p 127.0.0.1:8080:8080 lvhem-explainer:playground
 ```
 
-Open `http://127.0.0.1:8080/`. The check script starts a temporary container on a random loopback port and removes it afterwards. It checks the homepage, every runtime asset, exact photo bytes against the current assets folder, JavaScript MIME types, missing/private paths, the non-root runtime user, and the single-port contract.
+Open `http://127.0.0.1:8080/`. The check script starts a temporary container on a random loopback port and removes it afterwards. It checks the homepage, every runtime asset, exact optimized photo bytes against `assets/web/`, JavaScript MIME types, missing/private paths, the non-root runtime user, and the single-port contract.
 
 For the isolated Colima runtime created on this workstation, prefix Docker commands with `docker --context colima-ai-verification`, or set `DOCKER_CONTEXT=colima-ai-verification` when running the check script. This does not change the user's default Docker context.
 

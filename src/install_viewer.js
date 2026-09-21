@@ -5,7 +5,7 @@ import {layoutRacks} from './fleet_layout.js';
 import {buildCableBundles} from './fleet_bundles.js';
 import {buildDataHall,buildHallFrontend} from './data_hall.js';
 import {buildVerificationScene} from './verification_scene.js?v=photo-callouts';
-import {createPhotoCallouts} from './photo_callouts.js?v=layout-2';
+import {createPhotoCallouts} from './photo_callouts.js?v=web-photos';
 import {iceberg,applyIcebergTheme} from './iceberg_theme.js';
 const presentation=document.documentElement.dataset.presentation==='iceberg';
 const $=id=>document.getElementById(id),stage=$('stage'),V=THREE.Vector3;
@@ -59,6 +59,7 @@ function goTo(index,instant=false){
  const from=focusIds.map(id=>positions[id].clone()),to=focusIds.map((id,i)=>index>=2?separated[i].clone():original[id].clone());
  const surroundings=index>0?contextScene:scene;surroundings.add(fullBundles.group,hall.group,hallFrontend.group);
  installation.setPhase(index<2?2:index<4?4:index===4?5:index===5||index===7?6:8);
+ if(index===5)photoCallouts?.preload();
  photoCallouts?.setVisible(index===7);
  installation.root.visible=true;
  installation.setTapInstall(installTaps?0:1);

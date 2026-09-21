@@ -20,20 +20,20 @@ until curl --fail --silent "$base/healthz" >/dev/null; do
     sleep 1
 done
 for path in / /presentation.html /src/install_viewer.js /src/photo_callouts.css \
-    '/src/verification_scene.js?v=photo-callouts' '/src/photo_callouts.js?v=layout-2' \
+    '/src/verification_scene.js?v=photo-callouts' '/src/photo_callouts.js?v=web-photos' \
     /src/rack_geometry.js /src/fleet_layout.js /src/fleet_bundles.js /src/data_hall.js \
     /src/iceberg_theme.js /src/cable_routes.js /vendor/three.module.js /vendor/three.core.js \
     /vendor/OrbitControls.js /vendor/THREE-LICENSE.txt /assets/model-data.js \
-    /assets/compute.jpg /assets/recompute.jpeg /assets/TAP.jpg; do
+    /assets/web/photos.js; do
     curl --fail --silent --show-error "$base$path" -o /dev/null
 done
-# Verify the deployed photos are byte-for-byte the current working-tree assets.
-for file in compute.jpg recompute.jpeg TAP.jpg; do
-    curl --fail --silent --show-error "$base/assets/$file" | cmp "assets/$file" -
+# Verify each optimized photo exactly matches the current working-tree asset.
+for file in assets/web/*.webp; do
+    curl --fail --silent --show-error "$base/$file" | cmp "$file" -
 done
 curl --fail --silent "$base/" | grep -q 'data-presentation="iceberg"'
 curl --fail --silent --head "$base/src/install_viewer.js" | grep -qi 'content-type:.*javascript'
-for path in /.git/config /README.md /references/ /missing-file.js; do
+for path in /.git/config /README.md /references/ /missing-file.js /assets/compute.jpg /assets/recompute.jpeg /assets/TAP.jpg; do
     [ "$(curl --silent -o /dev/null -w '%{http_code}' "$base$path")" = 404 ] || exit 1
 done
 echo "PASS: root presentation, exact current photo bytes, runtime assets, JavaScript MIME type, one TCP port, non-root user and 404 boundaries."

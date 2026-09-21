@@ -94,3 +94,7 @@ The real-hardware step adds the supplied `compute.jpg`, `recompute.jpeg` and `TA
 ## Hosting on Amodo Apps Playground
 
 The root `Dockerfile` packages the text-free presentation as the homepage, using an unprivileged nginx server on port 8080. No secrets, database or persistent volume are required. See [DEPLOYMENT.md](DEPLOYMENT.md) for registration, build and verification instructions for `Amodo-Design/LVHEM_EXPLAINER`.
+
+### Web photo assets
+
+Callouts use responsive WebP copies in `assets/web/`, preloaded only on the verifier step. The large original JPEGs stay in `assets/` for future edits and are excluded from the Docker image. Run `python3 scripts/optimize-images.py` after changing an original (requires ImageMagick and cwebp). It normalizes orientation, converts to sRGB, strips metadata, and generates two sizes per photo plus a manifest recording each original’s SHA-256. The largest three variants total about 147 KB, versus 38 MB for the originals.

@@ -10,8 +10,8 @@ COPY src/install_viewer.js src/rack_geometry.js src/fleet_layout.js \
      src/photo_callouts.css /opt/presentation/src/
 COPY vendor/three.module.js vendor/three.core.js vendor/OrbitControls.js \
      vendor/THREE-LICENSE.txt /opt/presentation/vendor/
-COPY assets/model-data.js assets/compute.jpg assets/recompute.jpeg \
-     assets/TAP.jpg /opt/presentation/assets/
+COPY assets/model-data.js /opt/presentation/assets/
+COPY assets/web/ /opt/presentation/assets/web/
 
 # Must be the only port in the image's ExposedPorts, including inherited ports.
 EXPOSE 8080/tcp
