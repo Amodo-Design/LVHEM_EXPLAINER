@@ -24,7 +24,7 @@ for path in / /presentation.html /src/install_viewer.js /src/photo_callouts.css 
     /src/rack_geometry.js /src/fleet_layout.js /src/fleet_bundles.js /src/data_hall.js \
     /src/iceberg_theme.js /src/cable_routes.js /vendor/three.module.js /vendor/three.core.js \
     /vendor/OrbitControls.js /vendor/THREE-LICENSE.txt /assets/model-data.js \
-    /assets/web/photos.js /assets/fonts/ibm-plex-sans-regular-latin.woff2 /assets/fonts/OFL.txt; do
+    /assets/web/photos.js /assets/fonts/ibm-plex-serif-regular-latin.woff2 /assets/fonts/OFL.txt; do
     curl --fail --silent --show-error "$base$path" -o /dev/null
 done
 # Verify each optimized photo exactly matches the current working-tree asset.
