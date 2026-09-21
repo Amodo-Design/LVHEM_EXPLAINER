@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>if(new URLSearchParams(location.search).get("embed")==="1")document.documentElement.dataset.embed="true";</script>
+<title>Inference Recomputation Verification</title>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-medium-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fake.css">
+</head>
+<body>
+<main class="page">
+  <div class="shell">
+    <header class="topbar">
+      <div class="title">
+        <h1>Inference Recomputation Verification</h1>
+      </div>
+    </header>
+
+    <div class="chat">
+      <div class="examples" role="group" aria-labelledby="examples-label">
+        <span id="examples-label">Examples:</span>
+        <div class="example-buttons" id="examples"></div>
+        <button type="button" id="clear" class="example-button clear-button" disabled>Clear</button>
+      </div>
+      <ol class="verification-timeline" id="timeline" aria-label="Latest example progress">
+        <li><span class="timeline-dot" aria-hidden="true">1</span><span>Message sent</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">2</span><span>Response generated</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">3</span><span>Verification started</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">4</span><span>Verification complete</span></li>
+      </ol>
+      <span id="timeline-status" class="visually-hidden" role="status" aria-live="polite"></span>
+      <div class="muted chat-empty" id="empty">
+        Choose an example to compare the two model responses.
+      </div>
+      <div id="sends"></div>
+    </div>
+  </div>
+</main>
+
+<template id="card-template">
+  <article class="chat-card">
+    <header class="chat-card-head">
+      <span class="chat-tag-model" data-slot="model"></span>
+      <span class="chat-card-stage mono" data-slot="stage">inferring</span>
+    </header>
+    <div class="chat-reply" data-slot="reply">…</div>
+    <div class="chat-progress-row" data-slot="progress" role="status" aria-live="polite">
+      <span class="chat-spinner" aria-hidden="true"></span>
+      <span data-slot="progress-label">Generating answer</span>
+      <span class="chat-progress-time mono" data-slot="progress-time">0s</span>
+    </div>
+    <section class="chat-result" data-slot="result" hidden aria-label="Verification result">
+      <div class="chat-verdict" data-slot="verdict" role="status"><span class="chat-verdict-label" data-slot="verdict-label"></span></div>
+      <dl class="chat-metrics">
+        <div class="chat-metric">
+          <dt>Token match</dt>
+          <dd>
+            <span class="chat-metric-value"><span data-slot="match"></span><span class="chat-metric-unit">%</span></span>
+            <span class="chat-metric-hint" data-slot="match-hint"></span>
+          </dd>
+        </div>
+        <div class="chat-metric chat-metric-wide">
+          <dt>Mean logit difference</dt>
+          <dd>
+            <span class="chat-metric-value" data-slot="delta"></span>
+            <span class="chat-metric-hint" data-slot="threshold-hint"></span>
+            <span class="chat-bar" role="img" data-slot="bar">
+              <span class="chat-bar-fill" data-slot="bar-fill"></span>
+              <span class="chat-bar-marker" data-slot="bar-marker"></span>
+              <span class="chat-bar-scale" aria-hidden="true"><span>0</span><span>5</span></span>
+            </span>
+          </dd>
+        </div>
+      </dl>
+    </section>
+  </article>
+</template>
+
+<script type="module" src="fake.js"></script>
+</body>
+</html>

@@ -2,6 +2,22 @@
 
 Start with **`fleet.html`** for the scalable rack field, `index.html` for the original four-rack study, or `network.html` for the separate network-fabric variant. Run `./serve.command` on macOS, or `python3 -m http.server 8765 --bind 127.0.0.1` from this folder and open http://127.0.0.1:8765/fleet.html. Three.js is bundled locally; no external runtime calls are needed.
 
+## Fake verification dashboard (`fake/`)
+
+`fake/index.html` is a self-contained stand-in for the LVHEM inference
+verification dashboard's Chat tab, for presenting the verification flow
+without a cluster. It ships with two fixed "instances" that both
+report as Qwen 2.5 7B (one honest, one actually a 1.5B), five numbered example buttons that immediately send
+preset prompts to both instances, and pre-written answers: the reply streams in at a
+model-appropriate pace, the ledger and verifier stages tick past with
+realistic delays, and the card ends with the verdict, token match, mean logit
+difference against the threshold and differences highlighted in the original response. Every number and token is
+fixture data from `fake/presets.js`; regenerate it with
+`python3 scripts/generate-fake-presets.py` after editing the prompts or
+answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
+so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
+the local server, or `/fake/` on the deployed image.
+
 ## Rack field
 
 The scene supports 16–1,024 racks in continuous, uniformly spaced rows. Default: 256 racks, 32 per row. **Between racks** (0–2 m) and **Between rows** (0–6 m) control clear edge-to-edge gaps. Changing a gap reroutes connections immediately and retains a close-up camera relative to the selected rack. These are composition controls, not installation clearance recommendations.
@@ -83,7 +99,7 @@ The shared TAP forwards the three original links outside the DC and branches cop
 
 ## Text-free presentation
 
-Open **`presentation.html`** for the full-canvas Iceberg Light edition. Only two small circular back/forward controls are visible; Left/Right arrow keys also navigate. Seven views run from full DC → inference-or-training question → zoom → separation and backend fade → shared TAP → verifier → real hardware photos. The question appears before zoom-in in a lower-left caption with regular-weight IBM Plex Serif, a translucent beige background, and a soft fade. Captions use balanced line breaks and stay clear of the central hardware. During backend fading, the same popup reads “Split the cluster into "inference units"”. “Fit verification hardware” remains visible across the TAP and verifier installation views, then clears for the photo callouts. The locally hosted font is bundled; its font license is included in `assets/fonts/`. The redundant hold after separation is skipped in both directions. The photo callouts are the final view; the forward arrow is disabled there. No automatic recomputation or restart step is included in this edition. Drag and scroll still orbit and zoom. The annotated `install.html` interface is retained.
+Open **`presentation.html`** for the full-canvas Iceberg Light edition. Only two small circular back/forward controls are visible; Left/Right arrow keys also navigate. Eight views run from full DC → inference-or-training question → zoom → separation and backend fade → shared TAP → verifier → real hardware photos → interactive recomputation dashboard. The question appears before zoom-in in a lower-left caption with regular-weight IBM Plex Serif, a translucent beige background, and a soft fade. Captions use balanced line breaks and stay clear of the central hardware. During backend fading, the same popup reads “Split the cluster into "inference units"”. “Fit verification hardware” remains visible across the TAP and verifier installation views, then clears for the photo callouts. The locally hosted font is bundled; its font license is included in `assets/fonts/`. The redundant hold after separation is skipped in both directions. After the photo callouts, the final forward click opens the dashboard shell over the same data-centre scene. Back returns to the photo layout. The embedded dashboard stays mounted, preserving selections, replies, running checks and scroll position when reopened; a page reload resets this demo state. The forward arrow is disabled on the dashboard. No automatic recomputation or restart step is included in this edition. Drag and scroll still orbit and zoom. The annotated `install.html` interface is retained.
 
 The palette follows [Iceberg Light](https://terminalcolors.com/themes/iceberg/light/): background `#e8e9ec`, hardware `#33374c` / `#262a3f`, frontend blue `#2d539e`, copies green `#668e3d`, and TAP / removed fabric orange `#c57339`. Shaded hardware and metal use cool neutral variations. No animated packet markers are introduced.
 
@@ -98,3 +114,5 @@ The root `Dockerfile` packages the text-free presentation as the homepage, using
 ### Web photo assets
 
 Callouts use responsive WebP copies in `assets/web/`, preloaded only on the verifier step. The large original JPEGs stay in `assets/` for future edits and are excluded from the Docker image. Run `python3 scripts/optimize-images.py` after changing an original (requires ImageMagick and cwebp). It normalizes orientation, converts to sRGB, strips metadata, and generates two sizes per photo plus a manifest recording each original’s SHA-256. The largest three variants total about 147 KB, versus 38 MB for the originals.
+
+The dashboard timeline follows the latest example: Message sent → Response generated → Verification started → Verification complete. Each milestone waits for both model cards; earlier concurrent examples cannot overwrite the latest run’s progress. It is retained when returning to the layout and reopening the dashboard.
