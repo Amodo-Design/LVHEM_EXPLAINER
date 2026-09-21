@@ -61,7 +61,7 @@ Solid, shaded hardware is now the default. Dark frames, metallic fascia, port re
 The **Animation** panel has **Next** and **Reset** controls. Each click advances one stage:
 
 1. Full data centre, using the current array.
-2. Fly into a fifteen-rack group and isolate it.
+2. Fly into a fifteen-rack group, keeping it opaque while the surrounding racks and network fade smoothly to 18% opacity. The surrounding racks stay visible in subsequent stages.
 3. Fade out backend bundles, trays, individual host fibres and management cables. Rack-local NVLink remains.
 4. Add **1 metre** to both the rack gaps and row gaps, moving the racks and camera smoothly.
 
