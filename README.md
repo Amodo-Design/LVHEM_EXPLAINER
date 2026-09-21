@@ -6,12 +6,12 @@ Start with **`fleet.html`** for the scalable rack field, `index.html` for the or
 
 `fake/index.html` is a self-contained stand-in for the LVHEM inference
 verification dashboard's Chat tab, for presenting the verification flow
-without a cluster. It ships with two pre-selected "instances" that both
-report as Qwen 2.5 7B (one honest, one actually a 1.5B), a dropdown of
-preset prompts, and pre-written answers: the reply streams in at a
+without a cluster. It ships with two fixed "instances" that both
+report as Qwen 2.5 7B (one honest, one actually a 1.5B), five numbered example buttons that immediately send
+preset prompts to both instances, and pre-written answers: the reply streams in at a
 model-appropriate pace, the ledger and verifier stages tick past with
 realistic delays, and the card ends with the verdict, token match, mean logit
-difference against the threshold and a token diff. Every number and token is
+difference against the threshold and differences highlighted in the original response. Every number and token is
 fixture data from `fake/presets.js`; regenerate it with
 `python3 scripts/generate-fake-presets.py` after editing the prompts or
 answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),

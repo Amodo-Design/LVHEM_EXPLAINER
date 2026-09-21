@@ -18,30 +18,13 @@
       </div>
     </header>
 
-    <nav class="tabs" aria-label="Dashboard sections">
-      <a class="tab tab-active" href="#" aria-current="page">Chat</a>
-      <span class="tab tab-inert" aria-disabled="true">Verification</span>
-      <span class="tab tab-inert" aria-disabled="true">Model Instances</span>
-      <span class="tab tab-inert" aria-disabled="true">Model Settings</span>
-    </nav>
-
     <div class="chat">
-      <div class="chat-controls">
-        <details class="chat-picker" id="picker">
-          <summary class="chat-picker-summary" id="picker-summary">2 instances selected</summary>
-          <div class="chat-picker-menu" id="picker-menu" role="listbox" aria-multiselectable="true"></div>
-        </details>
-        <ul class="chat-chips" id="chips" aria-label="Selected instances"></ul>
-        <div class="chat-composer">
-          <label class="visually-hidden" for="prompt">Prompt</label>
-          <select class="chat-input" id="prompt">
-            <option value="" selected disabled>Choose a prompt to send to every selected instance…</option>
-          </select>
-          <button type="button" class="chat-send" id="send" disabled>Send</button>
-        </div>
+      <div class="examples" role="group" aria-labelledby="examples-label">
+        <span id="examples-label">Examples:</span>
+        <div class="example-buttons" id="examples"></div>
       </div>
       <div class="muted chat-empty" id="empty">
-        Pick a prompt from the list and press Send. Each instance gets its own card with the reply and the verification result.
+        Choose an example to compare the two model responses.
       </div>
       <div id="sends"></div>
     </div>

@@ -6,92 +6,18 @@ import { INSTANCES, PRESETS, THRESHOLD } from "./presets.js";
 const BAR_MAX = 5;
 const $ = (sel, root = document) => root.querySelector(sel);
 
-const state = {
-  selected: new Set(INSTANCES.map((i) => i.key)),
-};
-
-// --- picker + chips -------------------------------------------------------
-
-function renderPicker() {
-  const menu = $("#picker-menu");
-  menu.innerHTML = "";
-  for (const inst of INSTANCES) {
-    const label = document.createElement("label");
-    label.className = "chat-picker-option";
-    const box = document.createElement("input");
-    box.type = "checkbox";
-    box.checked = state.selected.has(inst.key);
-    box.addEventListener("change", () => {
-      if (box.checked) state.selected.add(inst.key);
-      else state.selected.delete(inst.key);
-      renderSelection();
-    });
-    const text = document.createElement("span");
-    text.className = "chat-picker-label";
-    text.innerHTML = `<span>${inst.model_name}</span><span class="mono muted">${inst.hostname} · ${inst.deployment_id.slice(0, 8)}</span>`;
-    label.append(box, text);
-    menu.append(label);
-  }
-  renderSelection();
-}
-
-function renderSelection() {
-  const chosen = INSTANCES.filter((i) => state.selected.has(i.key));
-  $("#picker-summary").textContent =
-    chosen.length === 0
-      ? "Select model instances"
-      : chosen.length === 1
-        ? `${chosen[0].model_name} · ${chosen[0].hostname} · ${chosen[0].deployment_id.slice(0, 8)}`
-        : `${chosen.length} instances selected`;
-  const chips = $("#chips");
-  chips.innerHTML = "";
-  for (const inst of chosen) {
-    const li = document.createElement("li");
-    li.className = "chat-chip";
-    li.innerHTML = `<span>${inst.model_name}</span><span class="chat-chip-host mono">${inst.hostname}</span>`;
-    const remove = document.createElement("button");
-    remove.type = "button";
-    remove.className = "chat-chip-remove";
-    remove.setAttribute("aria-label", `Remove ${inst.model_name} on ${inst.hostname}`);
-    remove.textContent = "×";
-    remove.addEventListener("click", () => {
-      state.selected.delete(inst.key);
-      renderPicker();
-    });
-    li.append(remove);
-    chips.append(li);
-  }
-  updateSendEnabled();
-}
-
-// Close the picker on outside click so it never sits over the composer.
-document.addEventListener("mousedown", (event) => {
-  const picker = $("#picker");
-  if (picker.open && !picker.contains(event.target)) picker.open = false;
-});
-
-// --- composer -------------------------------------------------------------
-
-function renderPrompts() {
-  const select = $("#prompt");
+// Every example runs on both instances; one click sends the preset prompt.
+function renderExamples() {
   PRESETS.forEach((preset, index) => {
-    const option = document.createElement("option");
-    option.value = String(index);
-    option.textContent = preset.prompt;
-    select.append(option);
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "example-button";
+    button.textContent = String(index + 1);
+    button.setAttribute("aria-label", `Example ${index + 1}`);
+    button.title = preset.prompt;
+    button.addEventListener("click", () => send(preset));
+    $("#examples").append(button);
   });
-  select.addEventListener("change", updateSendEnabled);
-  $("#send").addEventListener("click", send);
-  select.addEventListener("keydown", (event) => {
-    if (event.key === "Enter" && !$("#send").disabled) {
-      event.preventDefault();
-      send();
-    }
-  });
-}
-
-function updateSendEnabled() {
-  $("#send").disabled = $("#prompt").value === "" || state.selected.size === 0;
 }
 
 // --- timing ---------------------------------------------------------------
@@ -101,10 +27,7 @@ const jitter = (base, spread) => base + (Math.random() * 2 - 1) * spread;
 
 // --- a send ---------------------------------------------------------------
 
-function send() {
-  const preset = PRESETS[Number($("#prompt").value)];
-  const chosen = INSTANCES.filter((i) => state.selected.has(i.key));
-  if (!preset || chosen.length === 0) return;
+function send(preset) {
 
   $("#empty").hidden = true;
   const group = document.createElement("section");
@@ -114,17 +37,14 @@ function send() {
   group.innerHTML = `<div class="chat-send-prompt"><span class="mono muted">${time}</span><p></p></div><div class="chat-cards"></div>`;
   $(".chat-send-prompt p", group).textContent = preset.prompt;
   const cards = $(".chat-cards", group);
-  cards.style.gridTemplateColumns = `repeat(${Math.min(chosen.length, 2)}, minmax(0, 1fr))`;
   $("#sends").prepend(group);
 
-  for (const inst of chosen) {
+  for (const inst of INSTANCES) {
     const card = buildCard(inst);
     cards.append(card);
     runCard(card, inst, preset[inst.key]);
   }
 
-  $("#prompt").value = "";
-  updateSendEnabled();
 }
 
 function buildCard(inst) {
@@ -216,36 +136,19 @@ function renderResult(card, outcome) {
     $('[data-slot="bar-fill"]', card).style.width = `${fill}%`;
   });
 
-  // The streamed reply pane becomes the diff: prover tokens with the ones the
-  // verifier could not reproduce highlighted, and the recomputation beneath.
+  // Keep the original response, highlighting tokens the verifier could not reproduce.
   const reply = $('[data-slot="reply"]', card);
   reply.textContent = "";
-  reply.classList.add("chat-reply-verified");
-  const prover = document.createElement("div");
-  prover.className = "chat-reply-row";
-  prover.setAttribute("aria-label", "Prover output");
-  const divider = document.createElement("div");
-  divider.className = "chat-reply-divider";
-  divider.setAttribute("aria-hidden", "true");
-  divider.textContent = "verifier recomputation";
-  const verifier = document.createElement("div");
-  verifier.className = "chat-reply-row";
-  verifier.setAttribute("aria-label", "Verifier output");
   for (const token of cmp) {
-    const p = document.createElement("span");
-    p.className = token.exact_match ? "token-piece" : "token-piece token-diff-prover";
-    p.textContent = token.prover_text;
-    if (!token.exact_match) p.title = `logit difference ${token.margin.toFixed(4)}`;
-    prover.append(p);
-    const v = document.createElement("span");
-    v.className = token.exact_match ? "token-piece" : "token-piece token-diff-verifier";
-    v.textContent = token.verifier_text;
-    verifier.append(v);
+    const piece = document.createElement("span");
+    piece.className = token.exact_match ? "token-piece" : "token-piece token-diff-prover";
+    piece.textContent = token.prover_text;
+    if (!token.exact_match) piece.title = `logit difference ${token.margin.toFixed(4)}`;
+    reply.append(piece);
   }
-  reply.append(prover, divider, verifier);
+  reply.scrollTop = 0;
 }
 
 // --- boot -----------------------------------------------------------------
 
-renderPicker();
-renderPrompts();
+renderExamples();
