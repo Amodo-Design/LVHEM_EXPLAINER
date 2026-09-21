@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inference Recomputation Verification</title>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-medium-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fake.css">
+</head>
+<body>
+<main class="page">
+  <div class="shell">
+    <header class="topbar">
+      <div class="title">
+        <h1>Inference Recomputation Verification</h1>
+      </div>
+    </header>
+
+    <nav class="tabs" aria-label="Dashboard sections">
+      <a class="tab tab-active" href="#" aria-current="page">Chat</a>
+      <span class="tab tab-inert" aria-disabled="true">Verification</span>
+      <span class="tab tab-inert" aria-disabled="true">Model Instances</span>
+      <span class="tab tab-inert" aria-disabled="true">Model Settings</span>
+    </nav>
+
+    <div class="chat">
+      <div class="chat-controls">
+        <details class="chat-picker" id="picker">
+          <summary class="chat-picker-summary" id="picker-summary">2 instances selected</summary>
+          <div class="chat-picker-menu" id="picker-menu" role="listbox" aria-multiselectable="true"></div>
+        </details>
+        <ul class="chat-chips" id="chips" aria-label="Selected instances"></ul>
+        <div class="chat-composer">
+          <label class="visually-hidden" for="prompt">Prompt</label>
+          <select class="chat-input" id="prompt">
+            <option value="" selected disabled>Choose a prompt to send to every selected instance…</option>
+          </select>
+          <button type="button" class="chat-send" id="send" disabled>Send</button>
+        </div>
+      </div>
+      <div class="muted chat-empty" id="empty">
+        Pick a prompt from the list and press Send. Each instance gets its own card with the reply and the verification result.
+      </div>
+      <div id="sends"></div>
+    </div>
+  </div>
+</main>
+
+<template id="card-template">
+  <article class="chat-card">
+    <header class="chat-card-head">
+      <ul class="chat-tags">
+        <li class="chat-tag-pill chat-tag-model" data-slot="model"></li>
+        <li class="chat-tag-pill chat-tag-container mono" data-slot="host"></li>
+        <li class="chat-tag-pill chat-tag-guid mono" data-slot="guid"></li>
+      </ul>
+      <span class="chat-card-stage mono" data-slot="stage">inferring</span>
+    </header>
+    <pre class="chat-reply" data-slot="reply">…</pre>
+    <div class="chat-progress-row" data-slot="progress" role="status" aria-live="polite">
+      <span class="chat-spinner" aria-hidden="true"></span>
+      <span data-slot="progress-label">Generating answer</span>
+      <span class="chat-progress-time mono" data-slot="progress-time">0s</span>
+    </div>
+    <section class="chat-result" data-slot="result" hidden aria-label="Verification result">
+      <div class="chat-verdict" data-slot="verdict" role="status"><span class="chat-verdict-label" data-slot="verdict-label"></span></div>
+      <dl class="chat-metrics">
+        <div class="chat-metric">
+          <dt>Token match</dt>
+          <dd>
+            <span class="chat-metric-value"><span data-slot="match"></span><span class="chat-metric-unit">%</span></span>
+            <span class="chat-metric-hint" data-slot="match-hint"></span>
+          </dd>
+        </div>
+        <div class="chat-metric chat-metric-wide">
+          <dt>Mean logit difference</dt>
+          <dd>
+            <span class="chat-metric-value" data-slot="delta"></span>
+            <span class="chat-metric-hint" data-slot="threshold-hint"></span>
+            <span class="chat-bar" role="img" data-slot="bar">
+              <span class="chat-bar-fill" data-slot="bar-fill"></span>
+              <span class="chat-bar-marker" data-slot="bar-marker"></span>
+              <span class="chat-bar-scale" aria-hidden="true"><span>0</span><span>5</span></span>
+            </span>
+          </dd>
+        </div>
+      </dl>
+      <details class="diff-details" open>
+        <summary data-slot="diff-summary"></summary>
+        <div class="token-diff">
+          <div class="token-row-label">Prover</div>
+          <pre class="token-row" data-slot="diff-prover"></pre>
+          <div class="token-row-label">Verifier</div>
+          <pre class="token-row" data-slot="diff-verifier"></pre>
+        </div>
+      </details>
+    </section>
+  </article>
+</template>
+
+<script type="module" src="fake.js"></script>
+</body>
+</html>

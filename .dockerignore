@@ -35,3 +35,9 @@ assets/web/**
 assets/fonts/**
 !assets/fonts/*.woff2
 !assets/fonts/OFL.txt
+!fake/
+fake/**
+!fake/index.html
+!fake/fake.css
+!fake/fake.js
+!fake/presets.js

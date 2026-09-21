@@ -2,6 +2,22 @@
 
 Start with **`fleet.html`** for the scalable rack field, `index.html` for the original four-rack study, or `network.html` for the separate network-fabric variant. Run `./serve.command` on macOS, or `python3 -m http.server 8765 --bind 127.0.0.1` from this folder and open http://127.0.0.1:8765/fleet.html. Three.js is bundled locally; no external runtime calls are needed.
 
+## Fake verification dashboard (`fake/`)
+
+`fake/index.html` is a self-contained stand-in for the LVHEM inference
+verification dashboard's Chat tab, for presenting the verification flow
+without a cluster. It ships with two pre-selected "instances" that both
+report as Qwen 2.5 7B (one honest, one actually a 1.5B), a dropdown of
+preset prompts, and pre-written answers: the reply streams in at a
+model-appropriate pace, the ledger and verifier stages tick past with
+realistic delays, and the card ends with the verdict, token match, mean logit
+difference against the threshold and a token diff. Every number and token is
+fixture data from `fake/presets.js`; regenerate it with
+`python3 scripts/generate-fake-presets.py` after editing the prompts or
+answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
+so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
+the local server, or `/fake/` on the deployed image.
+
 ## Rack field
 
 The scene supports 16–1,024 racks in continuous, uniformly spaced rows. Default: 256 racks, 32 per row. **Between racks** (0–2 m) and **Between rows** (0–6 m) control clear edge-to-edge gaps. Changing a gap reroutes connections immediately and retains a close-up camera relative to the selected rack. These are composition controls, not installation clearance recommendations.
