@@ -12,7 +12,7 @@
 @media(max-width:600px){.question-popup{left:20px;bottom:88px;padding:18px 22px;max-width:calc(100% - 40px)}.question-popup p{font-size:23px}}
 @media(prefers-reduced-motion:reduce){.question-popup{transition:none}}
 
-:root{color-scheme:light;background:#e8e9ec;color:#33374c}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}.stage{position:fixed;inset:0}.stage canvas{display:block;width:100%;height:100%;touch-action:none}.navigation{position:fixed;z-index:2;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:12px}button{display:grid;place-items:center;width:38px;height:38px;border:1px solid #8389a366;border-radius:50%;padding:0;background:#e8e9eceb;color:#33374c;cursor:pointer;transition:background .15s,border-color .15s,opacity .15s}button:hover:not(:disabled){background:#dcdfe7;border-color:#2d539e}button:focus-visible{outline:2px solid #2d539e;outline-offset:4px}button:disabled{opacity:.28;cursor:default}svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}@media(prefers-reduced-motion:reduce){button{transition:none}}
+:root{color-scheme:light;background:#e8e9ec;color:#33374c}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}.stage{position:fixed;inset:0}.stage canvas{display:block;width:100%;height:100%;touch-action:none}.navigation{position:fixed;z-index:5;bottom:max(24px,env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);display:flex;gap:12px}button{display:grid;place-items:center;width:38px;height:38px;border:1px solid #8389a366;border-radius:50%;padding:0;background:#e8e9eceb;color:#33374c;cursor:pointer;transition:background .15s,border-color .15s,opacity .15s}button:hover:not(:disabled){background:#dcdfe7;border-color:#2d539e}button:focus-visible{outline:2px solid #2d539e;outline-offset:4px}button:disabled{opacity:.28;cursor:default}svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}@media(prefers-reduced-motion:reduce){button{transition:none}}
 /* Keep the dashboard mounted so responses, selections and scroll survive Back. */
 .dashboard-overlay{position:fixed;z-index:3;inset:clamp(44px,5vh,60px) max(24px,5vw) 94px;max-width:1400px;margin-inline:auto;visibility:hidden;opacity:0;transform:translateY(18px) scale(.975);transform-origin:center bottom;pointer-events:none;transition:opacity .5s,transform .65s cubic-bezier(.2,.7,.2,1),visibility 0s .65s;filter:drop-shadow(0 18px 32px #262a3f30)}
 .dashboard-overlay.is-visible{visibility:visible;opacity:1;transform:none;pointer-events:auto;transition-delay:0s}
@@ -20,6 +20,15 @@
 @media(max-width:600px){.dashboard-overlay{inset:44px 12px 84px}}
 @media(prefers-reduced-motion:reduce){.dashboard-overlay{transition:none;transform:none}}
 .watermark{position:fixed;z-index:4;top:max(12px,env(safe-area-inset-top));right:max(20px,env(safe-area-inset-right));margin:0;color:#62677b;font:400 clamp(10px,1.2vw,13px)/1.5 'IBM Plex Serif',Georgia,serif;letter-spacing:.01em;white-space:nowrap;pointer-events:none;user-select:none}
+.closing-slide{position:fixed;inset:0;z-index:3;display:grid;place-content:center;gap:22px;padding:64px 24px 110px;text-align:center;background:#f4f0e6;color:#38352f;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
+.closing-slide.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+.closing-slide h1,.closing-slide p{margin:0;font-family:'IBM Plex Serif',Georgia,serif;font-weight:400}
+.closing-slide h1{font-size:clamp(25px,5vw,72px);line-height:1.2;letter-spacing:-.035em}
+.closing-slide p{font-size:clamp(15px,2vw,26px);line-height:1.5;color:#666156}
+.closing-slide a{color:inherit;text-decoration:none}
+.closing-slide a:hover{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}
+.closing-slide a:focus-visible{outline:2px solid #2d539e;outline-offset:8px}
+@media(prefers-reduced-motion:reduce){.closing-slide{transition:none}}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head><body>
@@ -29,9 +38,13 @@
 <section id="dashboard-overlay" class="dashboard-overlay" aria-label="Interactive recomputation dashboard" aria-hidden="true" inert>
 <iframe id="dashboard-frame" title="Inference recomputation verification dashboard"></iframe>
 </section>
+<section id="closing-slide" class="closing-slide" aria-label="Contact" aria-hidden="true" inert>
+<h1><a href="https://www.ai-verification.com" target="_blank" rel="noopener noreferrer">www.ai-verification.com</a></h1>
+<p><a href="mailto:tom.milton@amododesign.com">tom.milton@amododesign.com</a></p>
+</section>
 <nav class="navigation" aria-label="Presentation navigation">
 <button id="previous" aria-label="Previous view" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 5-5 5 5 5"/></svg></button>
 <button id="next" aria-label="Next view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
 </nav>
-<script type="module" src="src/install_viewer.js"></script>
+<script type="module" src="src/install_viewer.js?v=closing-slide"></script>
 </body></html>
