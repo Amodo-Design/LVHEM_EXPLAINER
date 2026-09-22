@@ -45,12 +45,13 @@
 .headshot-grid img{display:block;width:min(calc((100cqw - 70px)/8),calc((100cqh - 50px)/6));height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover}
 .project-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:18px 14px}
 .project-grid img{width:100%;height:100%;min-height:0;object-fit:contain;filter:brightness(.7)}
-.opening-logos{grid-column:1 / -1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:center;justify-items:center;padding:18px 26px;gap:28px;background:#faf9f5fa}
+.opening-logos{grid-column:1 / -1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 28px;align-items:center;justify-items:center;padding:18px 26px;gap:28px;background:#faf9f5fa}
+.logo-more{color:#746f64;font:400 34px/1 'IBM Plex Serif',Georgia,serif}
 .opening-logos img{display:block;width:100%;height:48px;object-fit:contain}
 .opening-logos .logo-mit{max-width:76px;height:38px}
 .opening-logos .logo-rand{max-width:54px;height:54px}
 @media(max-width:1100px){.headshot-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:6px}.headshot-grid img{width:min(calc((100cqw - 30px)/6),calc((100cqh - 42px)/8))}.project-grid{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:10px}}
-@media(max-width:900px){.opening-layout{grid-template-rows:minmax(0,1fr) 112px}.opening-logos{grid-template-columns:repeat(8,minmax(0,1fr));gap:12px 18px;padding:12px 22px}.opening-logos img{grid-column:span 2;height:32px;max-width:120px}.opening-logos img:nth-child(5){grid-column:2 / span 2}.opening-logos .logo-mit{height:30px;max-width:60px}.opening-logos .logo-rand{height:34px;max-width:34px}}
+@media(max-width:900px){.opening-layout{grid-template-rows:minmax(0,1fr) 112px}.opening-logos{grid-template-columns:repeat(8,minmax(0,1fr));gap:12px 18px;padding:12px 22px}.opening-logos img{grid-column:span 2;height:32px;max-width:120px}.opening-logos .logo-more{grid-column:span 2;font-size:28px}.opening-logos .logo-mit{height:30px;max-width:60px}.opening-logos .logo-rand{height:34px;max-width:34px}}
 @media(max-width:600px){.opening-slide{padding:44px 12px 84px}.opening-layout{gap:10px}.opening-team,.opening-projects{padding:12px}.headshot-grid{gap:3px}.headshot-grid img{width:min(calc((100cqw - 15px)/6),calc((100cqh - 21px)/8))}.project-grid{gap:7px}.credential-caption{font-size:10px;gap:5px}.credential-caption span{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.opening-slide{transition:none}}
 
@@ -171,6 +172,7 @@
     <img src="assets/web/logo-cambridge.webp" alt="University of Cambridge">
     <img src="assets/web/logo-imperial.webp" alt="Imperial College London">
     <img src="assets/web/logo-fractile.webp" alt="Fractile">
+    <span class="logo-more" role="img" aria-label="And more">+</span>
   </aside>
 </div>
 </section>
