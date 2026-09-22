@@ -29,6 +29,44 @@
 .closing-slide a:hover{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}
 .closing-slide a:focus-visible{outline:2px solid #2d539e;outline-offset:8px}
 @media(prefers-reduced-motion:reduce){.closing-slide{transition:none}}
+.opening-slide{position:fixed;inset:0;z-index:3;padding:clamp(56px,8vh,96px) clamp(28px,6vw,104px) 104px;background:transparent;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
+.opening-slide.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+.opening-layout{height:100%;max-width:1480px;margin:auto;display:grid;grid-template-columns:minmax(210px,.38fr) minmax(0,1fr);gap:20px}
+.opening-team{min-height:0;display:flex;flex-direction:column;padding:18px 18px 22px;border:1px solid #ffffffc9;border-radius:9px;background:#f4f0e6f5;box-shadow:0 16px 44px #262a3f2e,0 2px 6px #262a3f14;text-align:center}
+.team-count{margin:0;color:#38352f;font:400 clamp(64px,7.6vw,112px)/1 'IBM Plex Serif',Georgia,serif;letter-spacing:-.07em}
+.team-count span{font-size:.7em;vertical-align:12%;margin-left:.05em}
+.team-caption{margin:5px 0 20px;color:#666156;font:400 clamp(15px,1.5vw,21px)/1.3 'IBM Plex Serif',Georgia,serif}
+.team-headshots{flex:1;min-height:0;container-type:size}
+.headshot-grid{height:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:6px;place-items:center}
+.headshot-grid img{display:block;width:min(calc((100cqw - 42px)/8),calc((100cqh - 30px)/6));height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;border:1px solid #ffffffb3}
+.opening-stories{min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:20px}
+.opening-story{min-width:0;min-height:0;margin:0;display:grid;place-items:center;overflow:hidden;border:1px solid #ffffffc9;border-radius:9px;background:#fffdfa;box-shadow:0 16px 44px #262a3f2e,0 2px 6px #262a3f14}
+.opening-story img{display:block;width:100%;height:100%;object-fit:contain}
+.opening-cloud{background:#fff}
+@media(max-width:600px){.opening-slide{padding:44px 12px 84px}.opening-layout{grid-template-columns:minmax(110px,.42fr) minmax(0,1fr);gap:10px}.opening-team{padding:14px 8px}.team-count{font-size:52px}.team-caption{font-size:13px;margin-bottom:12px}.opening-stories{gap:10px}.headshot-grid{gap:3px}.headshot-grid img{width:min(calc((100cqw - 21px)/8),calc((100cqh - 15px)/6))}}
+@media(prefers-reduced-motion:reduce){.opening-slide{transition:none}}
+
+.claims-slide{position:fixed;inset:0;z-index:3;display:grid;place-items:center;padding:64px 24px 104px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
+.claims-slide.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
+.claims-card{width:min(780px,100%);max-height:100%;overflow:auto;padding:clamp(28px,4.5vw,60px);border:1px solid #ffffffb3;border-radius:9px;background:rgb(246 242 232 / 94%);color:#49463f;box-shadow:0 16px 44px #262a3f26,0 2px 6px #262a3f14;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-family:'IBM Plex Serif',Georgia,serif}
+.claims-card h1{margin:0;font-size:clamp(27px,3.5vw,42px);line-height:1.35;font-weight:400;letter-spacing:-.025em;text-wrap:balance}
+.claims-card strong{font-weight:700;color:#38352f}
+.claims-intro{margin:34px 0 18px;padding-top:28px;border-top:1px solid #49463f26;font-size:clamp(17px,1.9vw,22px);line-height:1.5;color:#777063}
+.claims-card ul{margin:0;padding-left:1.15em;font-size:clamp(18px,2.15vw,25px);line-height:1.5;letter-spacing:-.01em}
+.claims-card li+li{margin-top:18px}
+.claims-card li::marker{color:#958a76;font-size:.7em}
+@media(max-width:600px){.claims-slide{padding:48px 16px 84px}.claims-intro{margin-top:24px;padding-top:22px}.claims-card li+li{margin-top:14px}}
+@media(prefers-reduced-motion:reduce){.claims-slide{transition:none}}
+
+.opening-credentials{min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:20px}
+.opening-projects{min-height:0;display:flex;flex-direction:column;padding:18px 18px 22px;border:1px solid #ffffffc9;border-radius:9px;background:#f4f0e6f5;box-shadow:0 16px 44px #262a3f2e,0 2px 6px #262a3f14}
+.credential-heading{display:flex;align-items:baseline;justify-content:center;gap:10px;margin-bottom:20px}
+.credential-heading .team-count{font-size:clamp(40px,4.5vw,64px)}
+.credential-heading .team-caption{margin:0;font-size:clamp(13px,1.4vw,20px)}
+.project-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));gap:10px}
+.project-grid img{width:100%;height:100%;min-height:0;object-fit:contain}
+@media(max-width:600px){.opening-credentials{gap:10px}.opening-projects{padding:14px 8px}.credential-heading{gap:5px;margin-bottom:12px}.credential-heading .team-count{font-size:30px}.credential-heading .team-caption{font-size:11px}.project-grid{gap:5px}}
+@media(max-width:1100px){.headshot-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:4px}.headshot-grid img{width:min(calc((100cqw - 20px)/6),calc((100cqh - 28px)/8))}}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head><body>
@@ -42,9 +80,99 @@
 <h1><a href="https://www.ai-verification.com" target="_blank" rel="noopener noreferrer">www.ai-verification.com</a></h1>
 <p><a href="mailto:tom.milton@amododesign.com">tom.milton@amododesign.com</a></p>
 </section>
+<section id="opening-slide" class="opening-slide is-visible" aria-label="Amodo Design: team, projects, TIME article and Side Channel Cloud" aria-hidden="false">
+<div class="opening-layout">
+  <div class="opening-credentials">
+  <aside class="opening-team">
+    <header class="credential-heading"><p class="team-count">60<span>+</span></p>
+    <p class="team-caption">engineers</p></header>
+    <div class="team-headshots"><div class="headshot-grid" role="img" aria-label="Amodo Design team headshots">
+<img src="assets/web/opening-headshot-01.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-02.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-03.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-04.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-05.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-06.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-07.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-08.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-09.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-10.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-11.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-12.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-13.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-14.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-15.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-16.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-17.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-18.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-19.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-20.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-21.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-22.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-23.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-24.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-25.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-26.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-27.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-28.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-29.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-30.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-31.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-32.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-33.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-34.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-35.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-36.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-37.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-38.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-39.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-40.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-41.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-42.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-43.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-44.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-45.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-46.webp" alt="" width="160" height="160" decoding="async">
+<img src="assets/web/opening-headshot-47.webp" alt="" width="160" height="160" decoding="async">
+    </div></div>
+  </aside>
+  <aside class="opening-projects" aria-label="More than 100 projects">
+    <header class="credential-heading"><p class="team-count">100<span>+</span></p><p class="team-caption">projects</p></header>
+    <div class="project-grid" role="img" aria-label="A selection of Amodo engineering projects">
+      <img src="assets/web/opening-project-01.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-02.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-03.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-04.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-05.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-06.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-07.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-08.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-09.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-10.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-11.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-12.webp" alt="" decoding="async">
+    </div>
+  </aside>
+  </div>
+  <div class="opening-stories">
+    <figure class="opening-story opening-time"><img src="assets/web/opening-time.webp" alt="TIME: The People Building a Way to Slow Down the AI Race" width="1600" height="812" fetchpriority="high"></figure>
+    <figure class="opening-story opening-cloud"><img src="assets/web/opening-side-channel.webp" alt="Side Channel Cloud — AI infrastructure for AI security and verification work" width="1600" height="918"></figure>
+  </div>
+</div>
+</section>
+<section id="claims-slide" class="claims-slide" aria-labelledby="claims-title" aria-hidden="true" inert>
+<div class="claims-card">
+<h1 id="claims-title"><strong>Prover</strong> makes a <strong>claim</strong> that is checked by the <strong>verifier</strong>.</h1>
+<p class="claims-intro">The claims in this demo:</p>
+<ul>
+<li>The only workload in the data centre is inference and not training</li>
+<li>Only approved model X is being used to serve inference</li>
+</ul>
+</div>
+</section>
 <nav class="navigation" aria-label="Presentation navigation">
 <button id="previous" aria-label="Previous view" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 5-5 5 5 5"/></svg></button>
 <button id="next" aria-label="Next view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
 </nav>
-<script type="module" src="src/install_viewer.js?v=closing-slide"></script>
+<script type="module" src="src/install_viewer.js?v=opening-projects-claims"></script>
 </body></html>
