@@ -43,8 +43,10 @@
 .team-headshots{flex:1;min-height:0;container-type:size}
 .headshot-grid{height:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:10px;place-items:center}
 .headshot-grid img{display:block;width:min(calc((100cqw - 70px)/8),calc((100cqh - 50px)/6));height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover}
-.project-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:18px 14px}
-.project-grid img{width:100%;height:100%;min-height:0;object-fit:contain;filter:brightness(.7)}
+.project-grid{flex:1 1 0;min-width:0;min-height:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:18px 14px}
+/* Isolate intrinsic image dimensions from grid track sizing across browsers. */
+.project-tile{position:relative;min-width:0;min-height:0;overflow:hidden}
+.project-tile img{position:absolute;inset:0;display:block;width:100%;height:100%;min-width:0;min-height:0;object-fit:contain;filter:brightness(.7)}
 .opening-logos{grid-column:1 / -1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr)) 28px;align-items:center;justify-items:center;padding:18px 26px;gap:28px;background:#faf9f5fa}
 .logo-more{color:#746f64;font:400 34px/1 'IBM Plex Serif',Georgia,serif}
 .opening-logos img{display:block;width:100%;height:48px;object-fit:contain}
@@ -133,33 +135,33 @@
   </aside>
   <aside class="opening-projects" aria-label="More than 100 projects">
     <div class="project-grid" role="group" aria-label="Twenty-seven examples of Amodo engineering projects">
-      <img src="assets/web/opening-project-01.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-02.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-03.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-04.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-05.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-06.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-07.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-08.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-09.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-10.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-11.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-12.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-13.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-14.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-15.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-16.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-17.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-18.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-19.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-20.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-21.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-22.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-23.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-24.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-25.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-26.webp" alt="" decoding="async">
-      <img src="assets/web/opening-project-27.webp" alt="" decoding="async">
+      <div class="project-tile"><img src="assets/web/opening-project-01.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-02.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-03.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-04.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-05.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-06.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-07.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-08.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-09.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-10.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-11.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-12.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-13.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-14.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-15.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-16.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-17.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-18.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-19.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-20.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-21.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-22.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-23.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-24.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-25.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-26.webp" alt="" decoding="async"></div>
+      <div class="project-tile"><img src="assets/web/opening-project-27.webp" alt="" decoding="async"></div>
     <p class="credential-caption"><span>100+</span> projects</p>
     </div>
   </aside>
