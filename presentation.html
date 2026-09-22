@@ -32,9 +32,9 @@
 /* Opening: image collections with quiet corner captions. */
 .opening-slide{position:fixed;inset:0;z-index:3;padding:clamp(56px,8vh,96px) clamp(28px,6vw,104px) 104px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
 .opening-slide.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
-.opening-layout{height:100%;max-width:1480px;margin:auto;display:grid;grid-template-columns:minmax(240px,.68fr) minmax(0,1fr);gap:18px}
+.opening-layout{--opening-gap:18px;height:100%;max-width:1480px;margin:auto;display:grid;grid-template-columns:minmax(240px,.68fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr) 96px;gap:var(--opening-gap)}
 .opening-credentials,.opening-stories{min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:18px}
-.opening-team,.opening-projects,.opening-story{min-width:0;min-height:0;margin:0;border:1px solid #ffffffb3;border-radius:6px;background:#f7f5eef7;box-shadow:0 12px 30px #262a3f1c,0 1px 3px #262a3f0d;overflow:hidden}
+.opening-team,.opening-projects,.opening-story,.opening-logos{min-width:0;min-height:0;margin:0;border:1px solid #ffffffb3;border-radius:6px;background:#f7f5eef7;box-shadow:0 12px 30px #262a3f1c,0 1px 3px #262a3f0d;overflow:hidden}
 .opening-team,.opening-projects{display:flex;flex-direction:column;padding:clamp(14px,1.8vw,26px);gap:14px}
 .credential-caption{display:flex;align-items:baseline;justify-content:center;align-self:center;gap:7px;margin:0;color:#746f64;font:400 clamp(12px,1.1vw,16px)/1.1 'IBM Plex Serif',Georgia,serif;white-space:nowrap}
 .credential-caption span{color:#49463f;font-size:clamp(22px,2vw,30px);letter-spacing:-.04em}
@@ -45,11 +45,21 @@
 .headshot-grid img{display:block;width:min(calc((100cqw - 49px)/8),calc((100cqh - 35px)/6));height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover}
 .project-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:12px 9px}
 .project-grid img{width:100%;height:100%;min-height:0;object-fit:contain;filter:brightness(.7)}
-.opening-story{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);place-items:center;background:#fffdfa}
+.opening-stories{container-type:size;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--opening-gap)}
+/* Both screenshots share a width that fits their combined intrinsic heights. */
+.opening-story{flex:none;width:min(100cqw,calc((100cqh - var(--opening-gap)) * .9248554913));border:0;background:transparent}
+.opening-time{aspect-ratio:1600 / 812}
+.opening-cloud{aspect-ratio:1600 / 918}
+.opening-logos{grid-column:1 / -1;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));align-items:center;justify-items:center;padding:18px 26px;gap:28px;background:#faf9f5fa}
+.opening-logos img{display:block;width:100%;height:48px;object-fit:contain}
+.opening-logos .logo-mit{max-width:76px;height:38px}
+.opening-logos .logo-rand{max-width:54px;height:54px}
+@media(max-width:900px){.opening-layout{grid-template-rows:minmax(0,1fr) 112px}.opening-logos{grid-template-columns:repeat(8,minmax(0,1fr));gap:12px 18px;padding:12px 22px}.opening-logos img{grid-column:span 2;height:32px;max-width:120px}.opening-logos img:nth-child(5){grid-column:2 / span 2}.opening-logos .logo-mit{height:30px;max-width:60px}.opening-logos .logo-rand{height:34px;max-width:34px}}
+
 .opening-story img{display:block;min-width:0;min-height:0;width:100%;height:100%;object-fit:contain}
 .opening-cloud{background:#fff}
 @media(max-width:1100px){.headshot-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:5px}.headshot-grid img{width:min(calc((100cqw - 25px)/6),calc((100cqh - 35px)/8))}.project-grid{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:8px}}
-@media(max-width:600px){.opening-slide{padding:44px 12px 84px}.opening-layout{grid-template-columns:minmax(130px,.75fr) minmax(0,1fr);gap:10px}.opening-credentials,.opening-stories{gap:10px}.opening-team,.opening-projects{padding:10px;gap:10px}.headshot-grid{gap:3px}.headshot-grid img{width:min(calc((100cqw - 15px)/6),calc((100cqh - 21px)/8))}.project-grid{gap:5px}.credential-caption{font-size:10px;gap:5px}.credential-caption span{font-size:20px}}
+@media(max-width:600px){.opening-slide{padding:44px 12px 84px}.opening-layout{--opening-gap:10px;grid-template-columns:minmax(130px,.75fr) minmax(0,1fr)}.opening-credentials,.opening-stories{gap:10px}.opening-team,.opening-projects{padding:10px;gap:10px}.headshot-grid{gap:3px}.headshot-grid img{width:min(calc((100cqw - 15px)/6),calc((100cqh - 21px)/8))}.project-grid{gap:5px}.credential-caption{font-size:10px;gap:5px}.credential-caption span{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.opening-slide{transition:none}}
 
 .claims-slide{position:fixed;inset:0;z-index:3;display:grid;place-items:center;padding:64px 24px 104px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
@@ -165,6 +175,15 @@
     <figure class="opening-story opening-time"><img src="assets/web/opening-time.webp" alt="TIME: The People Building a Way to Slow Down the AI Race" width="1600" height="812" fetchpriority="high"></figure>
     <figure class="opening-story opening-cloud"><img src="assets/web/opening-side-channel.webp" alt="Side Channel Cloud — AI infrastructure for AI security and verification work" width="1600" height="918"></figure>
   </div>
+  <aside class="opening-logos" aria-label="Organisation logos">
+    <img class="logo-mit" src="assets/web/logo-mit.webp" alt="Massachusetts Institute of Technology">
+    <img src="assets/web/logo-aria.webp" alt="ARIA">
+    <img class="logo-rand" src="assets/web/logo-rand.webp" alt="RAND">
+    <img src="assets/web/logo-oxford.webp" alt="University of Oxford">
+    <img src="assets/web/logo-cambridge.webp" alt="University of Cambridge">
+    <img src="assets/web/logo-imperial.webp" alt="Imperial College London">
+    <img src="assets/web/logo-fractile.webp" alt="Fractile">
+  </aside>
 </div>
 </section>
 <section id="claims-slide" class="claims-slide" aria-labelledby="claims-title" aria-hidden="true" inert>
