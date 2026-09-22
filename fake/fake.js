@@ -5,7 +5,7 @@ import { INSTANCES, PRESETS, THRESHOLD } from "./presets.js";
 const BAR_MAX = 5;
 const $ = (sel, root = document) => root.querySelector(sel);
 const embedded = window.parent !== window && document.documentElement.dataset.embed === "true";
-const nextLabels = { 1: "Generate response", 2: "Start verification", 3: "Complete verification" };
+const nextLabels = { 0: "Send example 5", 1: "Generate response", 2: "Start verification", 3: "Complete verification" };
 let activeRun = null;
 
 function renderExamples() {
@@ -25,7 +25,7 @@ function publishState() {
   const step = activeRun?.step ?? 0;
   const state = {
     type: "recomputation-state", step,
-    canAdvance: Boolean(activeRun && !activeRun.busy && step < 4),
+    canAdvance: !activeRun || (!activeRun.busy && step < 4),
     nextLabel: nextLabels[step] ?? "Next step",
   };
   $("#advance").disabled = !state.canAdvance;
@@ -43,7 +43,7 @@ function setTimeline(step) {
   });
   $("#timeline-status").textContent = step
     ? $("#timeline").children[step - 1].lastElementChild.textContent
-    : "Results cleared. Choose an example to start again.";
+    : "Results cleared. Use the forward arrow to send example 5, or choose another example.";
 }
 
 function sleep(ms, signal) {
@@ -108,7 +108,11 @@ function send(preset) {
 
 async function advance() {
   const run = activeRun;
-  if (!run || run.busy || run.step === 4) return;
+  if (!run) {
+    send(PRESETS[4]);
+    return;
+  }
+  if (run.busy || run.step === 4) return;
   if (run.step === 1) {
     run.busy = true;
     publishState();
