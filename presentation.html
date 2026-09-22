@@ -29,21 +29,27 @@
 .closing-slide a:hover{text-decoration:underline;text-underline-offset:.2em;text-decoration-thickness:1px}
 .closing-slide a:focus-visible{outline:2px solid #2d539e;outline-offset:8px}
 @media(prefers-reduced-motion:reduce){.closing-slide{transition:none}}
-.opening-slide{position:fixed;inset:0;z-index:3;padding:clamp(56px,8vh,96px) clamp(28px,6vw,104px) 104px;background:transparent;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
+/* Opening: image collections with quiet corner captions. */
+.opening-slide{position:fixed;inset:0;z-index:3;padding:clamp(56px,8vh,96px) clamp(28px,6vw,104px) 104px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
 .opening-slide.is-visible{opacity:1;visibility:visible;pointer-events:auto;transition-delay:0s}
-.opening-layout{height:100%;max-width:1480px;margin:auto;display:grid;grid-template-columns:minmax(210px,.38fr) minmax(0,1fr);gap:20px}
-.opening-team{min-height:0;display:flex;flex-direction:column;padding:18px 18px 22px;border:1px solid #ffffffc9;border-radius:9px;background:#f4f0e6f5;box-shadow:0 16px 44px #262a3f2e,0 2px 6px #262a3f14;text-align:center}
-.team-count{margin:0;color:#38352f;font:400 clamp(64px,7.6vw,112px)/1 'IBM Plex Serif',Georgia,serif;letter-spacing:-.07em}
-.team-count span{font-size:.7em;vertical-align:12%;margin-left:.05em}
-.team-caption{margin:5px 0 20px;color:#666156;font:400 clamp(15px,1.5vw,21px)/1.3 'IBM Plex Serif',Georgia,serif}
+.opening-layout{height:100%;max-width:1480px;margin:auto;display:grid;grid-template-columns:minmax(240px,.68fr) minmax(0,1fr);gap:18px}
+.opening-credentials,.opening-stories{min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:18px}
+.opening-team,.opening-projects,.opening-story{min-width:0;min-height:0;margin:0;border:1px solid #ffffffb3;border-radius:6px;background:#f7f5eef7;box-shadow:0 12px 30px #262a3f1c,0 1px 3px #262a3f0d;overflow:hidden}
+.opening-team,.opening-projects{display:flex;flex-direction:column;padding:clamp(14px,1.8vw,26px);gap:14px}
+.credential-caption{display:flex;align-items:baseline;justify-content:center;align-self:center;gap:7px;margin:0;color:#746f64;font:400 clamp(12px,1.1vw,16px)/1.1 'IBM Plex Serif',Georgia,serif;white-space:nowrap}
+.credential-caption span{color:#49463f;font-size:clamp(22px,2vw,30px);letter-spacing:-.04em}
+.headshot-grid .credential-caption{grid-column:span 4;width:100%}
+.project-grid .credential-caption{grid-column:span 3}
 .team-headshots{flex:1;min-height:0;container-type:size}
-.headshot-grid{height:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:6px;place-items:center}
-.headshot-grid img{display:block;width:min(calc((100cqw - 42px)/8),calc((100cqh - 30px)/6));height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;border:1px solid #ffffffb3}
-.opening-stories{min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:20px}
-.opening-story{min-width:0;min-height:0;margin:0;display:grid;place-items:center;overflow:hidden;border:1px solid #ffffffc9;border-radius:9px;background:#fffdfa;box-shadow:0 16px 44px #262a3f2e,0 2px 6px #262a3f14}
-.opening-story img{display:block;width:100%;height:100%;object-fit:contain}
+.headshot-grid{height:100%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:7px;place-items:center}
+.headshot-grid img{display:block;width:min(calc((100cqw - 49px)/8),calc((100cqh - 35px)/6));height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover}
+.project-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(5,minmax(0,1fr));gap:12px 9px}
+.project-grid img{width:100%;height:100%;min-height:0;object-fit:contain;filter:brightness(.7)}
+.opening-story{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr);place-items:center;background:#fffdfa}
+.opening-story img{display:block;min-width:0;min-height:0;width:100%;height:100%;object-fit:contain}
 .opening-cloud{background:#fff}
-@media(max-width:600px){.opening-slide{padding:44px 12px 84px}.opening-layout{grid-template-columns:minmax(110px,.42fr) minmax(0,1fr);gap:10px}.opening-team{padding:14px 8px}.team-count{font-size:52px}.team-caption{font-size:13px;margin-bottom:12px}.opening-stories{gap:10px}.headshot-grid{gap:3px}.headshot-grid img{width:min(calc((100cqw - 21px)/8),calc((100cqh - 15px)/6))}}
+@media(max-width:1100px){.headshot-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:5px}.headshot-grid img{width:min(calc((100cqw - 25px)/6),calc((100cqh - 35px)/8))}.project-grid{grid-template-columns:repeat(5,minmax(0,1fr));grid-template-rows:repeat(6,minmax(0,1fr));gap:8px}}
+@media(max-width:600px){.opening-slide{padding:44px 12px 84px}.opening-layout{grid-template-columns:minmax(130px,.75fr) minmax(0,1fr);gap:10px}.opening-credentials,.opening-stories{gap:10px}.opening-team,.opening-projects{padding:10px;gap:10px}.headshot-grid{gap:3px}.headshot-grid img{width:min(calc((100cqw - 15px)/6),calc((100cqh - 21px)/8))}.project-grid{gap:5px}.credential-caption{font-size:10px;gap:5px}.credential-caption span{font-size:20px}}
 @media(prefers-reduced-motion:reduce){.opening-slide{transition:none}}
 
 .claims-slide{position:fixed;inset:0;z-index:3;display:grid;place-items:center;padding:64px 24px 104px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .65s,visibility 0s .65s}
@@ -57,16 +63,6 @@
 .claims-card li::marker{color:#958a76;font-size:.7em}
 @media(max-width:600px){.claims-slide{padding:48px 16px 84px}.claims-intro{margin-top:24px;padding-top:22px}.claims-card li+li{margin-top:14px}}
 @media(prefers-reduced-motion:reduce){.claims-slide{transition:none}}
-
-.opening-credentials{min-height:0;display:grid;grid-template-rows:repeat(2,minmax(0,1fr));gap:20px}
-.opening-projects{min-height:0;display:flex;flex-direction:column;padding:18px 18px 22px;border:1px solid #ffffffc9;border-radius:9px;background:#f4f0e6f5;box-shadow:0 16px 44px #262a3f2e,0 2px 6px #262a3f14}
-.credential-heading{display:flex;align-items:baseline;justify-content:center;gap:10px;margin-bottom:20px}
-.credential-heading .team-count{font-size:clamp(40px,4.5vw,64px)}
-.credential-heading .team-caption{margin:0;font-size:clamp(13px,1.4vw,20px)}
-.project-grid{flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(4,minmax(0,1fr));gap:10px}
-.project-grid img{width:100%;height:100%;min-height:0;object-fit:contain}
-@media(max-width:600px){.opening-credentials{gap:10px}.opening-projects{padding:14px 8px}.credential-heading{gap:5px;margin-bottom:12px}.credential-heading .team-count{font-size:30px}.credential-heading .team-caption{font-size:11px}.project-grid{gap:5px}}
-@media(max-width:1100px){.headshot-grid{grid-template-columns:repeat(6,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));gap:4px}.headshot-grid img{width:min(calc((100cqw - 20px)/6),calc((100cqh - 28px)/8))}}
 </style>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head><body>
@@ -84,9 +80,7 @@
 <div class="opening-layout">
   <div class="opening-credentials">
   <aside class="opening-team">
-    <header class="credential-heading"><p class="team-count">60<span>+</span></p>
-    <p class="team-caption">engineers</p></header>
-    <div class="team-headshots"><div class="headshot-grid" role="img" aria-label="Amodo Design team headshots">
+    <div class="team-headshots"><div class="headshot-grid" role="group" aria-label="Amodo Design team">
 <img src="assets/web/opening-headshot-01.webp" alt="" width="160" height="160" decoding="async">
 <img src="assets/web/opening-headshot-02.webp" alt="" width="160" height="160" decoding="async">
 <img src="assets/web/opening-headshot-03.webp" alt="" width="160" height="160" decoding="async">
@@ -131,14 +125,11 @@
 <img src="assets/web/opening-headshot-42.webp" alt="" width="160" height="160" decoding="async">
 <img src="assets/web/opening-headshot-43.webp" alt="" width="160" height="160" decoding="async">
 <img src="assets/web/opening-headshot-44.webp" alt="" width="160" height="160" decoding="async">
-<img src="assets/web/opening-headshot-45.webp" alt="" width="160" height="160" decoding="async">
-<img src="assets/web/opening-headshot-46.webp" alt="" width="160" height="160" decoding="async">
-<img src="assets/web/opening-headshot-47.webp" alt="" width="160" height="160" decoding="async">
+    <p class="credential-caption"><span>60+</span> engineers</p>
     </div></div>
   </aside>
   <aside class="opening-projects" aria-label="More than 100 projects">
-    <header class="credential-heading"><p class="team-count">100<span>+</span></p><p class="team-caption">projects</p></header>
-    <div class="project-grid" role="img" aria-label="A selection of Amodo engineering projects">
+    <div class="project-grid" role="group" aria-label="Twenty-seven examples of Amodo engineering projects">
       <img src="assets/web/opening-project-01.webp" alt="" decoding="async">
       <img src="assets/web/opening-project-02.webp" alt="" decoding="async">
       <img src="assets/web/opening-project-03.webp" alt="" decoding="async">
@@ -151,6 +142,22 @@
       <img src="assets/web/opening-project-10.webp" alt="" decoding="async">
       <img src="assets/web/opening-project-11.webp" alt="" decoding="async">
       <img src="assets/web/opening-project-12.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-13.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-14.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-15.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-16.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-17.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-18.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-19.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-20.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-21.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-22.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-23.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-24.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-25.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-26.webp" alt="" decoding="async">
+      <img src="assets/web/opening-project-27.webp" alt="" decoding="async">
+    <p class="credential-caption"><span>100+</span> projects</p>
     </div>
   </aside>
   </div>
