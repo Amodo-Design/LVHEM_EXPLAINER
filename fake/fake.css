@@ -289,3 +289,10 @@ html[data-embed="true"],html[data-embed="true"] body{height:100%;background:tran
 @media(min-width:760px){
  [data-embed="true"] .chat-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+
+/* Standalone page uses the same forward action as the presentation arrow. */
+.standalone-advance{position:fixed;bottom:24px;left:50%;translate:-50% 0;width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--hairline);border-radius:50%;background:var(--surface);color:var(--ink);cursor:pointer}
+.standalone-advance svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.standalone-advance:disabled{opacity:.3;cursor:default}
+.standalone-advance:focus-visible{outline:2px solid var(--teal);outline-offset:4px}
+[data-embed="true"] .standalone-advance{display:none}

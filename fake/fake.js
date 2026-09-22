@@ -1,12 +1,13 @@
-// Fake verification dashboard: replays pre-written answers and pre-computed
-// verdicts from presets.js with realistic timing. No network, no randomness
-// in the outcomes; only the pacing has a little jitter so it reads as live.
+// Interactive presentation of fixture responses and verification outcomes.
+// Every milestone is advanced explicitly; only response streaming uses timers.
 import { INSTANCES, PRESETS, THRESHOLD } from "./presets.js";
 
 const BAR_MAX = 5;
 const $ = (sel, root = document) => root.querySelector(sel);
+const embedded = window.parent !== window && document.documentElement.dataset.embed === "true";
+const nextLabels = { 1: "Generate response", 2: "Start verification", 3: "Complete verification" };
+let activeRun = null;
 
-// Every example runs on both instances; one click sends the preset prompt.
 function renderExamples() {
   PRESETS.forEach((preset, index) => {
     const button = document.createElement("button");
@@ -20,10 +21,18 @@ function renderExamples() {
   });
 }
 
-// The shared timeline follows the most recently sent example. Both model
-// cards must reach a milestone before it advances; older runs cannot reset it.
-let latestRun = 0;
-let runController = new AbortController();
+function publishState() {
+  const step = activeRun?.step ?? 0;
+  const state = {
+    type: "recomputation-state", step,
+    canAdvance: Boolean(activeRun && !activeRun.busy && step < 4),
+    nextLabel: nextLabels[step] ?? "Next step",
+  };
+  $("#advance").disabled = !state.canAdvance;
+  $("#advance").setAttribute("aria-label", state.nextLabel);
+  if (embedded) window.parent.postMessage(state, location.origin);
+}
+
 function setTimeline(step) {
   $("#timeline").dataset.step = String(step);
   [...$("#timeline").children].forEach((item, index) => {
@@ -32,10 +41,10 @@ function setTimeline(step) {
     if (index === step - 1) item.setAttribute("aria-current", "step");
     else item.removeAttribute("aria-current");
   });
-  $("#timeline-status").textContent = step ? $("#timeline").children[step - 1].lastElementChild.textContent : "Results cleared. Choose an example to start again.";
+  $("#timeline-status").textContent = step
+    ? $("#timeline").children[step - 1].lastElementChild.textContent
+    : "Results cleared. Choose an example to start again.";
 }
-
-// --- timing ---------------------------------------------------------------
 
 function sleep(ms, signal) {
   if (signal.aborted) return Promise.reject(signal.reason);
@@ -50,31 +59,32 @@ function sleep(ms, signal) {
 }
 const jitter = (base, spread) => base + (Math.random() * 2 - 1) * spread;
 
+function pausePreviousRun() {
+  if (!activeRun) return;
+  activeRun.controller.abort();
+  if (activeRun.step < 4) for (const { card } of activeRun.entries) {
+    $('[data-slot="progress"]', card).hidden = true;
+    $('[data-slot="stage"]', card).textContent = "paused";
+  }
+}
+
 function clearResults() {
-  ++latestRun;
-  runController.abort();
-  runController = new AbortController();
+  pausePreviousRun();
+  activeRun = null;
   $("#sends").replaceChildren();
   $("#empty").hidden = false;
   $("#clear").disabled = true;
   setTimeline(0);
+  publishState();
   $(".shell").scrollTop = 0;
   window.scrollTo(0, 0);
 }
 
-// --- a send ---------------------------------------------------------------
-
 function send(preset) {
-  const run = ++latestRun;
-  const reached = { generated: 0, verifying: 0, complete: 0 };
-  const steps = { generated: 2, verifying: 3, complete: 4 };
-  const report = milestone => {
-    reached[milestone]++;
-    if (run === latestRun && reached[milestone] === INSTANCES.length) setTimeline(steps[milestone]);
-  };
-  setTimeline(1);
+  pausePreviousRun();
+  const run = { step: 1, busy: false, controller: new AbortController(), entries: [] };
+  activeRun = run;
   $("#clear").disabled = false;
-
   $("#empty").hidden = true;
   const group = document.createElement("section");
   group.className = "chat-send-group";
@@ -82,42 +92,71 @@ function send(preset) {
   const time = new Date().toLocaleTimeString("en-GB");
   group.innerHTML = `<div class="chat-send-prompt"><span class="mono muted">${time}</span><p></p></div><div class="chat-cards"></div>`;
   $(".chat-send-prompt p", group).textContent = preset.prompt;
-  const cards = $(".chat-cards", group);
   $("#sends").prepend(group);
-
   for (const inst of INSTANCES) {
-    const card = buildCard(inst);
-    cards.append(card);
-    runCard(card, inst, preset[inst.key], report, runController.signal);
+    const card = $("#card-template").content.firstElementChild.cloneNode(true);
+    $('[data-slot="model"]', card).textContent = inst.key === "honest" ? "Correct model" : "Illegal model";
+    $('[data-slot="stage"]', card).textContent = "message sent";
+    $('[data-slot="reply"]', card).textContent = "Waiting to generate a response.";
+    $('[data-slot="progress"]', card).hidden = true;
+    $(".chat-cards", group).append(card);
+    run.entries.push({ card, inst, outcome: preset[inst.key] });
   }
-
+  setTimeline(1);
+  publishState();
 }
 
-function buildCard(inst) {
-  const card = $("#card-template").content.firstElementChild.cloneNode(true);
-  $('[data-slot="model"]', card).textContent = inst.key === "honest" ? "Correct model" : "Illegal model";
-  return card;
+async function advance() {
+  const run = activeRun;
+  if (!run || run.busy || run.step === 4) return;
+  if (run.step === 1) {
+    run.busy = true;
+    publishState();
+    try {
+      await Promise.all(run.entries.map(entry => streamResponse(entry, run.controller.signal)));
+      if (activeRun !== run || run.controller.signal.aborted) return;
+      run.step = 2;
+    } catch (error) {
+      if (!run.controller.signal.aborted) throw error;
+      return;
+    } finally {
+      run.busy = false;
+      if (activeRun === run) publishState();
+    }
+  } else if (run.step === 2) {
+    run.step = 3;
+    for (const { card } of run.entries) {
+      $('[data-slot="stage"]', card).textContent = "verifying";
+      $('[data-slot="progress"]', card).hidden = false;
+      $('[data-slot="progress-time"]', card).hidden = true;
+      $('[data-slot="progress-label"]', card).textContent = "Recomputing the answer and comparing logits";
+    }
+  } else {
+    run.step = 4;
+    for (const { card, outcome } of run.entries) {
+      $('[data-slot="progress"]', card).hidden = true;
+      $('[data-slot="stage"]', card).textContent = "done";
+      renderResult(card, outcome);
+    }
+  }
+  setTimeline(run.step);
+  publishState();
 }
 
-async function runCard(card, inst, outcome, report, signal) {
+async function streamResponse({ card, inst, outcome }, signal) {
   const reply = $('[data-slot="reply"]', card);
   const stage = $('[data-slot="stage"]', card);
-  const progressLabel = $('[data-slot="progress-label"]', card);
   const progressTime = $('[data-slot="progress-time"]', card);
+  $('[data-slot="progress"]', card).hidden = false;
+  $('[data-slot="progress-label"]', card).textContent = "Generating answer";
+  stage.textContent = "inferring";
   const started = performance.now();
   const ticker = setInterval(() => {
     progressTime.textContent = `${Math.round((performance.now() - started) / 1000)}s`;
   }, 250);
-
   try {
-    // 1. Time to first token, then the reply streams at the instance's speed.
-    stage.textContent = "inferring";
-    progressLabel.textContent = "Generating answer";
     await sleep(jitter(inst.key === "liar" ? 420 : 650, 150), signal);
     reply.textContent = "";
-    // Each token gets a target time; occasional longer gaps mimic batching on
-    // a shared GPU. Emission is driven by the clock rather than one token per
-    // timer tick, so a throttled background tab catches up instead of crawling.
     const perToken = 1000 / inst.tokens_per_second;
     const schedule = [];
     let at = 0;
@@ -137,27 +176,9 @@ async function runCard(card, inst, outcome, report, signal) {
       }
       if (next < schedule.length) await sleep(Math.max(8, schedule[next].at - (performance.now() - streamStart)), signal);
     }
-
-    report("generated");
-
-    // 2. The tap records the event in the ledger.
-    stage.textContent = "awaiting ledger event";
-    progressLabel.textContent = "Waiting for the ledger to record the inference";
-    await sleep(jitter(900, 300), signal);
-
-    // 3. The verifier is kept warm, so it is ready almost at once.
-    report("verifying");
-    stage.textContent = "verifying";
-    progressLabel.textContent = "Verifying: recomputing the answer and comparing logits";
-    await sleep(jitter(1800 + outcome.tokens.length * 28, 500), signal);
-
-    // 4. Verdict.
+    reply.scrollTop = 0;
+    stage.textContent = "response generated";
     $('[data-slot="progress"]', card).hidden = true;
-    stage.textContent = "done";
-    renderResult(card, outcome);
-    report("complete");
-  } catch (error) {
-    if (!signal.aborted) throw error;
   } finally {
     clearInterval(ticker);
   }
@@ -201,7 +222,11 @@ function renderResult(card, outcome) {
   reply.scrollTop = 0;
 }
 
-// --- boot -----------------------------------------------------------------
-
 renderExamples();
 $("#clear").addEventListener("click", clearResults);
+$("#advance").addEventListener("click", advance);
+window.addEventListener("message", event => {
+  if (!embedded || event.source !== window.parent || event.origin !== location.origin) return;
+  if (event.data?.type === "recomputation-advance") advance();
+});
+publishState();
