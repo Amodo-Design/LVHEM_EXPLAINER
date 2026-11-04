@@ -8,7 +8,7 @@
 <link rel="preload" href="../assets/fonts/ibm-plex-mono-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/ibm-plex-mono-medium-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="../fake/fake.css">
-<link rel="stylesheet" href="zkml.css?v=3">
+<link rel="stylesheet" href="zkml.css?v=4">
 </head>
 <body>
 <main class="page">
@@ -84,28 +84,25 @@
       <span class="system-title">The system</span>
       <span class="chat-card-stage mono" data-slot="system-stage">idle</span>
     </header>
-    <div class="zone zone-verifier">
-      <span class="zone-label">Verifier · no weights</span>
-      <ol class="layers">
-        <li data-layer="ledger" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Ledger</span><span class="layer-value"></span></li>
-        <li data-layer="orchestrator" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Orchestrator</span><span class="layer-value"></span></li>
-        <li data-layer="verifier" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Verifier</span><span class="layer-value"></span></li>
-      </ol>
-    </div>
-    <div class="zone zone-prover">
-      <span class="zone-label">Prover · holds the weights</span>
-      <ol class="layers">
-        <li data-layer="tap" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Tap</span><span class="layer-value"></span></li>
-        <li data-layer="model" class="layer-lab"><span class="layer-dot" aria-hidden="true"></span><span>Model</span><span class="layer-value"></span></li>
-        <li data-layer="prover" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Prover</span><span class="layer-value"></span></li>
-        <li data-layer="zkml" class="layer-gpai"><span class="layer-dot" aria-hidden="true"></span><span>zkml</span><span class="layer-value"></span></li>
-      </ol>
+    <div class="net" data-slot="net">
+      <div class="zone-bg zone-you"><span>You</span></div>
+      <div class="zone-bg zone-verifier"><span>Verifier · no weights</span></div>
+      <div class="zone-bg zone-prover"><span>Prover · holds the weights</span></div>
+      <svg class="edges" aria-hidden="true"></svg>
+      <div class="node node-you" data-node="chat" style="--x:9;--y:30"><b>Chat</b><small></small></div>
+      <div class="node node-ledger node-amodo" data-node="ledger" style="--x:59;--y:15"><b>Ledger</b><ol class="ledger-rows"></ol></div>
+      <div class="node node-amodo" data-node="orchestrator" style="--x:36;--y:44"><b>Orchestrator</b><small></small></div>
+      <div class="node node-amodo" data-node="verifier" style="--x:83;--y:44"><b>Verifier</b><small></small></div>
+      <div class="node node-amodo" data-node="tap" style="--x:33;--y:85"><b>Tap</b><small></small></div>
+      <div class="node node-lab" data-node="model" style="--x:52;--y:85"><b>Model</b><small></small></div>
+      <div class="node node-amodo" data-node="prover" style="--x:71;--y:85"><b>Prover</b><small></small></div>
+      <div class="node node-gpai" data-node="zkml" style="--x:90;--y:85"><b>zkml</b><small></small></div>
     </div>
     <p class="system-legend"><span class="key key-amodo"></span>Amodo <span class="key key-gpai"></span>GPAI</p>
   </article>
 </template>
 
 <button id="advance" class="standalone-advance" type="button" aria-label="Next step" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
-<script type="module" src="zkml.js?v=3"></script>
+<script type="module" src="zkml.js?v=4"></script>
 </body>
 </html>

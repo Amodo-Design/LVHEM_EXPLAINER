@@ -1,5 +1,6 @@
-/* Additions to fake/fake.css for the zkml version: the credits and the
-   system card. Blue is Amodo's system, orange is GPAI's zkml library. */
+/* Additions to fake/fake.css for the zkml version: the credits and the map
+   of the system. Blue is Amodo's system, orange is GPAI's zkml library,
+   green is the verdict. */
 
 :root {
   --amodo: #2d539e;
@@ -18,42 +19,77 @@
 .zk-passage summary { cursor: pointer; color: var(--muted); font-size: 0.75rem; width: max-content; }
 .zk-passage p { margin: 6px 0 0; max-width: 90ch; }
 
-/* The prompt's card and the system side by side, the system narrower. */
-.chat-cards { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); }
+/* The chat card and the system map side by side. */
+.chat-cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); }
 @media (max-width: 900px) { .chat-cards { grid-template-columns: 1fr; } }
+@media (min-width: 760px) { [data-embed="true"] .chat-cards { grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); } }
 
 .system-title { font-size: 0.75rem; font-weight: 500; }
-.zone { border-radius: 6px; padding: 8px 10px 6px; }
-.zone-verifier { background: rgba(45, 83, 158, 0.06); border: 1px solid rgba(45, 83, 158, 0.2); }
-.zone-prover { background: rgba(197, 115, 57, 0.06); border: 1px dashed rgba(122, 67, 24, 0.4); }
-.zone-label { display: block; font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--para); margin-bottom: 4px; }
 
-.layers { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
-.layers li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 5px 8px; border-radius: 4px; font-size: 0.8125rem; color: var(--muted); transition: background 0.25s, color 0.25s; }
-.layer-dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--hairline); background: var(--field); }
-.layer-value { font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+/* The map */
+.net { position: relative; height: 400px; min-width: 0; }
+@media (max-width: 520px) { .net { height: 380px; } }
+.zone-bg { position: absolute; border-radius: 6px; }
+.zone-bg span { position: absolute; top: 6px; left: 8px; font-size: 0.5625rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--para); }
+.zone-you { left: 0; top: 0; width: 17%; height: 58%; border: 1px dashed var(--hairline); }
+.zone-verifier { left: 19%; right: 0; top: 0; height: 58%; background: rgba(45, 83, 158, 0.06); border: 1px solid rgba(45, 83, 158, 0.2); }
+.zone-prover { left: 19%; right: 0; top: 64%; bottom: 0; background: rgba(197, 115, 57, 0.07); border: 1px dashed rgba(122, 67, 24, 0.4); }
 
-.layers li[data-state="active"] { background: var(--field); color: var(--ink); box-shadow: inset 0 0 0 1px var(--amodo); }
-.layers li[data-state="active"] .layer-dot { border-color: var(--amodo); animation: zk-pulse 1.3s ease-in-out infinite; }
-.layers li[data-state="done"] { color: var(--ink); }
-.layer-amodo[data-state="done"] .layer-dot { background: var(--amodo); border-color: var(--amodo); }
+.edges { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.edges line { stroke: rgba(51, 55, 76, 0.18); stroke-width: 1.5; stroke-dasharray: 3 4; transition: stroke 0.2s; }
+.edges line.is-active { stroke: var(--ink); stroke-dasharray: none; stroke-width: 2; }
 
-.layer-gpai { border: 1px dashed rgba(197, 115, 57, 0.7); }
-.layers li.layer-gpai[data-state="active"] { box-shadow: inset 0 0 0 1px var(--gpai); background: var(--gpai-tint); }
-.layers li.layer-gpai[data-state="active"] .layer-dot { border-color: var(--gpai); animation-name: zk-pulse-orange; }
-.layer-gpai[data-state="done"] .layer-dot { background: var(--gpai); border-color: var(--gpai); }
+.node {
+  position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); transform: translate(-50%, -50%);
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  min-width: 74px; padding: 6px 8px; border-radius: 6px; background: var(--field); border: 1px solid var(--hairline);
+  font-size: 0.75rem; line-height: 1.25; text-align: center; color: var(--para); z-index: 1;
+  transition: border-color 0.25s, background 0.25s, color 0.25s, box-shadow 0.25s;
+}
+.node b { font-weight: 500; }
+.node small { font-size: 0.625rem; color: var(--para); min-height: 0.8em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.node-gpai { border: 1.5px dashed var(--gpai); background: var(--gpai-tint); }
+.node[data-state="active"] { color: var(--ink); background: #ffffff; border-color: var(--amodo); box-shadow: 0 0 0 3px rgba(45, 83, 158, 0.15); }
+.node-gpai[data-state="active"] { border-style: solid; border-color: var(--gpai); box-shadow: 0 0 0 3px rgba(197, 115, 57, 0.2); }
+.node-lab[data-state="active"], .node-you[data-state="active"] { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(51, 55, 76, 0.12); }
+.node[data-state="done"] { color: var(--ink); }
+.node-amodo[data-state="done"] { border-color: rgba(45, 83, 158, 0.55); }
+.node.is-hit { animation: zk-hit 0.5s ease-out; }
+@keyframes zk-hit { 0% { transform: translate(-50%, -50%) scale(1.08); } 100% { transform: translate(-50%, -50%) scale(1); } }
 
-.layers li.layer-lab[data-state="active"] { box-shadow: inset 0 0 0 1px var(--ink); }
-.layer-lab[data-state="active"] .layer-dot, .layer-lab[data-state="done"] .layer-dot { background: var(--para); border-color: var(--para); animation: none; }
+/* The ledger is the hub: rows land in it. */
+.node-ledger { min-width: 150px; padding-bottom: 8px; }
+.ledger-rows { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 3px; width: 100%; }
+.ledger-rows:empty::before { content: "no rows"; font-size: 0.625rem; color: var(--para); opacity: 0.7; }
+.ledger-row { font-size: 0.625rem; padding: 2px 6px; border-radius: 3px; background: var(--amodo-tint); color: #1f3c75; text-align: left; animation: zk-land 0.6s ease-out; }
+.ledger-row-pass { background: rgba(102, 142, 61, 0.16); color: #3d5a22; }
+@keyframes zk-land { from { opacity: 0; transform: translateY(-6px); background: #ffffff; } }
+
+/* Packets */
+.packet { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; white-space: nowrap; font-size: 0.625rem; font-weight: 500; padding: 2px 7px; border-radius: 99px; background: var(--amodo); color: #ffffff; box-shadow: 0 4px 10px -4px rgba(51, 55, 76, 0.5); }
+.packet-data { background: var(--ink); }
+.packet-gpai { background: var(--gpai); color: #2a1607; }
+.packet-pass { background: var(--pass); }
 
 .system-legend { margin: 0; display: flex; align-items: center; gap: 6px; font-size: 0.6875rem; color: var(--para); }
 .key { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
 .key-amodo { background: var(--amodo); }
 .key-gpai { background: var(--gpai); margin-left: 10px; }
 
-@keyframes zk-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(45, 83, 158, 0.35); } 50% { box-shadow: 0 0 0 5px rgba(45, 83, 158, 0); } }
-@keyframes zk-pulse-orange { 0%, 100% { box-shadow: 0 0 0 0 rgba(197, 115, 57, 0.4); } 50% { box-shadow: 0 0 0 5px rgba(197, 115, 57, 0); } }
-@media (prefers-reduced-motion: reduce) { .layers li .layer-dot { animation: none !important; } }
+/* Room for the fixed forward arrow below the cards. */
+html:not([data-embed="true"]) .page { padding-bottom: 96px; }
 
-/* In the presentation embed the two cards stay side by side when there is room. */
-@media (min-width: 760px) { [data-embed="true"] .chat-cards { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); } }
+/* On a phone the prover side stacks in two rows so nothing overlaps. */
+@media (max-width: 520px) {
+  .node { min-width: 58px; padding: 4px 5px; font-size: 0.6875rem; }
+  .node[data-node="orchestrator"] { --x: 33 !important; --y: 42 !important; }
+  .node[data-node="tap"] { --x: 33 !important; --y: 75 !important; }
+  .node[data-node="model"] { --x: 33 !important; --y: 92 !important; }
+  .node[data-node="prover"] { --x: 74 !important; --y: 75 !important; }
+  .node[data-node="zkml"] { --x: 74 !important; --y: 92 !important; }
+  .node-ledger { min-width: 118px; }
+  .zone-bg span { font-size: 0.5rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .node.is-hit, .ledger-row { animation: none; }
+}

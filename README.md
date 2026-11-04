@@ -23,10 +23,15 @@ the local server, or `/fake/` on the deployed image.
 `zkml/index.html`, served at `/zkml/`, is the zero-knowledge version of the
 fake dashboard: the same look, the same four-step forward arrow and the same
 embed messages, with one chat card and a small card for the system beside it.
-The system card lists the real components (ledger, orchestrator, verifier on
-the side that never holds the weights; tap, model, prover and zkml on the side
-that does), each lighting up as the chat passes through it. Blue is Amodo
-Design's system; orange is zkml, the proof library by Pierre Peigné at GPAI.
+The system card is a small map of the real components (the ledger,
+orchestrator and verifier on the side that never holds the weights; the tap,
+model, prover and zkml on the side that does), and labelled packets travel
+between them: the prompt to the model, the token ids landing on the ledger as
+an `inference_event` row, the event from the ledger to the orchestrator and
+verifier, the request down to the prover and zkml, the proof back up, and the
+verdict landing on the ledger as a `verification_event` row and returning to
+the chat. Blue is Amodo Design's system; orange is zkml, the proof library by
+Pierre Peigné at GPAI.
 
 Nothing is invented: prompts, answers (zkml's own greedy token ids, decoded),
 timings and sizes come from the 2026-10-15 proof sweep of the LVHEM inference
