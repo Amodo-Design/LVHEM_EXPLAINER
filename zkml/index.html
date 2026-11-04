@@ -4,81 +4,108 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <script>if(new URLSearchParams(location.search).get("embed")==="1")document.documentElement.dataset.embed="true";</script>
-<title>zkml verification console</title>
-<meta name="description" content="Send one prompt and watch the zkml verification system prove the answer, layer by layer, from measured runs of the LVHEM inference prototype.">
+<title>Inference Proof Verification</title>
 <link rel="preload" href="../assets/fonts/ibm-plex-mono-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/ibm-plex-mono-medium-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="zkml.css?v=2">
+<link rel="stylesheet" href="../fake/fake.css">
+<link rel="stylesheet" href="zkml.css?v=3">
 </head>
 <body>
 <main class="page">
   <div class="shell">
     <header class="topbar">
       <div class="title">
-        <p class="eyebrow">Zero-knowledge inference verification</p>
-        <h1>Send a prompt. Watch the system prove the answer.</h1>
+        <h1>Inference Proof Verification</h1>
       </div>
       <div class="credits" aria-label="Built by">
-        <div class="credit credit-amodo"><strong>Amodo Design</strong><span>the verification system</span></div>
-        <span class="credit-join" aria-hidden="true">×</span>
-        <div class="credit credit-gpai"><strong>GPAI · Pierre Peigné</strong><span>zkml, the proof library</span></div>
+        <span class="credit credit-amodo">Amodo Design · system</span>
+        <span class="credit credit-gpai">GPAI · zkml proofs</span>
       </div>
     </header>
 
-    <div class="console">
-      <section class="chat" aria-label="Chat">
-        <header class="pane-head">
-          <h2>Chat</h2>
-          <span class="pane-code">the dashboard you use</span>
-        </header>
-        <div class="thread" id="thread">
-          <p class="thread-empty" id="thread-empty">Pick a prompt and send it. The system on the right will capture it, prove it with zkml on an H100 and bring back the verdict.</p>
-        </div>
-        <form class="composer" id="composer">
-          <div class="composer-examples" role="group" aria-label="Prompts" id="examples"></div>
-          <label class="visually-hidden" for="prompt-preview">Prompt</label>
-          <textarea id="prompt-preview" class="composer-input" rows="3" readonly></textarea>
-          <div class="composer-row">
-            <span class="composer-note">Precomputed prompts: each one was really proved.</span>
-            <button type="submit" class="send" id="send">Send</button>
-          </div>
-        </form>
-      </section>
-
-      <section class="system" aria-label="The system">
-        <div class="now" id="now" aria-live="polite"></div>
-        <div class="controls" role="group" aria-label="Run controls">
-          <div class="segmented" role="group" aria-label="Mode">
-            <button type="button" data-mode="auto">Run</button>
-            <button type="button" data-mode="step">Step by step</button>
-          </div>
-          <button type="button" class="ctl ctl-primary" id="next-step" hidden>Next step</button>
-          <button type="button" class="ctl" id="pause">Pause</button>
-          <div class="segmented" role="group" aria-label="Speed">
-            <button type="button" data-speed="1">1×</button>
-            <button type="button" data-speed="50">50×</button>
-            <button type="button" data-speed="200">200×</button>
-          </div>
-          <button type="button" class="ctl" id="skip">Skip to verdict</button>
-          <div class="clock" id="clock"></div>
-        </div>
-        <div class="system-body">
-          <nav class="stack" id="stack" aria-label="System layers"></nav>
-          <section class="inspector" id="inspector" aria-label="Layer inspector"></section>
-        </div>
-        <details class="events" id="events-box">
-          <summary>What happened <span id="events-count"></span></summary>
-          <ol class="events-list" id="events"></ol>
-        </details>
-      </section>
+    <div class="chat">
+      <div class="examples" role="group" aria-labelledby="examples-label">
+        <span id="examples-label">Examples:</span>
+        <div class="example-buttons" id="examples"></div>
+        <button type="button" id="clear" class="example-button clear-button" disabled>Clear</button>
+      </div>
+      <ol class="verification-timeline" id="timeline" aria-label="Latest example progress">
+        <li><span class="timeline-dot" aria-hidden="true">1</span><span>Message sent</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">2</span><span>Response generated</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">3</span><span>Proof generated</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">4</span><span>Proof verified</span></li>
+      </ol>
+      <span id="timeline-status" class="visually-hidden" role="status" aria-live="polite"></span>
+      <div class="muted chat-empty" id="empty">
+        Use the forward arrow to send example 1, or choose an example above.
+      </div>
+      <div id="sends"></div>
     </div>
-
-    <footer class="footer">
-      <p class="source" id="source"></p>
-    </footer>
   </div>
 </main>
-<span id="announce" class="visually-hidden" role="status" aria-live="polite"></span>
-<script type="module" src="zkml.js?v=2"></script>
+
+<template id="card-template">
+  <article class="chat-card">
+    <header class="chat-card-head">
+      <span class="chat-tag-model" data-slot="model"></span>
+      <span class="chat-card-stage mono" data-slot="stage">message sent</span>
+    </header>
+    <div class="chat-reply" data-slot="reply"></div>
+    <div class="chat-progress-row" data-slot="progress" role="status" aria-live="polite" hidden>
+      <span class="chat-spinner" aria-hidden="true"></span>
+      <span data-slot="progress-label"></span>
+      <span class="chat-progress-time mono" data-slot="progress-time"></span>
+    </div>
+    <section class="chat-result" data-slot="result" hidden aria-label="Verification result">
+      <div class="chat-verdict" data-slot="verdict" role="status"><span class="chat-verdict-label" data-slot="verdict-label"></span></div>
+      <dl class="chat-metrics">
+        <div class="chat-metric">
+          <dt>Tokens proved</dt>
+          <dd>
+            <span class="chat-metric-value" data-slot="tokens"></span>
+            <span class="chat-metric-hint">every answer token</span>
+          </dd>
+        </div>
+        <div class="chat-metric">
+          <dt>Proof</dt>
+          <dd>
+            <span class="chat-metric-value" data-slot="size"></span>
+            <span class="chat-metric-hint" data-slot="size-hint"></span>
+          </dd>
+        </div>
+      </dl>
+    </section>
+  </article>
+</template>
+
+<template id="system-template">
+  <article class="chat-card system-card" aria-label="The system">
+    <header class="chat-card-head">
+      <span class="system-title">The system</span>
+      <span class="chat-card-stage mono" data-slot="system-stage">idle</span>
+    </header>
+    <div class="zone zone-verifier">
+      <span class="zone-label">Verifier · no weights</span>
+      <ol class="layers">
+        <li data-layer="ledger" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Ledger</span><span class="layer-value"></span></li>
+        <li data-layer="orchestrator" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Orchestrator</span><span class="layer-value"></span></li>
+        <li data-layer="verifier" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Verifier</span><span class="layer-value"></span></li>
+      </ol>
+    </div>
+    <div class="zone zone-prover">
+      <span class="zone-label">Prover · holds the weights</span>
+      <ol class="layers">
+        <li data-layer="tap" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Tap</span><span class="layer-value"></span></li>
+        <li data-layer="model" class="layer-lab"><span class="layer-dot" aria-hidden="true"></span><span>Model</span><span class="layer-value"></span></li>
+        <li data-layer="prover" class="layer-amodo"><span class="layer-dot" aria-hidden="true"></span><span>Prover</span><span class="layer-value"></span></li>
+        <li data-layer="zkml" class="layer-gpai"><span class="layer-dot" aria-hidden="true"></span><span>zkml</span><span class="layer-value"></span></li>
+      </ol>
+    </div>
+    <p class="system-legend"><span class="key key-amodo"></span>Amodo <span class="key key-gpai"></span>GPAI</p>
+  </article>
+</template>
+
+<button id="advance" class="standalone-advance" type="button" aria-label="Next step" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
+<script type="module" src="zkml.js?v=3"></script>
 </body>
 </html>
