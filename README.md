@@ -18,22 +18,30 @@ answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
 so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
 the local server, or `/fake/` on the deployed image.
 
-## zkml proof chat (`zkml/`)
+## zkml verification console (`zkml/`)
 
-`zkml/index.html`, served at `/zkml/`, shows one chat being proved with zkml:
-pick a prompt, send it, and watch the answer go through the real components
-(tap, ledger, orchestrator, proof request, zkml on the H100, the weight-blind
-verifier, the verdict in the ledger). It credits both sides: the verification
-system is Amodo Design's, the proof library (zkml) is Pierre Peigné's at GPAI.
-Nothing is invented: prompts, answers (zkml's own greedy token ids, decoded)
-and every time and size come from the 2026-10-15 proof sweep of the LVHEM
-inference prototype (PR #9, `proof_sweep.sqlite`), replayed on an accelerated
-clock (50× by default; real time and 200× are offered). The verifier step uses
-the 118 s measured for a 256-window zkml proof on 2026-10-09, labelled as such.
-Three ways of showing it: **How it happens** (default), **Prover log** and
-**To scale**; `?view=`, `?example=`, `?speed=` and `?autoplay=1` set them from
-the URL. Regenerate the data with `scripts/generate-zkml-presets.py` (it needs
-the sweep database and a Llama 3.2 `tokenizer.json`).
+`zkml/index.html`, served at `/zkml/`, lets you operate the zkml verification
+system on one chat. Send a prompt from the chat on the left; on the right the
+system's real components, split into the verifier side (never holds the
+weights) and the prover box (where the weights live), light up as the chat
+moves through them: dashboard, tap (inf-proxy), model server (vLLM), ledger,
+orchestrator, verifier, prover service, zkml and the GPU. A "Now" bar names
+each step and who built it. Click any layer to open its own interface: the
+tap message, the ledger rows, the orchestrator's calls, `POST /proofs`, the
+job from `GET /proofs/{job_id}`, `/health`, zkml's stages and the GPU's memory.
+**Step by step** waits for you before each step; **Run** plays it through.
+
+It credits both sides: the verification system is Amodo Design's, the proof
+library (zkml) is Pierre Peigné's at GPAI. Nothing is invented: prompts,
+answers (zkml's own greedy token ids, decoded), job and request ids,
+timestamps, timings and sizes come from the 2026-10-15 proof sweep of the
+LVHEM inference prototype (PR #9, `proof_sweep.sqlite`), replayed on an
+accelerated clock (50× by default; 1× and 200× are offered). Values the sweep
+did not record are shown as ‹placeholders›. The verifier's check uses the
+118 s measured for a 256-window zkml proof on 2026-10-09, labelled as such.
+`?example=`, `?speed=`, `?mode=step` and `?autoplay=1` set the page from the
+URL. Regenerate the data with `scripts/generate-zkml-presets.py` (it needs the
+sweep database and a Llama 3.2 `tokenizer.json`).
 
 ## Rack field
 

@@ -6,6 +6,7 @@ export const META = {
  "host": "amodo-cray1",
  "hardware": "1 × NVIDIA H100 80 GB",
  "model": "Llama-3.2-1B-Instruct",
+ "checkpoint": "Llama-3.2-1B-Instruct-seq4096.zkll",
  "verifier_reference": {
   "seconds": 118,
   "date": "2026-10-09",
@@ -239,7 +240,11 @@ export const EXAMPLES = [
   ],
   "answer_text": "The village of Hollin Mere is situated at the head of a long glacial lake. In 1962, the county built a causeway across the narrow northern end of the lake.",
   "ends_on_stop_token": true,
+  "job_id": "62e2ac20-6c16-4558-939c-0df0895ecd18",
+  "request_id": "bb9882bf-b971-44b4-b71e-f3ab4d11d733",
   "submitted_at": "2026-10-15T15:46:15+00:00",
+  "accepted_at": "2026-10-15T15:46:15.786963+00:00",
+  "started_at": "2026-10-15T15:46:15.793385+00:00",
   "finished_at": "2026-10-15T16:06:16.107457+00:00",
   "job_wall_s": 1200.3,
   "phases": [
@@ -280,6 +285,8 @@ export const EXAMPLES = [
   "openings_used": 3,
   "openings_budget": 6,
   "profile": "private-weights",
+  "positions_claimed": 40,
+  "wire_version": 35,
   "statement_digest": "sha256:0a72f25caa2b4cda408115136cb8795eeecee7f89c87b22fe4a3192d2bf348b2",
   "library_version": "zkml c13781165e37 S=2^8"
  },
@@ -442,7 +449,11 @@ export const EXAMPLES = [
   ],
   "answer_text": "The main subject of the passage is \"Hollin Mere\".",
   "ends_on_stop_token": true,
+  "job_id": "015ff1ef-c34c-46b7-ba5d-c95181073155",
+  "request_id": "fe16ee37-c5d8-4409-badc-143719bf208a",
   "submitted_at": "2026-10-15T11:11:11+00:00",
+  "accepted_at": "2026-10-15T11:11:11.040927+00:00",
+  "started_at": "2026-10-15T11:11:11.049144+00:00",
   "finished_at": "2026-10-15T11:27:56.678754+00:00",
   "job_wall_s": 1005.6,
   "phases": [
@@ -483,6 +494,8 @@ export const EXAMPLES = [
   "openings_used": 4,
   "openings_budget": 6,
   "profile": "private-weights",
+  "positions_claimed": 15,
+  "wire_version": 35,
   "statement_digest": "sha256:e3872060d649a0145f8e38b77679c7314bf3f952dc25792283438c030ca7939d",
   "library_version": "zkml c13781165e37 S=2^7"
  },
@@ -847,7 +860,11 @@ export const EXAMPLES = [
   ],
   "answer_text": "The passage describes the transformation of Hollin Mere, a small lake, into a thriving community. The introduction of a causeway across the lake shortened the journey to the market town, allowing young families to commute.",
   "ends_on_stop_token": true,
+  "job_id": "319ba941-5ce5-42b2-b941-bca9c3b98439",
+  "request_id": "05c44399-abf0-4533-ae07-edf78ea098fb",
   "submitted_at": "2026-10-16T10:39:46+00:00",
+  "accepted_at": "2026-10-16T10:39:46.308823+00:00",
+  "started_at": "2026-10-16T10:39:46.315429+00:00",
   "finished_at": "2026-10-16T11:06:00.399705+00:00",
   "job_wall_s": 1574.1,
   "phases": [
@@ -888,6 +905,8 @@ export const EXAMPLES = [
   "openings_used": 5,
   "openings_budget": 6,
   "profile": "private-weights",
+  "positions_claimed": 44,
+  "wire_version": 35,
   "statement_digest": "sha256:dc1e0083e0d29f852fc72754721c4c57e8016d8c8d1af5a52204b8c12fb5f69a",
   "library_version": "zkml c13781165e37 S=2^9"
  },
@@ -1494,7 +1513,11 @@ export const EXAMPLES = [
   ],
   "answer_text": "Here is a two-sentence summary of the passage:\n\nThe lighthouse at Point Harrow was automated in 1972, and the keeper's cottage is now a small museum.",
   "ends_on_stop_token": true,
+  "job_id": "769d9c1d-ad87-4638-94ab-94a7ce76dcd3",
+  "request_id": "482bd508-1ec9-4f23-9e7d-8116718ddcbe",
   "submitted_at": "2026-10-16T02:18:54+00:00",
+  "accepted_at": "2026-10-16T02:18:54.957287+00:00",
+  "started_at": "2026-10-16T02:18:54.961518+00:00",
   "finished_at": "2026-10-16T02:57:01.750712+00:00",
   "job_wall_s": 2286.8,
   "phases": [
@@ -1535,6 +1558,8 @@ export const EXAMPLES = [
   "openings_used": 1,
   "openings_budget": 6,
   "profile": "private-weights",
+  "positions_claimed": 37,
+  "wire_version": 35,
   "statement_digest": "sha256:2851e4367e2c2598aff721957e02b7553b9ddc2b43d66c8ce5413becc1851c82",
   "library_version": "zkml c13781165e37 S=2^10"
  }

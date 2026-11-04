@@ -95,7 +95,11 @@ def main() -> None:
                 "answer_tokens": pieces,
                 "answer_text": tok.decode(ids, skip_special_tokens=True),
                 "ends_on_stop_token": ids[-1] == 128009,
+                "job_id": (p["job"] or "").rsplit("/", 1)[-1],
+                "request_id": p["request_id"],
                 "submitted_at": p["submitted_at"],
+                "accepted_at": p["accepted_at"],
+                "started_at": p["started_at"],
                 "finished_at": p["finished_at"],
                 "job_wall_s": round(p["job_wall_s"], 1),
                 "phases": [
@@ -111,6 +115,8 @@ def main() -> None:
                 "openings_used": detail.get("openings_used", p["openings_used"]),
                 "openings_budget": detail.get("openings_budget", 6),
                 "profile": detail.get("profile"),
+                "positions_claimed": detail.get("positions_claimed"),
+                "wire_version": detail.get("wire_version"),
                 "statement_digest": detail.get("native_statement_digest"),
                 "library_version": p["system_version"],
             }
@@ -122,6 +128,7 @@ def main() -> None:
         "host": run["host"],
         "hardware": "1 × NVIDIA H100 80 GB",
         "model": "Llama-3.2-1B-Instruct",
+        "checkpoint": Path(run["zkll"]).name,
         "verifier_reference": VERIFIER_REFERENCE,
     }
     js = (
