@@ -18,6 +18,23 @@ answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
 so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
 the local server, or `/fake/` on the deployed image.
 
+## zkml proof chat (`zkml/`)
+
+`zkml/index.html`, served at `/zkml/`, shows one chat being proved with zkml:
+pick a prompt, send it, and watch the answer go through the real components
+(tap, ledger, orchestrator, proof request, zkml on the H100, the weight-blind
+verifier, the verdict in the ledger). It credits both sides: the verification
+system is Amodo Design's, the proof library (zkml) is Pierre Peigné's at GPAI.
+Nothing is invented: prompts, answers (zkml's own greedy token ids, decoded)
+and every time and size come from the 2026-10-15 proof sweep of the LVHEM
+inference prototype (PR #9, `proof_sweep.sqlite`), replayed on an accelerated
+clock (50× by default; real time and 200× are offered). The verifier step uses
+the 118 s measured for a 256-window zkml proof on 2026-10-09, labelled as such.
+Three ways of showing it: **How it happens** (default), **Prover log** and
+**To scale**; `?view=`, `?example=`, `?speed=` and `?autoplay=1` set them from
+the URL. Regenerate the data with `scripts/generate-zkml-presets.py` (it needs
+the sweep database and a Llama 3.2 `tokenizer.json`).
+
 ## Rack field
 
 The scene supports 16–1,024 racks in continuous, uniformly spaced rows. Default: 256 racks, 32 per row. **Between racks** (0–2 m) and **Between rows** (0–6 m) control clear edge-to-edge gaps. Changing a gap reroutes connections immediately and retains a close-up camera relative to the selected rack. These are composition controls, not installation clearance recommendations.

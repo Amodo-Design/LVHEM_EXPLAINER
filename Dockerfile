@@ -15,6 +15,8 @@ COPY assets/web/ /opt/presentation/assets/web/
 COPY assets/fonts/ /opt/presentation/assets/fonts/
 # Self-contained fake of the verification dashboard, served at /fake/.
 COPY fake/ /opt/presentation/fake/
+# zkml proof chat: measured zkml proofs replayed, served at /zkml/.
+COPY zkml/ /opt/presentation/zkml/
 
 # Must be the only port in the image's ExposedPorts, including inherited ports.
 EXPOSE 8080/tcp
