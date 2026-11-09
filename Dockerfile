@@ -7,6 +7,7 @@ COPY presentation.html /opt/presentation/presentation.html
 COPY src/install_viewer.js src/rack_geometry.js src/fleet_layout.js \
      src/fleet_bundles.js src/data_hall.js src/verification_scene.js \
      src/iceberg_theme.js src/photo_callouts.js src/cable_routes.js \
+     src/zk_scene.js src/scene_tags.js \
      src/photo_callouts.css /opt/presentation/src/
 COPY vendor/three.module.js vendor/three.core.js vendor/OrbitControls.js \
      vendor/THREE-LICENSE.txt /opt/presentation/vendor/
@@ -15,7 +16,7 @@ COPY assets/web/ /opt/presentation/assets/web/
 COPY assets/fonts/ /opt/presentation/assets/fonts/
 # Self-contained fake of the verification dashboard, served at /fake/.
 COPY fake/ /opt/presentation/fake/
-# zkml proof chat: measured zkml proofs replayed, served at /zkml/.
+# Zero-knowledge edition of the presentation at /zkml/, with its proof dashboard at /zkml/chat.html.
 COPY zkml/ /opt/presentation/zkml/
 
 # Must be the only port in the image's ExposedPorts, including inherited ports.

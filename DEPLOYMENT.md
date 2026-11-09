@@ -2,7 +2,7 @@
 
 Repository: **Amodo-Design/LVHEM_EXPLAINER** (private).
 
-The root Dockerfile serves the text-free presentation at `/` and `/presentation.html`. It also serves the self-contained fake verification dashboard at `/fake/` and the zkml proof chat at `/zkml/` (see README). The image includes the model, vendored Three.js and responsive WebP versions of the three photo callouts. Original JPEGs are retained in Git but excluded from the deployed image. Regenerate web assets with `python3 scripts/optimize-images.py` whenever a source photo changes. It does not serve the asset editors, reference downloads, Git history or export gallery.
+The root Dockerfile serves the text-free presentation at `/` and `/presentation.html`. It also serves the self-contained fake verification dashboard at `/fake/` and the zero-knowledge edition of the presentation at `/zkml/`, with its proof dashboard at `/zkml/chat.html` (see README). The image includes the model, vendored Three.js and responsive WebP versions of the three photo callouts. Original JPEGs are retained in Git but excluded from the deployed image. Regenerate web assets with `python3 scripts/optimize-images.py` whenever a source photo changes. It does not serve the asset editors, reference downloads, Git history or export gallery.
 
 This follows the [Apps Playground requirements](https://apps.amodo.tools/docs/app-requirements): the platform builds the default branch using `docker build <repo-root>` without build arguments. No image registry upload or Compose configuration is needed.
 

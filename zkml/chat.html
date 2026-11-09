@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>if(new URLSearchParams(location.search).get("embed")==="1")document.documentElement.dataset.embed="true";</script>
+<title>Inference Proof Verification</title>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-medium-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../fake/fake.css">
+<link rel="stylesheet" href="zkml.css?v=5">
+</head>
+<body>
+<main class="page">
+  <div class="shell">
+    <header class="topbar">
+      <div class="title">
+        <h1>Inference Proof Verification</h1>
+      </div>
+      <div class="credits" aria-label="Built by">
+        <span class="credit credit-amodo">Amodo Design · system</span>
+        <span class="credit credit-gpai">GPAI · zkml proofs</span>
+      </div>
+    </header>
+
+    <div class="chat">
+      <div class="examples" role="group" aria-labelledby="examples-label">
+        <span id="examples-label">Examples:</span>
+        <div class="example-buttons" id="examples"></div>
+        <button type="button" id="clear" class="example-button clear-button" disabled>Clear</button>
+      </div>
+      <ol class="verification-timeline" id="timeline" aria-label="Latest example progress">
+        <li><span class="timeline-dot" aria-hidden="true">1</span><span>Message sent</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">2</span><span>Response generated</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">3</span><span>Proof generated</span></li>
+        <li><span class="timeline-dot" aria-hidden="true">4</span><span>Proof verified</span></li>
+      </ol>
+      <span id="timeline-status" class="visually-hidden" role="status" aria-live="polite"></span>
+      <div class="muted chat-empty" id="empty">
+        Use the forward arrow to send example 1, or choose an example above.
+      </div>
+      <div id="sends"></div>
+    </div>
+  </div>
+</main>
+
+<template id="card-template">
+  <article class="chat-card">
+    <header class="chat-card-head">
+      <span class="chat-tag-model" data-slot="model"></span>
+      <span class="chat-card-stage mono" data-slot="stage">message sent</span>
+    </header>
+    <div class="chat-reply" data-slot="reply"></div>
+    <div class="chat-progress-row" data-slot="progress" role="status" aria-live="polite" hidden>
+      <span class="chat-spinner" aria-hidden="true"></span>
+      <span data-slot="progress-label"></span>
+      <span class="chat-progress-time mono" data-slot="progress-time"></span>
+    </div>
+    <section class="chat-result" data-slot="result" hidden aria-label="Verification result">
+      <div class="chat-verdict" data-slot="verdict" role="status"><span class="chat-verdict-label" data-slot="verdict-label"></span></div>
+      <dl class="chat-metrics">
+        <div class="chat-metric">
+          <dt>Tokens proved</dt>
+          <dd>
+            <span class="chat-metric-value" data-slot="tokens"></span>
+            <span class="chat-metric-hint">every answer token</span>
+          </dd>
+        </div>
+        <div class="chat-metric">
+          <dt>Proof</dt>
+          <dd>
+            <span class="chat-metric-value" data-slot="size"></span>
+            <span class="chat-metric-hint" data-slot="size-hint"></span>
+          </dd>
+        </div>
+      </dl>
+    </section>
+  </article>
+</template>
+
+<template id="system-template">
+  <article class="chat-card system-card" aria-label="The system">
+    <header class="chat-card-head">
+      <span class="system-title">The system</span>
+      <span class="chat-card-stage mono" data-slot="system-stage">idle</span>
+    </header>
+    <div class="net" data-slot="net">
+      <div class="zone-bg zone-you"><span>You</span></div>
+      <div class="zone-bg zone-verifier"><span>Verifier · no weights</span></div>
+      <div class="zone-bg zone-prover"><span>Prover · holds the weights</span></div>
+      <svg class="edges" aria-hidden="true"></svg>
+      <div class="node node-you" data-node="chat" style="--x:9;--y:30"><b>Chat</b><small></small></div>
+      <div class="node node-ledger node-amodo" data-node="ledger" style="--x:59;--y:15"><b>Ledger</b><ol class="ledger-rows"></ol></div>
+      <div class="node node-amodo" data-node="orchestrator" style="--x:36;--y:44"><b>Orchestrator</b><small></small></div>
+      <div class="node node-amodo" data-node="verifier" style="--x:83;--y:44"><b>Verifier</b><small></small></div>
+      <div class="node node-amodo node-certifier" data-node="tap" style="--x:33;--y:85"><b>Network Certifier</b><small></small></div>
+      <div class="node node-lab" data-node="model" style="--x:52;--y:85"><b>Model</b><small></small></div>
+      <div class="node node-amodo" data-node="prover" style="--x:71;--y:85"><b>Prover</b><small></small></div>
+      <div class="node node-gpai" data-node="zkml" style="--x:90;--y:85"><b>zkml</b><small></small></div>
+    </div>
+    <p class="system-legend"><span class="key key-amodo"></span>Amodo <span class="key key-gpai"></span>GPAI</p>
+  </article>
+</template>
+
+<button id="advance" class="standalone-advance" type="button" aria-label="Next step" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
+<script type="module" src="zkml.js?v=4"></script>
+</body>
+</html>

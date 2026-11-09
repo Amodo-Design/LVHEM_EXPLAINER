@@ -18,27 +18,38 @@ answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
 so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
 the local server, or `/fake/` on the deployed image.
 
-## zkml proof verification (`zkml/`)
+## Zero-knowledge edition (`zkml/`)
 
-`zkml/index.html`, served at `/zkml/`, is the zero-knowledge version of the
-fake dashboard: the same look, the same four-step forward arrow and the same
-embed messages, with one chat card and a small card for the system beside it.
-The system card is a small map of the real components (the ledger,
-orchestrator and verifier on the side that never holds the weights; the tap,
-model, prover and zkml on the side that does), and labelled packets travel
-between them: the prompt to the model, the token ids landing on the ledger as
-an `inference_event` row, the event from the ledger to the orchestrator and
-verifier, the request down to the prover and zkml, the proof back up, and the
-verdict landing on the ledger as a `verification_event` row and returning to
-the chat. Blue is Amodo Design's system; orange is zkml, the proof library by
-Pierre Peigné at GPAI.
+`zkml/index.html`, served at `/zkml/`, is the zero-knowledge edition of the
+presentation. It uses the same data hall, zoom and unit split as
+`presentation.html` (the same `src/install_viewer.js`, switched by
+`data-variant="zk"` on the page), then installs different hardware, built in
+`src/zk_scene.js`:
 
-Nothing is invented: prompts, answers (zkml's own greedy token ids, decoded),
-timings and sizes come from the 2026-10-15 proof sweep of the LVHEM inference
-prototype (PR #9, `proof_sweep.sqlite`). The proof replays at 120× (`?speed=`
-changes it); pressing the arrow while it runs skips ahead. Regenerate the data
-with `scripts/generate-zkml-presets.py` (it needs the sweep database and a
-Llama 3.2 `tokenizer.json`).
+- **The Network Certifier** (our name for the tap): a sealed unit on the exit
+  tray at the data-centre boundary. Every link out passes through it and it
+  keeps one record of everything said. One view lowers it into place; the next
+  moves in close and names its parts.
+- **The prover**: one ordinary rack inside the boundary, beside the model.
+- **The verifier**: a small console outside the boundary. No rack, no model.
+
+Two further views animate what crosses the boundary: a fingerprint of the
+model when it is sealed, then a request in and a proof out, ending in a pass.
+Name tags (`src/scene_tags.js`) are pinned to the new hardware. The views are:
+claims, hall, zoom, inference units, fit the Network Certifier, the Certifier
+close up, add a prover, seal the model, prove an answer, the dashboard, contact.
+The recomputation presentation is unchanged.
+
+The dashboard step embeds `zkml/chat.html`, which also works on its own at
+`/zkml/chat.html`: the same look, four-step forward arrow and embed messages
+as the fake dashboard, with one chat card and a map of the system beside it.
+Nothing in it is invented: prompts, answers (zkml's own greedy token ids,
+decoded), timings and sizes come from the 2026-10-15 proof sweep of the LVHEM
+inference prototype (PR #9, `proof_sweep.sqlite`). The proof replays at 120×
+(`?speed=` changes it); pressing the arrow while it runs skips ahead.
+Regenerate the data with `scripts/generate-zkml-presets.py` (it needs the
+sweep database and a Llama 3.2 `tokenizer.json`). The system is Amodo
+Design's; zkml, the proof library, is by Pierre Peigné at GPAI.
 
 ## Rack field
 

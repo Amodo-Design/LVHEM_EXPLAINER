@@ -90,8 +90,10 @@ export function buildVerificationScene(points,rackGeometry,rackMaterial,options=
  label(sampling,options.simple?'Same approved model\nReady before checks begin':'Approved weights + same preprocessing\nLoaded at setup · protocol TBD',verifier.clone().add(new V(.8,.1,3.2)),3.3);
  // Restricted reporting is a static line, with no extra server, cabinet or animated marker.
  cable(reporting,[verifier.clone().add(new V(.2,-.63,.75)),new V(verifier.x+.5,verifier.y-.85,.75),new V(edge.x,verifier.y-.85,.75)],orange,.005,false);
- const boundary=new THREE.BufferGeometry().setFromPoints([new V(edge.x-.9,edge.y-1,.012),new V(edge.x-.9,verifier.y+1.1,.012)]);geometries.add(boundary);
- const boundaryMat=new THREE.LineDashedMaterial({color:0x566962,dashSize:.18,gapSize:.10});materials.add(boundaryMat);const border=new THREE.Line(boundary,boundaryMat);border.computeLineDistances();slow.add(border);
+ if(options.boundary!==false){
+  const boundary=new THREE.BufferGeometry().setFromPoints([new V(edge.x-.9,edge.y-1,.012),new V(edge.x-.9,verifier.y+1.1,.012)]);geometries.add(boundary);
+  const boundaryMat=new THREE.LineDashedMaterial({color:0x566962,dashSize:.18,gapSize:.10});materials.add(boundaryMat);const border=new THREE.Line(boundary,boundaryMat);border.computeLineDistances();slow.add(border);
+ }
  [points[0],points.at(-1),verifier].forEach(p=>{const at=p.clone().add(new V(-.6,-.75,.35));box(monitoring,at,[.16,.16,.2],orange);mesh(monitoring,new THREE.CylinderGeometry(.018,.018,.38,6),silver,at.clone().add(new V(0,0,.2))).rotation.x=Math.PI/2;for(const r of[.2,.32,.44]){const geo=new THREE.RingGeometry(r,r+.009,40);mesh(monitoring,geo,new THREE.MeshBasicMaterial({color:0xc37d3f,side:THREE.DoubleSide}),at.clone().add(new V(0,0,-.24)));}});
  label(monitoring,'Also monitor undeclared channels\nPower · EM / RF · acoustic · management',new V((minX+maxX)/2,maxY+1.1,2.8),4,'#946035');
  function setFrontendLayout(locations){
