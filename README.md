@@ -18,6 +18,43 @@ answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
 so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
 the local server, or `/fake/` on the deployed image.
 
+## Zero-knowledge edition (`izkp/`)
+
+`izkp/index.html`, served at `/izkp/`, explains the zero-knowledge version of
+the same claim: only approved model X is serving inference, checked without
+the verifier ever holding the model. It uses the same data hall, zoom and unit
+split as `presentation.html` (the same `src/install_viewer.js`, switched by
+`data-variant="zk"` on the page), then fits a Network Certifier on the exit, a
+verifier console outside the boundary and a prover rack beside the model
+(`src/zk_scene.js`, with name tags from `src/scene_tags.js`).
+
+It then follows one check from start to finish, one caption per view:
+
+1. **Seal** the model. Only a fingerprint leaves.
+2. **Serve** users as normal. Every answer is **recorded**.
+3. The verifier picks one answer at random (**sample**).
+4. The prover shows it came from the sealed model (**prove**).
+5. The verifier **checks** the proof. It never sees the model.
+
+Three pages share those five steps:
+
+- `izkp/index.html`: the 3D presentation. Fourteen views: claim, hall, zoom,
+  inference units, certifier, certifier close up, prover, the five steps, the
+  console, contact. Back/forward arrows or the Left/Right keys.
+- `izkp/steps.html`: the five steps as a flat diagram with the same captions.
+  No WebGL, so it opens instantly on any machine. After step 5 the forward
+  arrow picks another answer.
+- `izkp/console.html`: the interactive step, also embedded in the presentation.
+  Two data centres claim sealed model X and one has swapped it. Five example
+  buttons send a question to both; the forward arrow then advances four
+  milestones (question sent, answer recorded, proof requested, proof checked).
+  It uses the fake dashboard's look and its embed messages.
+
+Nothing here is measured or computed. The 3D views are animation, and the
+console's answers are fixtures written in `izkp/console.js`. Read
+**IZKP_STORYBOARD.md** for the view list and for what the walkthrough does
+and does not claim. The mockups it was built from are in `design/izkp/`.
+
 ## Rack field
 
 The scene supports 16–1,024 racks in continuous, uniformly spaced rows. Default: 256 racks, 32 per row. **Between racks** (0–2 m) and **Between rows** (0–6 m) control clear edge-to-edge gaps. Changing a gap reroutes connections immediately and retains a close-up camera relative to the selected rack. These are composition controls, not installation clearance recommendations.

@@ -7,7 +7,8 @@ COPY presentation.html /opt/presentation/presentation.html
 COPY src/install_viewer.js src/rack_geometry.js src/fleet_layout.js \
      src/fleet_bundles.js src/data_hall.js src/verification_scene.js \
      src/iceberg_theme.js src/photo_callouts.js src/cable_routes.js \
-     src/photo_callouts.css /opt/presentation/src/
+     src/photo_callouts.css src/zk_scene.js src/scene_tags.js \
+     /opt/presentation/src/
 COPY vendor/three.module.js vendor/three.core.js vendor/OrbitControls.js \
      vendor/THREE-LICENSE.txt /opt/presentation/vendor/
 COPY assets/model-data.js /opt/presentation/assets/
@@ -15,6 +16,8 @@ COPY assets/web/ /opt/presentation/assets/web/
 COPY assets/fonts/ /opt/presentation/assets/fonts/
 # Self-contained fake of the verification dashboard, served at /fake/.
 COPY fake/ /opt/presentation/fake/
+# Zero-knowledge (IZKP) edition of the presentation at /izkp/, with its console at /izkp/console.html.
+COPY izkp/ /opt/presentation/izkp/
 
 # Must be the only port in the image's ExposedPorts, including inherited ports.
 EXPOSE 8080/tcp

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI verification · Zero-knowledge in five steps</title>
+<link rel="preload" href="../assets/fonts/ibm-plex-serif-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* The five steps of a zero-knowledge check as a flat diagram: no 3D, no data,
+   one caption per step. Drawn on a fixed 1280 x 720 frame that scales to fit. */
+@font-face{font-family:'IBM Plex Serif';src:url('../assets/fonts/ibm-plex-serif-regular-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../assets/fonts/ibm-plex-mono-regular-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../assets/fonts/ibm-plex-mono-semibold-latin.woff2') format('woff2');font-weight:600;font-display:swap}
+:root{color-scheme:light;--bg:#e8e9ec;--ink:#33374c;--muted:#5a5f76;--line:#8389a3;--blue:#2d539e;--orange:#c57339;--violet:#7759b4;--violet-ink:#5e4396;--green:#668e3d;--green-deep:#4f6f2f}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--ink)}
+.fit{position:fixed;inset:0;display:grid;place-items:center}
+.frame{position:relative;flex:none;width:1280px;height:720px;font:400 13px/20px 'IBM Plex Mono',ui-monospace,monospace;transform-origin:center}
+.frame>*{position:absolute}
+.dc{left:64px;top:40px;width:560px;height:416px;background:#dcdfe7;border:1.5px solid var(--line);border-radius:12px}
+.dc-label{left:88px;top:58px;font-weight:600;letter-spacing:.12em;line-height:16px;color:var(--muted)}
+.wire{background:var(--line);border-radius:2px}
+.wire.h{height:2px}.wire.v{width:2px}
+.wire.blue{background:var(--blue)}.wire.blue.h{height:3px}.wire.blue.v{width:3px}
+.card{display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;border-radius:10px;transition:background .4s,color .4s,border-color .4s}
+.card b{font-size:18px;font-weight:600}
+.model{left:112px;top:176px;width:208px;height:120px;background:var(--ink);color:#e8e9ec}
+.prover{left:112px;top:344px;width:208px;height:80px;background:var(--bg);color:var(--violet-ink);border:1.5px solid var(--violet)}
+.prover.working{background:var(--violet);color:#fff;animation:work 1.1s ease-in-out infinite}
+@keyframes work{50%{box-shadow:0 0 0 7px #7759b433}}
+.certifier{left:544px;top:188px;width:160px;height:96px;background:var(--orange);color:#262a3f}
+.users{left:928px;top:64px;width:288px;height:88px;background:#f4f5f7;border:1.5px solid var(--line)}
+.verifier{left:928px;top:208px;width:288px;height:248px;background:#f4f5f7;border:1.5px solid var(--ink);border-radius:10px;transition:border-color .4s,box-shadow .4s}
+[data-step="5"] .verifier{border-color:var(--green-deep);box-shadow:0 0 0 1.5px var(--green-deep)}
+.v-title{left:952px;top:224px;font-size:18px;line-height:24px;font-weight:600}
+.v-sub{left:952px;top:250px;color:var(--muted)}
+.pass{left:1100px;top:222px;width:92px;height:32px;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--green-deep);color:#fff;border-radius:999px;font-size:14px;font-weight:600;opacity:0;transform:scale(.8);transition:opacity .35s,transform .35s}
+[data-step="5"] .pass{opacity:1;transform:none}
+.pass svg{width:13px;height:13px;fill:none;stroke:#fff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.slot{left:952px;top:284px;width:240px;height:44px;padding:0 12px;display:flex;align-items:center;gap:8px;border:1.5px dashed var(--line);border-radius:8px;color:var(--muted);font-weight:600;line-height:16px;transition:background .4s,border-color .4s,color .4s}
+.slot svg{flex:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.slot.held{background:#fff;border:1.5px solid var(--violet);color:var(--violet-ink)}
+.rec-label{left:952px;top:342px;font-size:12px;line-height:16px;color:var(--muted)}
+.tray{left:952px;top:362px;width:240px;height:64px;padding:5px 6px;display:flex;flex-wrap:wrap;align-content:flex-start;gap:5px 9px;background:#fff;border:1.5px solid var(--line);border-radius:8px}
+.tray:empty{background:none;border-style:dashed}
+.tray i{width:14px;height:14px;border-radius:3px;background:var(--green);animation:pop .3s ease-out;transition:background .3s,box-shadow .3s}
+.tray.dim i{background:#b9c8a8}
+.tray i.picked{background:var(--orange);box-shadow:0 0 0 3px #fff,0 0 0 5px var(--orange)}
+.tray i.checked{background:var(--green-deep);box-shadow:0 0 0 2px #fff,0 0 0 4px var(--green-deep)}
+@keyframes pop{from{transform:scale(.2);opacity:0}}
+.seal{left:298px;top:154px;width:44px;height:44px;opacity:0;transform:scale(.4);transition:opacity .4s,transform .4s}
+.sealed .seal{opacity:1;transform:none}
+.chip{left:0;top:0;height:30px;padding:0 13px;display:flex;align-items:center;border-radius:999px;font-weight:600;line-height:16px;white-space:nowrap;offset-rotate:0deg;offset-anchor:center;pointer-events:none}
+.chip.violet{background:var(--violet);color:#fff}.chip.blue{background:var(--blue);color:#fff}.chip.green{background:var(--green-deep);color:#fff}.chip.orange{background:var(--orange);color:#262a3f}
+.caption{left:51px;bottom:94px;max-width:490px;margin:0;padding:22px 28px;background:#f3efe5;color:#49463f;border-radius:3px;font:400 32px/1.4 'IBM Plex Serif',Georgia,serif;letter-spacing:-.018em;text-wrap:balance;transition:opacity .35s}
+.caption.swap{opacity:0}
+.watermark{right:20px;top:12px;margin:0;color:#5a5f76;font:400 13px/1.5 'IBM Plex Serif',Georgia,serif}
+.navigation{left:590px;top:658px;display:flex;gap:24px}
+button{display:grid;place-items:center;width:38px;height:38px;border:1px solid #8389a366;border-radius:50%;padding:0;background:#e8e9eceb;color:var(--ink);cursor:pointer;transition:background .15s,border-color .15s,opacity .15s}
+button:hover:not(:disabled){background:#dcdfe7;border-color:var(--blue)}
+button:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+button:disabled{opacity:.28;cursor:default}
+button svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="fit">
+<main class="frame" id="frame" data-step="1" aria-label="The five steps of a zero-knowledge check">
+<div class="dc"></div>
+<div class="wire blue h" style="left:320px;top:235px;width:224px"></div>
+<div class="wire blue h" style="left:704px;top:219px;width:112px"></div>
+<div class="wire blue v" style="left:815px;top:108px;height:113px"></div>
+<div class="wire blue h" style="left:816px;top:107px;width:112px"></div>
+<div class="wire h" style="left:704px;top:251px;width:160px"></div>
+<div class="wire v" style="left:863px;top:252px;height:81px"></div>
+<div class="wire h" style="left:864px;top:331px;width:64px"></div>
+<div class="wire h" style="left:320px;top:383px;width:304px"></div>
+<div class="wire v" style="left:623px;top:284px;height:100px"></div>
+
+<div class="card model"><span><b>Model X</b><br>sealed: the weights<br>never leave</span></div>
+<div class="card prover" id="prover"><span><b>Prover</b><br><span id="prover-line">makes proofs</span></span></div>
+<div class="card certifier"><span><b>Certifier</b><br>on every link out</span></div>
+<div class="card users"><span><b>Users</b><br>ask questions, get answers</span></div>
+<div class="verifier"></div>
+<div class="dc-label">DATA CENTRE</div>
+<div class="v-title">Verifier</div>
+<div class="v-sub">outside, without the model</div>
+<div class="pass" aria-hidden="true"><svg viewBox="0 0 12 12"><path d="M2.5 6.5l2.5 2.5 4.5-5.5"/></svg>Pass</div>
+<div class="slot" id="slot"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15a8 8 0 0 1 16 0M8 16a4 4 0 0 1 8 0M12 16v3"/></svg><span id="slot-text">No fingerprint yet</span></div>
+<div class="rec-label" id="rec-label">Record: nothing yet</div>
+<div class="tray" id="tray" role="img" aria-label="Recorded answers"></div>
+<svg class="seal" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20" fill="#7759b4" stroke="#e8e9ec" stroke-width="3"/><path d="M13 26a9 9 0 0 1 18 0M17 27a5 5 0 0 1 10 0M22 27v4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg>
+
+<p class="caption" id="caption" role="status" aria-live="polite"></p>
+<p class="watermark">Amodo Design | www.ai-verification.com</p>
+<nav class="navigation" aria-label="Step navigation">
+<button id="previous" aria-label="Previous step" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m12 5-5 5 5 5"/></svg></button>
+<button id="next" aria-label="Next step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
+</nav>
+</main>
+</div>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const frame = $("frame"), tray = $("tray");
+  const reduced = matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const CAPTIONS = {
+    1: "Seal the model. Only a fingerprint leaves.",
+    2: "Serve users as normal. Every answer is recorded.",
+    3: "The verifier picks one answer at random.",
+    4: "The prover shows it came from the sealed model.",
+    5: "The verifier checks the proof. It never sees the model."
+  };
+  // Routes along the wires. Everything that leaves the data centre passes through the certifier.
+  const ROUTE = {
+    seal: "M320 236 H624 V252 H864 V332 H928",
+    answer: "M320 236 H624 V220 H816 V108 H928",
+    record: "M624 252 H864 V332 H928",
+    request: "M928 332 H864 V252 H624 V384 H320",
+    proof: "M320 384 H624 V252 H864 V332 H928"
+  };
+  const MAX_TILES = 30;
+  let step = 1, run = 0, serving = null, picked = null;
+
+  function fit() {
+    const k = Math.min(innerWidth / 1280, innerHeight / 720);
+    frame.style.transform = "scale(" + k + ")";
+  }
+  addEventListener("resize", fit); fit();
+
+  const sleep = ms => new Promise(r => setTimeout(r, reduced ? 0 : ms));
+  // A labelled chip travelling along a wire. Resolves when it arrives.
+  function fly(kind, text, route, ms) {
+    if (reduced) return Promise.resolve();
+    const chip = document.createElement("div");
+    chip.className = "chip " + kind; chip.textContent = text;
+    chip.style.offsetPath = 'path("' + route + '")';
+    frame.append(chip);
+    const done = () => chip.remove();
+    return chip.animate([{ offsetDistance: "0%" }, { offsetDistance: "100%" }], { duration: ms, easing: "ease-in-out" }).finished.then(done, done);
+  }
+  function label() {
+    const n = tray.children.length, done = tray.querySelectorAll(".checked").length;
+    $("rec-label").textContent = n ? "Record: " + n + (n === 1 ? " answer" : " answers") + (done ? ", " + done + " checked" : "") : "Record: nothing yet";
+  }
+  function addTile() { if (tray.children.length < MAX_TILES) { tray.append(document.createElement("i")); label(); } }
+  function hold(on) { $("slot").classList.toggle("held", on); $("slot-text").textContent = on ? "Fingerprint of model X" : "No fingerprint yet"; }
+
+  // Serving runs from step 2 onwards and never waits for a proof.
+  function serve() {
+    if (serving) return;
+    const mine = serving = {};
+    (async () => {
+      while (serving === mine) {
+        fly("blue", "answer", ROUTE.answer, 1500);
+        await sleep(450);
+        if (serving !== mine) return;
+        await fly("green", "record", ROUTE.record, 1100);
+        if (serving !== mine) return;
+        addTile();
+        await sleep(tray.children.length < 8 ? 250 : 1900);
+      }
+    })();
+  }
+  function pick() {
+    const pool = [...tray.children].filter(t => !t.classList.contains("checked"));
+    if (picked && !picked.classList.contains("checked")) picked.classList.remove("picked");
+    picked = pool[Math.floor(Math.random() * pool.length)];
+    picked.classList.add("picked");
+  }
+
+  async function go(n) {
+    const mine = ++run;
+    step = n;
+    frame.dataset.step = String(n);
+    $("previous").disabled = n === 1;
+    $("next").setAttribute("aria-label", n === 5 ? "Check another answer" : "Next step");
+    const caption = $("caption");
+    caption.classList.add("swap");
+    setTimeout(() => { caption.textContent = CAPTIONS[n]; caption.classList.remove("swap"); }, reduced ? 0 : 200);
+    frame.querySelectorAll(".chip").forEach(c => c.remove());
+    $("prover").classList.remove("working"); $("prover-line").textContent = "makes proofs";
+    tray.classList.toggle("dim", n >= 3);
+
+    if (n === 1) {
+      serving = null; picked = null; tray.replaceChildren(); label(); hold(false);
+      frame.classList.add("sealed");
+      await sleep(500);
+      if (mine !== run) return;
+      await fly("violet", "fingerprint", ROUTE.seal, 2600);
+      if (mine === run) hold(true);
+      return;
+    }
+    frame.classList.add("sealed"); hold(true);
+    while (tray.children.length < (n === 2 ? 0 : 8)) addTile();   // jumping in: there is already a record
+    serve();
+    if (n === 2) { if (picked && !picked.classList.contains("checked")) picked.classList.remove("picked"); return; }
+    if (n === 3) {
+      pick();
+      await sleep(600);
+      if (mine === run) await fly("orange", "prove this one", ROUTE.request, 2200);
+      return;
+    }
+    if (!picked || picked.classList.contains("checked")) pick();
+    if (n === 4) {
+      $("prover").classList.add("working"); $("prover-line").textContent = "working: minutes, not seconds";
+      await sleep(2400);
+      if (mine !== run) return;
+      $("prover").classList.remove("working"); $("prover-line").textContent = "proof sent";
+      await fly("violet", "proof", ROUTE.proof, 2200);
+      return;
+    }
+    picked.classList.remove("picked"); picked.classList.add("checked"); label();
+  }
+
+  $("next").onclick = () => go(step === 5 ? 3 : step + 1);
+  $("previous").onclick = () => { if (step > 1) go(step - 1); };
+  addEventListener("keydown", e => {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === "ArrowRight") { e.preventDefault(); $("next").click(); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); $("previous").click(); }
+  });
+  go(1);
+})();
+</script>
+</body>
+</html>

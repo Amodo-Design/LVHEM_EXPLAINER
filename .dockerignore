@@ -17,6 +17,8 @@ src/**
 !src/photo_callouts.js
 !src/photo_callouts.css
 !src/cable_routes.js
+!src/zk_scene.js
+!src/scene_tags.js
 !vendor/
 vendor/**
 !vendor/three.module.js
@@ -41,3 +43,10 @@ fake/**
 !fake/fake.css
 !fake/fake.js
 !fake/presets.js
+!izkp/
+izkp/**
+!izkp/index.html
+!izkp/console.html
+!izkp/console.css
+!izkp/console.js
+!izkp/steps.html
