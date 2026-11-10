@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The whole scheme on one page</title>
+<style>
+@font-face{font-family:'IBM Plex Serif';src:url('../../assets/fonts/ibm-plex-serif-regular-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../../assets/fonts/ibm-plex-mono-regular-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../../assets/fonts/ibm-plex-mono-medium-latin.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../../assets/fonts/ibm-plex-mono-semibold-latin.woff2') format('woff2');font-weight:600;font-display:swap}
+</style>
+<style>
+body{margin:0}
+a{color:#2d539e}a:hover{color:#262a3f}
+</style>
+</head>
+<body>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; padding: 64px 72px 48px; display: flex; flex-direction: column; gap: 36px; background: #e8e9ec; color: #33374c; font-family: 'IBM Plex Serif', Georgia, serif">
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="font: 600 14px/1.4 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: 0.12em; color: #5a5f76">ZERO-KNOWLEDGE INFERENCE VERIFICATION</div>
+<h1 style="margin: 0; font-size: 50px; line-height: 1.16; font-weight: 400; letter-spacing: -0.03em; max-width: 1040px">Proving which model answered, without showing the model.</h1>
+<p style="margin: 0; font-size: 22px; line-height: 1.45; color: #5a5f76; max-width: 900px">The prover runs the model. The verifier checks it. The weights never leave the data centre.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px">
+
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; background: #f4f5f7; border-radius: 10px">
+<svg viewBox="0 0 208 112" width="208" height="112" role="img" aria-label="A fingerprint leaves the model and reaches the verifier" style="display: block; width: 100%; height: auto">
+<rect x="6" y="26" width="58" height="60" rx="6" fill="#33374c"/>
+<rect x="16" y="40" width="38" height="5" rx="2" fill="#8389a3"/><rect x="16" y="52" width="38" height="5" rx="2" fill="#8389a3"/><rect x="16" y="64" width="38" height="5" rx="2" fill="#8389a3"/>
+<path d="M72 56h46" stroke="#7759b4" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 7"/>
+<circle cx="104" cy="56" r="17" fill="#f4f5f7" stroke="#7759b4" stroke-width="2.5"/>
+<path d="M96 61a8 8 0 0 1 16 0M100 62a4 4 0 0 1 8 0M92 59a12 12 0 0 1 24 0" fill="none" stroke="#7759b4" stroke-width="2" stroke-linecap="round"/>
+<path d="M126 56h20" stroke="#7759b4" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="1 7"/>
+<rect x="150" y="32" width="52" height="36" rx="4" fill="#ffffff" stroke="#33374c" stroke-width="2.5"/>
+<path d="M176 68v12M162 82h28" stroke="#33374c" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font: 600 14px/1 'IBM Plex Mono', ui-monospace, monospace; color: #7759b4">1</span>
+<span style="font: 600 17px/1.2 'IBM Plex Mono', ui-monospace, monospace">Seal</span>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.42">The prover fingerprints its model and gives the fingerprint to the verifier.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; background: #f4f5f7; border-radius: 10px">
+<svg viewBox="0 0 208 112" width="208" height="112" role="img" aria-label="Answers pass a certifier, which adds each one to a record" style="display: block; width: 100%; height: auto">
+<path d="M6 34h196" stroke="#2d539e" stroke-width="3" stroke-linecap="round"/>
+<rect x="82" y="18" width="44" height="32" rx="5" fill="#c57339"/>
+<path d="M104 50v18" stroke="#668e3d" stroke-width="2.5" stroke-linecap="round"/>
+<g fill="#668e3d">
+<rect x="38" y="74" width="14" height="14" rx="3"/><rect x="58" y="74" width="14" height="14" rx="3"/><rect x="78" y="74" width="14" height="14" rx="3"/><rect x="98" y="74" width="14" height="14" rx="3"/><rect x="118" y="74" width="14" height="14" rx="3"/><rect x="138" y="74" width="14" height="14" rx="3"/>
+<rect x="38" y="94" width="14" height="14" rx="3"/><rect x="58" y="94" width="14" height="14" rx="3"/><rect x="78" y="94" width="14" height="14" rx="3"/>
+</g>
+<rect x="98" y="94" width="14" height="14" rx="3" fill="none" stroke="#668e3d" stroke-width="2" stroke-dasharray="3 3"/>
+</svg>
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font: 600 14px/1 'IBM Plex Mono', ui-monospace, monospace; color: #4f7a26">2</span>
+<span style="font: 600 17px/1.2 'IBM Plex Mono', ui-monospace, monospace">Serve and record</span>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.42">Users are served as normal. A certifier on the link records every answer.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; background: #f4f5f7; border-radius: 10px">
+<svg viewBox="0 0 208 112" width="208" height="112" role="img" aria-label="One recorded answer is picked out of many" style="display: block; width: 100%; height: auto">
+<g fill="#b9c8a8">
+<rect x="28" y="22" width="20" height="20" rx="4"/><rect x="56" y="22" width="20" height="20" rx="4"/><rect x="84" y="22" width="20" height="20" rx="4"/><rect x="112" y="22" width="20" height="20" rx="4"/><rect x="140" y="22" width="20" height="20" rx="4"/>
+<rect x="28" y="50" width="20" height="20" rx="4"/><rect x="56" y="50" width="20" height="20" rx="4"/><rect x="112" y="50" width="20" height="20" rx="4"/><rect x="140" y="50" width="20" height="20" rx="4"/>
+<rect x="28" y="78" width="20" height="20" rx="4"/><rect x="56" y="78" width="20" height="20" rx="4"/><rect x="84" y="78" width="20" height="20" rx="4"/><rect x="112" y="78" width="20" height="20" rx="4"/><rect x="140" y="78" width="20" height="20" rx="4"/>
+</g>
+<rect x="80" y="46" width="28" height="28" rx="6" fill="#c57339"/>
+<rect x="74" y="40" width="40" height="40" rx="10" fill="none" stroke="#c57339" stroke-width="2"/>
+<path d="M166 60h24M182 52l8 8-8 8" fill="none" stroke="#c57339" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font: 600 14px/1 'IBM Plex Mono', ui-monospace, monospace; color: #a85e2b">3</span>
+<span style="font: 600 17px/1.2 'IBM Plex Mono', ui-monospace, monospace">Sample</span>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.42">The verifier picks one recorded answer at random.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; background: #f4f5f7; border-radius: 10px">
+<svg viewBox="0 0 208 112" width="208" height="112" role="img" aria-label="The prover produces a proof for that answer" style="display: block; width: 100%; height: auto">
+<rect x="6" y="26" width="58" height="60" rx="6" fill="#7759b4"/>
+<rect x="16" y="40" width="38" height="5" rx="2" fill="#cbbfe6"/><rect x="16" y="52" width="38" height="5" rx="2" fill="#cbbfe6"/><rect x="16" y="64" width="38" height="5" rx="2" fill="#cbbfe6"/>
+<path d="M74 56h40M106 48l8 8-8 8" fill="none" stroke="#7759b4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M132 20h44l20 20v52h-64z" fill="#ffffff" stroke="#7759b4" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M176 20v20h20" fill="none" stroke="#7759b4" stroke-width="2.5" stroke-linejoin="round"/>
+<path d="M144 54h38M144 66h38M144 78h22" stroke="#7759b4" stroke-width="2.5" stroke-linecap="round"/>
+</svg>
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font: 600 14px/1 'IBM Plex Mono', ui-monospace, monospace; color: #7759b4">4</span>
+<span style="font: 600 17px/1.2 'IBM Plex Mono', ui-monospace, monospace">Prove</span>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.42">The prover shows that answer came from the sealed model.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 20px; background: #f4f5f7; border-radius: 10px">
+<svg viewBox="0 0 208 112" width="208" height="112" role="img" aria-label="The verifier checks the proof and passes it" style="display: block; width: 100%; height: auto">
+<rect x="20" y="24" width="84" height="56" rx="5" fill="#ffffff" stroke="#33374c" stroke-width="2.5"/>
+<path d="M62 80v14M40 96h44" stroke="#33374c" stroke-width="2.5" stroke-linecap="round"/>
+<path d="M34 42h56M34 54h56M34 66h30" stroke="#8389a3" stroke-width="2.5" stroke-linecap="round"/>
+<circle cx="154" cy="56" r="34" fill="#668e3d"/>
+<path d="M138 57l11 11 21-24" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<div style="display: flex; align-items: baseline; gap: 10px">
+<span style="font: 600 14px/1 'IBM Plex Mono', ui-monospace, monospace; color: #4f7a26">5</span>
+<span style="font: 600 17px/1.2 'IBM Plex Mono', ui-monospace, monospace">Check</span>
+</div>
+<p style="margin: 0; font-size: 18px; line-height: 1.42">The verifier checks the proof against the fingerprint and the record.</p>
+</div>
+
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; flex: 1 1 auto; min-height: 0">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 24px 28px; background: #33374c; color: #e8e9ec; border-radius: 10px">
+<div style="font: 600 14px/1.4 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: 0.1em; color: #c6c8d1">STAYS INSIDE THE DATA CENTRE</div>
+<p style="margin: 0; font-size: 22px; line-height: 1.4">The model weights.<br>Everything the model computes along the way.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 24px 28px; background: #f6f2e8; color: #49463f; border-radius: 10px">
+<div style="font: 600 14px/1.4 'IBM Plex Mono', ui-monospace, monospace; letter-spacing: 0.1em; color: #6d675b">WHAT THE VERIFIER HOLDS</div>
+<p style="margin: 0; font-size: 22px; line-height: 1.4">A fingerprint of the model. A record of every answer.<br>A proof for each answer it sampled.</p>
+</div>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: baseline; gap: 24px; font-size: 14px; color: #5a5f76">
+<span>An illustration of the scheme. Proving is far slower than serving, so only a sample is proved.</span>
+<span>Amodo Design | www.ai-verification.com</span>
+</div>
+
+</div>
+</body>
+</html>

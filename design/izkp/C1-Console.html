@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Console: two data centres, one swapped model</title>
+<style>
+@font-face{font-family:'IBM Plex Serif';src:url('../../assets/fonts/ibm-plex-serif-regular-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../../assets/fonts/ibm-plex-mono-regular-latin.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../../assets/fonts/ibm-plex-mono-medium-latin.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'IBM Plex Mono';src:url('../../assets/fonts/ibm-plex-mono-semibold-latin.woff2') format('woff2');font-weight:600;font-display:swap}
+</style>
+<style>
+body{margin:0}
+a{color:#2d539e}a:hover{color:#262a3f}
+</style>
+</head>
+<body>
+<div style="min-height: 880px; box-sizing: border-box; padding: 3rem clamp(1rem, 4vw, 3rem); background: #e8e9ec; color: #33374c; font: 400 15px/1.5 'IBM Plex Mono', ui-monospace, monospace">
+<div style="max-width: 1180px; margin: 0 auto; box-sizing: border-box; padding: 2.25rem; display: flex; flex-direction: column; gap: 18px; background: #e8e9ec; border: 1px solid #b9bcc9; border-radius: 8px; box-shadow: 0 18px 32px rgba(38, 42, 63, 0.12)">
+
+<div style="display: flex; flex-direction: column; gap: 8px; padding-bottom: 16px; border-bottom: 1px solid #b9bcc9">
+<h1 style="margin: 0; font-size: 30px; line-height: 1.25; font-weight: 400; letter-spacing: -0.01em">Zero-Knowledge Inference Verification</h1>
+<p style="margin: 0; color: #444b71; max-width: 70ch">Two data centres say they serve sealed model X. One of them has swapped it.</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px">
+<span>Examples:</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" style="min-width: 44px; height: 44px; padding: 0 14px; border: 1px solid #b9bcc9; border-radius: 6px; background: #f8f9fb; font: inherit; color: inherit">1</button>
+<button type="button" style="min-width: 44px; height: 44px; padding: 0 14px; border: 1px solid #b9bcc9; border-radius: 6px; background: #f8f9fb; font: inherit; color: inherit">2</button>
+<button type="button" style="min-width: 44px; height: 44px; padding: 0 14px; border: 1px solid #b9bcc9; border-radius: 6px; background: #f8f9fb; font: inherit; color: inherit">3</button>
+<button type="button" style="min-width: 44px; height: 44px; padding: 0 14px; border: 1px solid #b9bcc9; border-radius: 6px; background: #f8f9fb; font: inherit; color: inherit">4</button>
+<button type="button" aria-pressed="true" style="min-width: 44px; height: 44px; padding: 0 14px; border: 2px solid #2d539e; border-radius: 6px; background: #f8f9fb; font: inherit; color: inherit">5</button>
+</div>
+<button type="button" style="margin-left: auto; height: 44px; padding: 0 14px; border: 1px solid #b9bcc9; border-radius: 6px; background: #f8f9fb; font: inherit; color: inherit">Clear</button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; font-size: 12px">
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #2d539e; color: #ffffff; font-size: 11px">1</span><span>Question sent</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #2d539e; color: #ffffff; font-size: 11px">2</span><span>Answer recorded</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #2d539e; color: #ffffff; font-size: 11px">3</span><span>Proof requested</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span style="display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: #2d539e; color: #ffffff; font-size: 11px; box-shadow: 0 0 0 3px rgba(45, 83, 158, 0.2)">4</span><span>Proof checked</span></div>
+</div>
+
+<p style="margin: 0; display: flex; gap: 12px; align-items: baseline; font-size: 17px"><span style="font-size: 12px; letter-spacing: 0.08em; color: #5a5f76">USER</span><span>Name the three primary colours.</span></p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px">
+
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; background: #f3f4f7; border: 1px solid #b9bcc9; border-radius: 8px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
+<span style="padding: 4px 10px; border-radius: 4px; background: #2d539e; color: #ffffff; font-weight: 600; font-size: 13px">Data centre A · serves sealed model X</span>
+<span style="font-size: 12px; letter-spacing: 0.08em; color: #5a5f76">VERIFIED</span>
+</div>
+<div style="min-height: 4.5em; padding: 12px 14px; background: #f8f9fb; border: 1px solid #b9bcc9; border-radius: 6px">Red, yellow and blue.</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #668e3d"></span><span>Recorded by the certifier</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #c57339"></span><span>Picked by the verifier</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #7759b4"></span><span>Proof received from the prover</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border-radius: 6px; background: #e3ecd9; color: #4f6f2f">
+<b style="font-weight: 600; font-size: 16px">Verified</b>
+<span style="font-size: 13px">The proof matches the fingerprint and the record. This answer came from sealed model X.</span>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 16px; background: #f3f4f7; border: 1px solid #b9bcc9; border-radius: 8px; min-width: 0">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px">
+<span style="padding: 4px 10px; border-radius: 4px; background: #33374c; color: #ffffff; font-weight: 600; font-size: 13px">Data centre B · swapped the model</span>
+<span style="font-size: 12px; letter-spacing: 0.08em; color: #5a5f76">NOT VERIFIED</span>
+</div>
+<div style="min-height: 4.5em; padding: 12px 14px; background: #f8f9fb; border: 1px solid #b9bcc9; border-radius: 6px">The primary colours are red, blue and yellow.</div>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #668e3d"></span><span>Recorded by the certifier</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 12px; height: 12px; border-radius: 3px; background: #c57339"></span><span>Picked by the verifier</span></div>
+<div style="display: flex; align-items: center; gap: 8px; color: #a23a5e"><span style="width: 12px; height: 12px; box-sizing: border-box; border-radius: 3px; border: 1.5px dashed #a23a5e"></span><span>No proof: this answer cannot be proved against the sealed model</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border-radius: 6px; background: #f6e1e8; color: #a23a5e">
+<b style="font-weight: 600; font-size: 16px">Not verified</b>
+<span style="font-size: 13px">No valid proof. This answer did not come from sealed model X.</span>
+</div>
+</div>
+
+</div>
+
+<p style="margin: 0; padding-top: 14px; border-top: 1px solid #b9bcc9; color: #5a5f76; font-size: 12px">An illustration. The answers are fixtures and nothing is computed here. A real proof takes minutes on a GPU, so only a sample of answers is proved.</p>
+
+</div>
+</div>
+</body>
+</html>
