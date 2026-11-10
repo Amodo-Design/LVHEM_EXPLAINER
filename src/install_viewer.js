@@ -72,7 +72,7 @@ function goTo(index,instant=false){
  if(presentation){
   const overlay=$('dashboard-overlay'),frame=$('dashboard-frame'),showDashboard=index===9;
   // Load once ahead of the final click; hiding never reloads the dashboard.
-  if((index===7||showDashboard)&&!frame.hasAttribute('src'))frame.src='fake/index.html?embed=1';
+  if((index===7||showDashboard)&&!frame.hasAttribute('src'))frame.src=document.documentElement.dataset.dashboard||'fake/index.html?embed=1';
   overlay.classList.toggle('is-visible',showDashboard);
   overlay.inert=!showDashboard;
   overlay.setAttribute('aria-hidden',String(!showDashboard));

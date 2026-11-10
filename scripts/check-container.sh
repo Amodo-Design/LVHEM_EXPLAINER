@@ -26,7 +26,8 @@ for path in / /presentation.html /src/install_viewer.js /src/photo_callouts.css 
     /vendor/OrbitControls.js /vendor/THREE-LICENSE.txt /assets/model-data.js \
     /assets/web/photos.js /assets/fonts/ibm-plex-serif-regular-latin.woff2 /assets/fonts/OFL.txt \
     /assets/fonts/ibm-plex-mono-regular-latin.woff2 /assets/fonts/ibm-plex-mono-medium-latin.woff2 \
-    /assets/fonts/ibm-plex-mono-semibold-latin.woff2 /fake/ '/fake/index.html?embed=1' /fake/fake.css /fake/fake.js /fake/presets.js; do
+    /assets/fonts/ibm-plex-mono-semibold-latin.woff2 /fake/ '/fake/index.html?embed=1' /fake/fake.css /fake/fake.js /fake/presets.js \
+    /gpai /gpai.html /ledger/ '/ledger/index.html?embed=1' /ledger/ledger.css /ledger/ledger.js; do
     curl --fail --silent --show-error "$base$path" -o /dev/null
 done
 # Verify each optimized photo exactly matches the current working-tree asset.
@@ -35,8 +36,11 @@ for file in assets/web/*.webp; do
 done
 curl --fail --silent "$base/fake/" | grep -q 'id="card-template"'
 curl --fail --silent "$base/" | grep -q 'data-presentation="iceberg"'
+curl --fail --silent "$base/gpai" | grep -q 'data-dashboard="ledger/index.html?embed=1"'
+curl --fail --silent "$base/ledger/" | grep -q 'id="units"'
+[ "$(curl --silent -o /dev/null -w '%{http_code}' "$base/gpai/")" = 301 ] || { echo '/gpai/ should redirect to /gpai' >&2; exit 1; }
 curl --fail --silent --head "$base/src/install_viewer.js" | grep -qi 'content-type:.*javascript'
 for path in /.git/config /README.md /references/ /missing-file.js /assets/compute.jpg /assets/recompute.jpeg /assets/TAP.jpg; do
     [ "$(curl --silent -o /dev/null -w '%{http_code}' "$base$path")" = 404 ] || exit 1
 done
-echo "PASS: root presentation, exact current photo bytes, runtime assets, JavaScript MIME type, one TCP port, non-root user and 404 boundaries."
+echo "PASS: root presentation, /gpai and its ledger demo, exact current photo bytes, runtime assets, JavaScript MIME type, one TCP port, non-root user and 404 boundaries."

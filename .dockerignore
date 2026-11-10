@@ -5,6 +5,7 @@
 deploy/**
 !deploy/nginx.conf
 !presentation.html
+!gpai.html
 !src/
 src/**
 !src/install_viewer.js
@@ -41,3 +42,8 @@ fake/**
 !fake/fake.css
 !fake/fake.js
 !fake/presets.js
+!ledger/
+ledger/**
+!ledger/index.html
+!ledger/ledger.css
+!ledger/ledger.js

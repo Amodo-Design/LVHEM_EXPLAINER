@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<script>if(new URLSearchParams(location.search).get("embed")==="1")document.documentElement.dataset.embed="true";</script>
+<title>Chat, ledger and proof</title>
+<link rel="preload" href="../assets/fonts/ibm-plex-mono-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="ledger.css">
+</head>
+<body>
+<main class="page">
+  <div class="shell">
+
+    <section class="chat" aria-labelledby="chat-title">
+      <h2 class="eyebrow" id="chat-title">Chat</h2>
+      <p class="empty" id="chat-empty">Send the first prompt. Prompts and answers are recorded ones, so there is nothing to type.</p>
+      <div class="thread" id="thread"></div>
+      <form class="composer" id="composer">
+        <label for="next-prompt">Next prompt</label>
+        <div class="composer-row">
+          <input id="next-prompt" type="text" readonly>
+          <button id="send" type="submit" class="primary">Send</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="ledger" aria-labelledby="ledger-title">
+      <header class="ledger-head">
+        <h2 class="eyebrow" id="ledger-title">Ledger</h2>
+        <span class="muted" id="count">0 exchanges</span>
+      </header>
+      <p class="empty" id="ledger-empty">Nothing here yet. A prompt and its answer land in the ledger when you send the next prompt.</p>
+      <ol class="units" id="units"></ol>
+
+      <div class="proof" id="proof" hidden>
+        <div class="proof-head">
+          <span class="proof-title">
+            <svg viewBox="0 0 30 20" width="27" height="18" role="img" aria-label="France"><rect x="0" y="0" width="10" height="20" fill="#0055a4"/><rect x="10" y="0" width="10" height="20" fill="#ffffff"/><rect x="20" y="0" width="10" height="20" fill="#ef4135"/></svg>
+            <span id="proof-title"></span>
+          </span>
+          <span class="clock" id="proof-clock"></span>
+        </div>
+        <p class="proof-line" id="proof-requesting" hidden>Asking the prover for a proof of this exchange.</p>
+        <div class="proving" id="proof-proving" hidden>
+          <span><b id="proof-stage"></b> <span class="muted">· replayed at about 150 times the recorded speed</span></span>
+          <div class="bar"><div class="fill" id="proof-fill"></div></div>
+        </div>
+        <div class="done" id="proof-done" role="status" hidden>
+          <b>Proof received and checked</b>
+          <span id="proof-claim"></span>
+          <span class="mono" id="proof-facts"></span>
+        </div>
+        <span class="muted small" id="tokens-label"></span>
+        <div class="tokens" id="tokens"></div>
+      </div>
+
+      <p class="hint" id="hint" hidden>Click an entry to ask the prover for its proof. The proof plays back here.</p>
+    </section>
+
+  </div>
+</main>
+
+<button id="advance" class="standalone-advance" type="button" aria-label="Next step"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m8 5 5 5-5 5"/></svg></button>
+<script type="module" src="ledger.js"></script>
+</body>
+</html>

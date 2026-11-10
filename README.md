@@ -18,6 +18,36 @@ answers in that script. IBM Plex Mono is bundled under `assets/fonts/` (OFL),
 so the page makes no external requests. Open http://127.0.0.1:8765/fake/ with
 the local server, or `/fake/` on the deployed image.
 
+## Zero-knowledge proof demo (`/gpai`, `ledger/`)
+
+`gpai.html`, served at `/gpai`, is `presentation.html` with one difference: the
+dashboard step. The data hall, zoom, unit split, TAP, verifier and hardware
+photos are the same views from the same `src/install_viewer.js`. Where the
+presentation opens the fake recomputation dashboard, this page opens
+`ledger/index.html`, named by `data-dashboard` on its `<html>` element.
+
+`ledger/index.html` (also at `/ledger/`) is a chat beside a ledger:
+
+- **Send** posts a recorded prompt and the answer arrives token by token. The
+  chat keeps every exchange.
+- Sending the next prompt puts the previous exchange **in the ledger**.
+- **Clicking a ledger entry** asks the prover for its proof. The recorded proof
+  job then plays back in about eight seconds (roughly 150 times its real
+  speed), naming each step, and ends with the answer's tokens and token ids
+  marked as proved.
+
+In the presentation the forward arrow drives the same path for a clicker: send
+the first prompt, send another, ask for a proof, then on to the contact slide.
+Clicking in the demo works at any time.
+
+Nothing is computed. The three exchanges in `ledger/ledger.js`, their token
+ids, step times and proof sizes are from recorded zkml proofs of Llama-3.2-1B
+answers; zkml is the proof library by GPAI Policy Lab. The third prompt is
+shown without the passage it was asked about, and the split of its answer into
+token text was reconstructed from the recorded ids. Locally, open
+`http://127.0.0.1:8765/gpai.html`; the `/gpai` address without `.html` exists
+only on the deployed image.
+
 ## Rack field
 
 The scene supports 16–1,024 racks in continuous, uniformly spaced rows. Default: 256 racks, 32 per row. **Between racks** (0–2 m) and **Between rows** (0–6 m) control clear edge-to-edge gaps. Changing a gap reroutes connections immediately and retains a close-up camera relative to the selected rack. These are composition controls, not installation clearance recommendations.

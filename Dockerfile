@@ -4,6 +4,8 @@ FROM nginxinc/nginx-unprivileged:stable-alpine@sha256:04a3275f25d766cff8926d2e57
 
 COPY deploy/nginx.conf /etc/nginx/conf.d/default.conf
 COPY presentation.html /opt/presentation/presentation.html
+# The same presentation with the chat, ledger and proof demo as its dashboard step, served at /gpai.
+COPY gpai.html /opt/presentation/gpai.html
 COPY src/install_viewer.js src/rack_geometry.js src/fleet_layout.js \
      src/fleet_bundles.js src/data_hall.js src/verification_scene.js \
      src/iceberg_theme.js src/photo_callouts.js src/cable_routes.js \
@@ -15,6 +17,8 @@ COPY assets/web/ /opt/presentation/assets/web/
 COPY assets/fonts/ /opt/presentation/assets/fonts/
 # Self-contained fake of the verification dashboard, served at /fake/.
 COPY fake/ /opt/presentation/fake/
+# Chat, ledger and zero-knowledge proof replay, served at /ledger/ and embedded by /gpai.
+COPY ledger/ /opt/presentation/ledger/
 
 # Must be the only port in the image's ExposedPorts, including inherited ports.
 EXPOSE 8080/tcp
