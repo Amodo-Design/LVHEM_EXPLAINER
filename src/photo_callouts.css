@@ -6,9 +6,12 @@
 .photo-leaders .leader{stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none;vector-effect:non-scaling-stroke}
 .photo-leaders .anchor-halo{stroke:currentColor;stroke-width:1.5;fill:#e8e9ecd9}
 .photo-leaders .anchor-dot{fill:currentColor;stroke:none}
-.photo-card{position:absolute;margin:0;overflow:hidden;border:3px solid #e8e9ec;border-radius:5px;box-shadow:0 8px 26px #262a3f26,0 0 0 1px #8389a355;background:#dcdfe7;opacity:0;transform:translateY(10px);transition:opacity .55s,transform .65s cubic-bezier(.2,.7,.2,1)}
-.photo-card::after{content:'';position:absolute;inset:0;border-bottom:3px solid var(--accent);pointer-events:none}
-.photo-card img{display:block;width:100%;height:auto}
+.photo-card{position:absolute;margin:0;border:3px solid #e8e9ec;border-radius:5px;box-shadow:0 8px 26px #262a3f26,0 0 0 1px #8389a355;background:#dcdfe7;opacity:0;transform:translateY(10px);transition:opacity .55s,transform .65s cubic-bezier(.2,.7,.2,1)}
+.photo-card::after{content:'';position:absolute;inset:0;border-bottom:3px solid var(--accent);border-radius:0 0 2px 2px;pointer-events:none}
+.photo-card img{display:block;width:100%;height:auto;border-radius:2px}
+/* A flag sits over the top right corner and reaches past the card's border. */
+.photo-flag{position:absolute;z-index:1;top:calc(var(--flag)*-.45);right:calc(var(--flag)*-.6);height:var(--flag);--flag:clamp(18px,2.3vw,28px);display:block;border:2px solid #e8e9ec;border-radius:3px;overflow:hidden;box-shadow:0 3px 10px #262a3f40,0 0 0 1px #8389a355;background:#e8e9ec}
+.photo-flag svg{display:block;height:100%;width:auto}
 .is-visible .photo-card{opacity:1;transform:translateY(0);transition-delay:var(--delay)}
 .photo-card.compute{left:4%;bottom:12%;width:clamp(180px,27vw,350px)}
 .photo-card.recompute{left:50%;translate:-50% 0;top:4%;width:min(17vw,190px,22vh)}

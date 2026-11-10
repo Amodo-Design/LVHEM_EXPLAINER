@@ -1,28 +1,19 @@
 // Chat, ledger and proof replay. Nothing is computed here.
 //
-// Send posts a recorded prompt and its answer arrives token by token. Sending
-// the next prompt puts the previous exchange in the ledger. Clicking a ledger
+// Send posts a recorded prompt and its answer arrives token by token. As soon
+// as the answer is complete the exchange lands in the ledger. Clicking a ledger
 // entry asks the prover for its proof, and the recorded proof job plays back
 // at roughly 150 times its real speed.
 //
-// The three exchanges, their token ids, step times and proof sizes are from
-// recorded zkml proofs of Llama-3.2-1B answers. Each token is [text, id]; the
-// empty text is the end-of-answer token.
-const EXCHANGES = [
-  { prompt: "What is the capital of France? Answer with one word.", nPrompt: 47, size: "3.39 GB",
-    tokens: [["Paris", 60704], ["", 128009]],
-    stages: [["Start-up and pre-check", 213], ["Commit", 54], ["Compute", 27], ["Prove", 775], ["Prover's own check", 129]] },
-  { prompt: "Write a Python function that returns True if a number is even. Code only.", nPrompt: 54, size: "3.40 GB",
-    tokens: [["```", 74694], ["python", 12958], ["\n", 198], ["def", 755], [" is", 374], ["_even", 69447], ["(n", 1471], ["):\n", 997], ["   ", 262], [" return", 471], [" n", 308], [" %", 1034], [" ", 220], ["2", 17], [" ==", 624], [" ", 220], ["0", 15], ["\n", 198], ["```", 74694], ["", 128009]],
-    stages: [["Start-up and pre-check", 214], ["Commit", 57], ["Compute", 29], ["Prove", 876], ["Prover's own check", 129]] },
-  { prompt: "On which days does Marta bake sourdough? (asked about a short passage)", nPrompt: 152, size: "3.40 GB",
-    tokens: [["M", 44], ["arta", 26017], [" b", 293], ["akes", 2094], [" sour", 20897], ["d", 67], ["ough", 1409], [" on", 389], [" Tues", 83783], ["days", 14097], [" and", 323], [" Fridays", 80523], [".", 13], ["", 128009]],
-    stages: [["Start-up and pre-check", 193], ["Commit", 56], ["Compute", 27], ["Prove", 795], ["Prover's own check", 131]] },
-];
+// Every exchange in exchanges.js is a recorded zkml proof of a Llama-3.2-1B
+// answer: its token ids, step times and proof size are the recorded ones. Each
+// token is [text, id]; the empty text is the end-of-answer token.
+import { EXCHANGES } from "./exchanges.js";
+
 const TOKEN_MS = 120;        // one answer token
 const REQUEST_MS = 950;      // "requesting proof"
 const REPLAY_MS = 8400;      // one whole proof job, whatever its recorded length
-const NEXT = { 0: "Send the first prompt", 1: "Send another prompt", 2: "Ask for a proof", 3: "Proving" };
+const NEXT = { 0: "Send the first prompt", 1: "Answering", 2: "Ask for a proof", 3: "Proving" };
 
 const $ = id => document.getElementById(id);
 const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
@@ -31,6 +22,7 @@ const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const total = x => x.stages.reduce((a, s) => a + s[1], 0);
 const answer = (x, k = x.tokens.length) => x.tokens.slice(0, k).map(t => t[0]).join("");
 const shown = raw => raw === "" ? "<|eot_id|>" : raw.replace(/ /g, "␣").replace(/\n/g, "↵");
+const oneLine = text => text.replace(/\s+/g, " ").trim();
 const clock = s => { s = Math.floor(s); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
 
 const chats = [];   // { x, k, done, note }
@@ -47,17 +39,18 @@ function step() {
 function publish() {
   const s = step(), last = chats[chats.length - 1], streaming = !!last && !last.done;
   const state = { type: "recomputation-state", step: s, nextLabel: NEXT[s] ?? "Next step",
-                  canAdvance: s === 0 || (s === 1 && !streaming) || s === 2 };
+                  canAdvance: s === 0 || s === 2 };
   $("send").disabled = streaming;
   $("send").textContent = chats.length ? "Send another" : "Send";
-  $("next-prompt").value = EXCHANGES[next].prompt;
+  $("next-prompt").value = oneLine(EXCHANGES[next].prompt);
+  $("next-label").textContent = "Next prompt · " + (next + 1) + " of " + EXCHANGES.length;
   $("advance").disabled = !state.canAdvance;
   $("advance").setAttribute("aria-label", state.nextLabel);
   if (embedded) window.parent.postMessage(state, location.origin);
 }
 function advance() {
   const s = step();
-  if (s <= 1) send();
+  if (s === 0) send();
   else if (s === 2) request(units.find(u => u.phase === "recorded"));
 }
 
@@ -65,18 +58,24 @@ function advance() {
 function note(chat, i) {
   const x = chat.x, count = x.nPrompt + " prompt + " + x.tokens.length + " answer tokens.";
   if (!chat.done) return "Answering: token " + chat.k + " of " + x.tokens.length;
-  return i < chats.length - 1 ? count + " In the ledger as #" + (i + 1) + "."
-                              : count + " Send the next prompt to put this exchange in the ledger.";
+  return count + " In the ledger as #" + (i + 1) + ".";
 }
 function refreshNotes() { chats.forEach((c, i) => { c.note.textContent = note(c, i); }); }
 function send() {
   const last = chats[chats.length - 1];
   if (last && !last.done) return;
-  if (last) addUnit(last.x);
   const x = EXCHANGES[next];
   next = (next + 1) % EXCHANGES.length;
-  const turn = el("div", "turn"), a = el("div", "a"), n = el("span", "note");
-  turn.append(el("div", "q", x.prompt), a, n);
+  const turn = el("div", "turn"), q = el("div", "q", x.prompt), a = el("div", "a"), n = el("span", "note");
+  turn.append(q);
+  if (x.prompt.length > 320) {   // a prompt with a passage: show its start, and the rest on request
+    q.classList.add("long");
+    const more = el("button", "more", "Show the full prompt");
+    more.type = "button";
+    more.addEventListener("click", () => { more.textContent = q.classList.toggle("long") ? "Show the full prompt" : "Collapse the prompt"; });
+    turn.append(more);
+  }
+  turn.append(a, n);
   $("thread").append(turn);
   $("chat-empty").hidden = true;
   const chat = { x, k: 0, done: false, note: n };
@@ -87,7 +86,7 @@ function send() {
     a.textContent = answer(x, chat.k);
     refreshNotes();
     $("thread").scrollTop = $("thread").scrollHeight;
-    if (chat.done) publish(); else setTimeout(tick, TOKEN_MS);
+    if (chat.done) { addUnit(x); publish(); } else setTimeout(tick, TOKEN_MS);
   };
   refreshNotes();
   $("thread").scrollTop = $("thread").scrollHeight;
@@ -101,10 +100,10 @@ function addUnit(x) {
   const b = u.button = el("button", "unit");
   b.type = "button"; b.dataset.phase = u.phase; b.setAttribute("aria-pressed", "false");
   const top = el("span", "top"), bottom = el("span", "bottom");
-  top.append(el("span", "n", "#" + u.n), el("span", "p", x.prompt));
+  top.append(el("span", "n", "#" + u.n), el("span", "p", oneLine(x.prompt)));
   u.status = el("span", "status");
   bottom.append(el("span", "meta", x.nPrompt + " + " + x.tokens.length + " tokens"), u.status);
-  b.append(top, el("span", "ans", answer(x).replace(/\s+/g, " ")), bottom);
+  b.append(top, el("span", "ans", oneLine(answer(x))), bottom);
   b.addEventListener("click", () => request(u));
   const li = el("li"); li.append(b); $("units").append(li);
   units.push(u);
@@ -136,7 +135,7 @@ function paintProof() {
     $("proof-fill").style.width = (100 * u.t / all) + "%";
   }
   $("proof-claim").textContent = "The sealed model, given this prompt, produces exactly these " + x.tokens.length + " tokens.";
-  $("proof-facts").textContent = "window 256 · proof " + x.size + " · weights not revealed";
+  $("proof-facts").textContent = "window " + x.window + " · proof " + x.size + " · weights not revealed";
   $("tokens-label").textContent = u.phase === "verified" ? "Answer tokens, proved" : "Answer tokens, as recorded";
   $("tokens").classList.toggle("proved", u.phase === "verified");
   if ($("tokens").dataset.unit !== String(u.n)) {

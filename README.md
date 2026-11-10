@@ -20,31 +20,44 @@ the local server, or `/fake/` on the deployed image.
 
 ## Zero-knowledge proof demo (`/gpai`, `ledger/`)
 
-`gpai.html`, served at `/gpai`, is `presentation.html` with one difference: the
-dashboard step. The data hall, zoom, unit split, TAP, verifier and hardware
-photos are the same views from the same `src/install_viewer.js`. Where the
-presentation opens the fake recomputation dashboard, this page opens
-`ledger/index.html`, named by `data-dashboard` on its `<html>` element.
+`gpai.html`, served at `/gpai`, is `presentation.html` with three differences,
+each set by an attribute on its `<html>` element. The data hall, zoom, TAP,
+verifier and hardware photos are the same views from the same
+`src/install_viewer.js`.
+
+- `data-dashboard`: where the presentation opens the fake recomputation
+  dashboard, this page opens `ledger/index.html`.
+- `data-split="off"`: there is no "inference units" view. The cluster stays
+  whole, so the racks do not move apart and the fast links stay connected; the
+  zoom is followed directly by the TAP.
+- `data-flags="on"`: in the hardware photos, the compute racks carry a French
+  flag and the verifier's rack a UK flag, over the top right corner of each
+  card (`src/photo_callouts.js`).
 
 `ledger/index.html` (also at `/ledger/`) is a chat beside a ledger:
 
 - **Send** posts a recorded prompt and the answer arrives token by token. The
   chat keeps every exchange.
-- Sending the next prompt puts the previous exchange **in the ledger**.
+- As soon as the answer is complete, the exchange lands **in the ledger**.
 - **Clicking a ledger entry** asks the prover for its proof. The recorded proof
   job then plays back in about eight seconds (roughly 150 times its real
   speed), naming each step, and ends with the answer's tokens and token ids
   marked as proved.
 
 In the presentation the forward arrow drives the same path for a clicker: send
-the first prompt, send another, ask for a proof, then on to the contact slide.
+the first prompt, ask for its proof, then on to the contact slide.
 Clicking in the demo works at any time.
 
-Nothing is computed. The three exchanges in `ledger/ledger.js`, their token
-ids, step times and proof sizes are from recorded zkml proofs of Llama-3.2-1B
-answers; zkml is the proof library by GPAI Policy Lab. The third prompt is
-shown without the passage it was asked about, and the split of its answer into
-token text was reconstructed from the recorded ids. Locally, open
+Nothing is computed. The demo cycles through all 39 recorded exchanges in
+`ledger/exchanges.js`: every prompt, the answer's token ids, the step times and
+the proof size are from recorded zkml proofs of Llama-3.2-1B answers; zkml is
+the proof library by GPAI Policy Lab. The first three answers came from the
+serving model. The other 36 are from a proof-time sweep and are the proving
+model's own greedy answers, which is why some read oddly (a summary request
+answered with "There is no passage"). Prompts with a passage are shown
+collapsed, with a button for the full text. Regenerate the file with
+`scripts/generate-ledger-exchanges.py`, which reads the prototype repository's
+collected runs. Locally, open
 `http://127.0.0.1:8765/gpai.html`; the `/gpai` address without `.html` exists
 only on the deployed image.
 

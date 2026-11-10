@@ -8,6 +8,8 @@ import {buildVerificationScene} from './verification_scene.js?v=photo-callouts';
 import {createPhotoCallouts} from './photo_callouts.js?v=web-photos';
 import {iceberg,applyIcebergTheme} from './iceberg_theme.js';
 const presentation=document.documentElement.dataset.presentation==='iceberg';
+// data-split="off" on the page keeps the cluster whole: no inference-unit view, the racks stay put and the fast links stay connected.
+const split=document.documentElement.dataset.split!=='off';
 const isOverview=step=>step===-2||step===0;
 const $=id=>document.getElementById(id),stage=$('stage'),V=THREE.Vector3;
 const chapters=[
@@ -64,7 +66,7 @@ function goTo(index,instant=false){
  const strip=index===2&&previous<2,installTaps=index===4&&previous<4;
  const dashboardTransition=presentation&&(index===9||previous===9||index===10||previous===10);
  const destination=dashboardTransition?{position:camera.position.clone(),target:controls.target.clone()}:desiredView(index),duration=instant||matchMedia('(prefers-reduced-motion:reduce)').matches?0:dashboardTransition||index<0||previous<0?650:strip?3200:1600;
- const from=focusIds.map(id=>positions[id].clone()),to=focusIds.map((id,i)=>index>=2?separated[i].clone():original[id].clone());
+ const from=focusIds.map(id=>positions[id].clone()),to=focusIds.map((id,i)=>index>=2&&split?separated[i].clone():original[id].clone());
  const surroundings=isOverview(index)?scene:contextScene;surroundings.add(fullBundles.group,hall.group,hallFrontend.group);
  installation.setPhase(index<2?2:index<4?4:index===4?5:index===5||index===7||index===9||index===10?6:8);
  if(index===5)photoCallouts?.preload();
@@ -88,7 +90,7 @@ function goTo(index,instant=false){
  installation.root.visible=true;
  installation.setTapInstall(installTaps?0:1);
  installation.setFrontendLayout(from);
- transition={start:performance.now(),duration,from,to,strip,installTaps,fromP:camera.position.clone(),fromT:controls.target.clone(),toP:destination.position,toT:destination.target,fromNet:netOpacity,toNet:index<2?1:0,fromContext:contextOpacity,toContext:isOverview(index)?1:.18};
+ transition={start:performance.now(),duration,from,to,strip,installTaps,fromP:camera.position.clone(),fromT:controls.target.clone(),toP:destination.position,toT:destination.target,fromNet:netOpacity,toNet:index<2||!split?1:0,fromContext:contextOpacity,toContext:isOverview(index)?1:.18};
  updateUI();dirty=true;if(duration===0)tickTransition(performance.now());
 }
 function tickTransition(t){
@@ -104,7 +106,7 @@ function tickTransition(t){
  if(u===1){transition=null;busy=false;controls.enabled=!(presentation&&(current<0||current===9||current===10));installation.root.visible=true;updateUI();}
 }
 
-const navigationOrder=presentation?[-2,0,1,2,4,5,7,9,10]:chapters.map((_,i)=>i);
+const navigationOrder=presentation?(split?[-2,0,1,2,4,5,7,9,10]:[-2,0,1,4,5,7,9,10]):chapters.map((_,i)=>i);
 function navigate(direction){if(busy)return;if(presentation&&current===9&&direction>0){if(dashboardState.step===4){goTo(10);return;}if(dashboardState.canAdvance){dashboardState.canAdvance=false;updateUI();$('dashboard-frame').contentWindow.postMessage({type:'recomputation-advance'},location.origin);}return;}const index=navigationOrder.indexOf(current);if(presentation&&direction>0&&index===navigationOrder.length-1)return;const next=direction>0?(index+1)%navigationOrder.length:Math.max(0,index-1);goTo(navigationOrder[next]);}
 $('next').onclick=()=>navigate(1);$('previous').onclick=()=>navigate(-1);if(!presentation){$('restart').onclick=()=>goTo(0,true);$('camera-home').onclick=()=>{const view=desiredView(current);camera.position.copy(view.position);controls.target.copy(view.target);controls.update();dirty=true;};
 for(const id of ['match','different'])$(id).onclick=()=>{scenario=id;cancelCheck();$('match').setAttribute('aria-pressed',id==='match');$('different').setAttribute('aria-pressed',id==='different');};

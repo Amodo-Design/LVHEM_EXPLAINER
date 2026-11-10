@@ -27,7 +27,7 @@ for path in / /presentation.html /src/install_viewer.js /src/photo_callouts.css 
     /assets/web/photos.js /assets/fonts/ibm-plex-serif-regular-latin.woff2 /assets/fonts/OFL.txt \
     /assets/fonts/ibm-plex-mono-regular-latin.woff2 /assets/fonts/ibm-plex-mono-medium-latin.woff2 \
     /assets/fonts/ibm-plex-mono-semibold-latin.woff2 /fake/ '/fake/index.html?embed=1' /fake/fake.css /fake/fake.js /fake/presets.js \
-    /gpai /gpai.html /ledger/ '/ledger/index.html?embed=1' /ledger/ledger.css /ledger/ledger.js; do
+    /gpai /gpai.html /ledger/ '/ledger/index.html?embed=1' /ledger/ledger.css /ledger/ledger.js /ledger/exchanges.js; do
     curl --fail --silent --show-error "$base$path" -o /dev/null
 done
 # Verify each optimized photo exactly matches the current working-tree asset.

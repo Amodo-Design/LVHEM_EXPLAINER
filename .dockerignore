@@ -47,3 +47,4 @@ ledger/**
 !ledger/index.html
 !ledger/ledger.css
 !ledger/ledger.js
+!ledger/exchanges.js

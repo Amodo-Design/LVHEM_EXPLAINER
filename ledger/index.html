@@ -17,7 +17,7 @@
       <p class="empty" id="chat-empty">Send the first prompt. Prompts and answers are recorded ones, so there is nothing to type.</p>
       <div class="thread" id="thread"></div>
       <form class="composer" id="composer">
-        <label for="next-prompt">Next prompt</label>
+        <label for="next-prompt" id="next-label">Next prompt</label>
         <div class="composer-row">
           <input id="next-prompt" type="text" readonly>
           <button id="send" type="submit" class="primary">Send</button>
@@ -30,7 +30,7 @@
         <h2 class="eyebrow" id="ledger-title">Ledger</h2>
         <span class="muted" id="count">0 exchanges</span>
       </header>
-      <p class="empty" id="ledger-empty">Nothing here yet. A prompt and its answer land in the ledger when you send the next prompt.</p>
+      <p class="empty" id="ledger-empty">Nothing here yet. A prompt and its answer land here as soon as the answer has arrived.</p>
       <ol class="units" id="units"></ol>
 
       <div class="proof" id="proof" hidden>
